@@ -2,7 +2,17 @@
 <resources>
 
     <string name="app_name">SENS</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
+    <string name="hello_world">SENS</string>
+    <string name="action_settings">設定</string>
+    <string name="next_page">ログイン</string>
+    <string name="top_disp">Top画面</string>
+    <string name="title_activity_annual_calender">Top画面</string>
+    <string name="title_activity_making_task">MakingTask</string>
+    <string name="title_activity_listing_events">ListingEvents</string>
+    <string name="title_activity_making_new_event">MakingNewEvent</string>
+    <string name="title_activity_mypage">Mypage</string>
+    <string name="title_activity_choose_event">ChooseEvent</string>
+    <string name="title_activity_event_detail">EventDetailActivity</string>
+    <string name="title_activity_detail_tsk">DetailTsk</string>
 
 </resources>

@@ -1,0 +1,116 @@
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="laklab.inc.sens.DetailEventActivity"
+    android:layout_height="fill_parent"
+    android:layout_width="fill_parent"
+    >
+
+    <LinearLayout
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+
+        android:orientation="vertical"
+        android:weightSum="1">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="桜 Discussion"
+            android:id="@+id/textView10"
+            android:layout_gravity="center_horizontal"
+            android:textSize="20dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="基本情報"
+            android:id="@+id/textView14"
+            android:layout_marginTop="20dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="日時"
+            android:id="@+id/textView15"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="10dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2015年5月6日"
+            android:id="@+id/textView21"
+            android:layout_marginLeft="50dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="場所"
+            android:id="@+id/textView16"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="10dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="青少年オリンピックセンター"
+            android:id="@+id/textView19"
+            android:layout_marginLeft="50dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="https://goo.gl/maps/vNx9v"
+            android:id="@+id/textView20"
+            android:layout_marginLeft="50dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="参加費"
+            android:id="@+id/textView17"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="10dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="500円"
+            android:id="@+id/textView22"
+            android:layout_marginLeft="50dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="内容"
+            android:id="@+id/textView18"
+            android:layout_marginTop="20dp" />
+
+        <TextView
+            android:layout_width="283dp"
+            android:layout_height="179dp"
+            android:text="E.S.S一年生のための大会。初めてESSのdiscussionに参加する人たちに対してもやさしいTOPICを使。テーマ大学に入って何をしいか。What do you want to do in your univercity life? and why? tell me your detail. what do you think is the most important element in your student life? for example part-time work, grade, club-activity."
+            android:id="@+id/textView23"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="20dp" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="参加する"
+            android:id="@+id/button_attend" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="参加しない"
+            android:id="@+id/button_absent" />
+
+    </LinearLayout>
+</ScrollView>

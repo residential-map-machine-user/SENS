@@ -8,13 +8,49 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".MainActivity"
+            android:name=".LoginActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/title_activity_annual_calender" >
+        </activity>
+        <activity
+            android:name=".CalenderActivity"
+            android:label="@string/title_activity_annual_calender" >
+        </activity>
+        <activity
+            android:name=".MakeTaskActivity"
+            android:label="@string/title_activity_making_task" >
+        </activity>
+        <activity
+            android:name=".ListEventsActivity"
+            android:label="@string/title_activity_listing_events" >
+        </activity>
+        <activity
+            android:name=".MakeEventActivity"
+            android:label="@string/title_activity_making_new_event" >
+        </activity>
+        <activity
+            android:name=".MypageActivity"
+            android:label="@string/title_activity_mypage" >
+        </activity>
+        <activity
+            android:name=".ChooseEventActivity"
+            android:label="@string/title_activity_choose_event" >
+        </activity>
+        <activity
+            android:name=".DetailEventActivity"
+            android:label="@string/title_activity_event_detail" >
+        </activity>
+        <activity
+            android:name=".DetailTaskActivity"
+            android:label="@string/title_activity_detail_tsk" >
         </activity>
     </application>
 
