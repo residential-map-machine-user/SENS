@@ -45,4 +45,4 @@
             android:background="@drawable/icon_border"
             style="@style/again_button_style" />
 </LinearLayout>
-<!-- From: file:/Users/yukimatsuyama/AndroidStudioProjects/SENS/RPSSample/res/layout/content_fragment.xml -->
+<!-- From: file:/Users/yukimatsuyama/AndroidStudioProjects/SENS_dev/RPSSample/res/layout/content_fragment.xml -->

@@ -17,7 +17,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".TopActivity"
             android:label="@string/title_activity_annual_calender" >
         </activity>
         <activity

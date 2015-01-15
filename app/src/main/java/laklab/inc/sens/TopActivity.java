@@ -9,20 +9,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
-import com.facebook.AppEventsLogger;
 
-
-public class MainActivity extends ActionBarActivity {
+public class TopActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_top);
         Button annualCalender = (Button) findViewById(R.id.annual_schedule_button);
         annualCalender.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, CalenderActivity.class);
+                Intent intent = new Intent(TopActivity.this, CalenderActivity.class);
                 startActivity(intent);
             }
         });
@@ -30,7 +28,7 @@ public class MainActivity extends ActionBarActivity {
         listingEvents.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ListEventsActivity.class);
+                Intent intent = new Intent(TopActivity.this, ListEventsActivity.class);
                 startActivity(intent);
             }
         });
@@ -38,7 +36,7 @@ public class MainActivity extends ActionBarActivity {
         makeTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ChooseEventActivity.class);
+                Intent intent = new Intent(TopActivity.this, ChooseEventActivity.class);
                 startActivity(intent);
             }
 
@@ -47,7 +45,7 @@ public class MainActivity extends ActionBarActivity {
         myPage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, MypageActivity.class);
+                Intent intent = new Intent(TopActivity.this, MypageActivity.class);
                 startActivity(intent);
             }
         });
@@ -55,7 +53,7 @@ public class MainActivity extends ActionBarActivity {
         makeEvent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, MakeEventActivity.class);
+                Intent intent = new Intent(TopActivity.this, MakeEventActivity.class);
                 startActivity(intent);
             }
         });
