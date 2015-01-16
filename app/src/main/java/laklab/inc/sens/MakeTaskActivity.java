@@ -45,10 +45,7 @@ public class MakeTaskActivity extends ActionBarActivity implements View.OnClickL
         _taskContent = (EditText) findViewById(R.id.taskContent);
         _send = (Button) findViewById(R.id.send);
         _send.setOnClickListener(this);
-
-
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -68,23 +65,18 @@ public class MakeTaskActivity extends ActionBarActivity implements View.OnClickL
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void onClick(View v) {
-        System.out.println("クリックされたよ");
+        //
         String taskName = _taskContent.getText().toString();
         String taskLimit = _dueDate.getText().toString();
-        //プリファレンスに一時保存するperferenceはactivityから取得してくるのでthis でokもしくは書かなくて良い
-        //preferecneはedit().putString()ではじめてcommitでしめる
         SharedPreferences pref = getSharedPreferences("tasks", MODE_PRIVATE);
         boolean saveState = pref.edit().putString("TASK_NAME", taskName).putString("TASK_LIMIT", taskLimit).commit();
         if (saveState) {
             finish();
         }
-
-
     }
 }

@@ -64,7 +64,7 @@ public class TopActivity extends ActionBarActivity {
         super.onResume();
         SharedPreferences pref = getSharedPreferences("EVENT_NAME",MODE_PRIVATE);
         String eventName = pref.getString("EVENT_NAME", null);
-        System.out.println(eventName);
+        //System.out.println(eventName);
     }
 
 

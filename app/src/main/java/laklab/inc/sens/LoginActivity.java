@@ -1,51 +1,44 @@
 package laklab.inc.sens;
 
-import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.Button;
 
-public class LoginActivity extends Activity {
+public class LoginActivity extends FragmentActivity implements MainFragment.OnFragmentInteractionListener, View.OnClickListener {
+
+    private MainFragment mainFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        Button login = (Button) findViewById(R.id.button_login);
-        login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, TopActivity.class);
-                startActivity(intent);
-            }
-        });
+        Button login_button = (Button)findViewById(R.id.button_login);
+        login_button.setOnClickListener(this);
+//        if (savedInstanceState == null) {
+//            // Add the fragment on initial activity setup
+//            mainFragment = new MainFragment();
+//            getSupportFragmentManager()
+//                    .beginTransaction()
+//                    .add(android.R.id.content, mainFragment)
+//                    .commit();
+//        } else {
+//            // Or set the fragment from restored state info
+//            mainFragment = (MainFragment) getSupportFragmentManager()
+//                    .findFragmentById(android.R.id.content);
+//        }
     }
 
-
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_login, menu);
-        return true;
+    public void onFragmentInteraction(Uri uri) {
 
     }
 
-
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+    public void onClick(View v) {
+        Intent intent = new Intent(LoginActivity.this, TopActivity.class);
+        startActivity(intent);
     }
 }

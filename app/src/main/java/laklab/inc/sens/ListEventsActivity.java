@@ -37,7 +37,6 @@ public class ListEventsActivity extends ActionBarActivity {
                 //Toastでクリックされたitem が取得されているか確認する
                 Toast.makeText(ListEventsActivity.this, item, Toast.LENGTH_SHORT).show();
                 //つぎのアクティビティを開始する
-
                 Intent intent = new Intent(ListEventsActivity.this, DetailEventActivity.class);
                 startActivity(intent);
 
