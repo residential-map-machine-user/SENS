@@ -1,44 +1,87 @@
 package laklab.inc.sens;
 
+import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
-import android.view.View;
-import android.widget.Button;
+import android.util.Log;
 
-public class LoginActivity extends FragmentActivity implements MainFragment.OnFragmentInteractionListener, View.OnClickListener {
+import com.facebook.Session;
+import com.facebook.SessionState;
+import com.facebook.UiLifecycleHelper;
 
-    private MainFragment mainFragment;
+public class LoginActivity extends Activity {
+
+    private final static String TAG = "MainActivity";
+
+    private UiLifecycleHelper uiHelper;
+
+    private Session.StatusCallback callback = new Session.StatusCallback() {
+        @Override
+        public void call(Session session, SessionState state, Exception exception) {
+            onSessionStateChange(session, state, exception);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        Button login_button = (Button)findViewById(R.id.button_login);
-        login_button.setOnClickListener(this);
-//        if (savedInstanceState == null) {
-//            // Add the fragment on initial activity setup
-//            mainFragment = new MainFragment();
-//            getSupportFragmentManager()
-//                    .beginTransaction()
-//                    .add(android.R.id.content, mainFragment)
-//                    .commit();
-//        } else {
-//            // Or set the fragment from restored state info
-//            mainFragment = (MainFragment) getSupportFragmentManager()
-//                    .findFragmentById(android.R.id.content);
-//        }
+
+        uiHelper = new UiLifecycleHelper(this, callback);
+        uiHelper.onCreate(savedInstanceState);
+
+    }
+
+    private void onSessionStateChange(Session session, SessionState state, Exception exception) {
+        if (state.isOpened()) {
+            Log.i(TAG, "Logged in...");
+            Intent intent = new Intent(LoginActivity.this, TopActivity.class);
+            startActivity(intent);
+
+        } else if (state.isClosed()) {
+            Log.i(TAG, "Logged out...");
+        }
     }
 
     @Override
-    public void onFragmentInteraction(Uri uri) {
-
+    public void onResume() {
+        super.onResume();
+        uiHelper.onResume();
     }
 
     @Override
-    public void onClick(View v) {
-        Intent intent = new Intent(LoginActivity.this, TopActivity.class);
-        startActivity(intent);
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        uiHelper.onActivityResult(requestCode, resultCode, data);
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        uiHelper.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        uiHelper.onDestroy();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        uiHelper.onSaveInstanceState(outState);
+    }
+
+//
+//    @Override
+//    public void onFragmentInteraction(Uri uri) {
+//
+//    }
+//
+//    @Override
+//    public void onClick(View v) {
+//        Intent intent = new Intent(LoginActivity.this, TopActivity.class);
+//        startActivity(intent);
+//    }
 }

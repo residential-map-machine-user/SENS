@@ -25,6 +25,12 @@
         android:id="@+id/imageView"
         android:layout_gravity="center_horizontal"
         android:src="@drawable/ic_launcher" />
+    <com.facebook.widget.LoginButton
+        android:id="@+id/authButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="30dp" />
 
 
     <Button
@@ -44,11 +50,6 @@
         android:layout_marginRight="80dp"
         android:background="#ff5690e9"
         android:textColor="#fff" />
-    <fragment
-        android:id="@+id/MyFragment"
-        android:name="laklab.inc.sens.MainFragment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
 
 
 </LinearLayout>
