@@ -46,4 +46,4 @@
             android:layout_height="23dip"
             android:layout_marginRight="10dip"/>
 </LinearLayout>
-<!-- From: file:/Users/yukimatsuyama/AndroidStudioProjects/SENS_dev/facebook/res/layout/com_facebook_picker_list_row.xml --><!-- From: file:/Users/yukimatsuyama/AndroidStudioProjects/SENS_dev/HelloFacebookSample/build/intermediates/exploded-aar/com.facebook.android/facebook/3.22.0/res/layout/com_facebook_picker_list_row.xml -->
+<!-- From: file:/Users/yukimatsuyama/AndroidStudioProjects/SENS/facebook/res/layout/com_facebook_picker_list_row.xml --><!-- From: file:/Users/yukimatsuyama/AndroidStudioProjects/SENS/HelloFacebookSample/build/intermediates/exploded-aar/com.facebook.android/facebook/3.22.0/res/layout/com_facebook_picker_list_row.xml -->

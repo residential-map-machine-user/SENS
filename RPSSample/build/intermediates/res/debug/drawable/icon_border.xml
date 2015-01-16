@@ -20,4 +20,4 @@
     <corners android:radius="10dp" />
     <padding android:bottom="2dp" android:left="2dp" android:right="2dp" android:top="2dp" />
     <stroke android:width="2px" android:color="@color/text_color" />
-</shape><!-- From: file:/Users/yukimatsuyama/AndroidStudioProjects/SENS_dev/RPSSample/res/drawable/icon_border.xml -->
+</shape><!-- From: file:/Users/yukimatsuyama/AndroidStudioProjects/SENS/RPSSample/res/drawable/icon_border.xml -->
