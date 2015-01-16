@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- From: file:/Users/yukimatsuyama/AndroidStudioProjects/SENS_dev/HelloFacebookSample/build/intermediates/exploded-aar/com.facebook.android/facebook/3.22.0/res/values/values.xml -->
+    <!-- From: file:/Users/yukimatsuyama/AndroidStudioProjects/SENS/HelloFacebookSample/build/intermediates/exploded-aar/com.facebook.android/facebook/3.22.0/res/values/values.xml -->
     <eat-comment/>
     <color name="com_facebook_blue">#3B5998</color>
     <color name="com_facebook_likeboxcountview_border_color">#6a7180</color>
@@ -48,12 +48,12 @@
     <dimen name="com_facebook_usersettingsfragment_profile_picture_height">64dp</dimen>
     <dimen name="com_facebook_usersettingsfragment_profile_picture_width">64dp</dimen>
     <drawable name="com_facebook_picker_default_separator_color">#33464c59</drawable>
-    <!-- From: file:/Users/yukimatsuyama/AndroidStudioProjects/SENS_dev/HelloFacebookSample/res/values/strings.xml -->
+    <!-- From: file:/Users/yukimatsuyama/AndroidStudioProjects/SENS/HelloFacebookSample/res/values/strings.xml -->
     <eat-comment/>
     <string name="app_id">355198514515820</string>
     <string name="app_name">HelloFacebookSample</string>
     <string name="cancelled">Cancelled</string>
-    <!-- From: file:/Users/yukimatsuyama/AndroidStudioProjects/SENS_dev/HelloFacebookSample/build/intermediates/exploded-aar/com.facebook.android/facebook/3.22.0/res/values/values.xml -->
+    <!-- From: file:/Users/yukimatsuyama/AndroidStudioProjects/SENS/HelloFacebookSample/build/intermediates/exploded-aar/com.facebook.android/facebook/3.22.0/res/values/values.xml -->
     <eat-comment/>
     <string name="com_facebook_choose_friends">Choose Friends</string>
     <string name="com_facebook_dialogloginactivity_ok_button">OK</string>
@@ -84,7 +84,7 @@
     <string name="com_facebook_usersettingsfragment_log_in_button">Log in…</string>
     <string name="com_facebook_usersettingsfragment_logged_in">Logged in</string>
     <string name="com_facebook_usersettingsfragment_not_logged_in">Not logged in</string>
-    <!-- From: file:/Users/yukimatsuyama/AndroidStudioProjects/SENS_dev/HelloFacebookSample/res/values/strings.xml -->
+    <!-- From: file:/Users/yukimatsuyama/AndroidStudioProjects/SENS/HelloFacebookSample/res/values/strings.xml -->
     <eat-comment/>
     <string name="error">Error</string>
     <string name="exception">Exception: %1$s</string>
@@ -99,7 +99,7 @@
     <string name="success">Success</string>
     <string name="successfully_posted_post">Successfully posted \'%1$s\'.\nPost ID: %2$s</string>
     <string name="you_picked">You picked:</string>
-    <!-- From: file:/Users/yukimatsuyama/AndroidStudioProjects/SENS_dev/HelloFacebookSample/build/intermediates/exploded-aar/com.facebook.android/facebook/3.22.0/res/values/values.xml -->
+    <!-- From: file:/Users/yukimatsuyama/AndroidStudioProjects/SENS/HelloFacebookSample/build/intermediates/exploded-aar/com.facebook.android/facebook/3.22.0/res/values/values.xml -->
     <eat-comment/>
     <style name="com_facebook_loginview_default_style" parent="@android:style/Widget.Button">
         <item name="android:layout_width">wrap_content</item>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- From: file:/Users/yukimatsuyama/AndroidStudioProjects/SENS_dev/Scrumptious/res/values/strings.xml -->
+    <!-- From: file:/Users/yukimatsuyama/AndroidStudioProjects/SENS/Scrumptious/res/values/strings.xml -->
     <eat-comment/>
     <string-array name="food_og_urls">
         <item>http://samples.ogp.me/314483151980285</item> <!-- Cheeseburger -->
@@ -24,7 +24,7 @@
         <item>Indian</item>
         <item>&lt;Other></item>
     </string-array>
-    <!-- From: file:/Users/yukimatsuyama/AndroidStudioProjects/SENS_dev/Scrumptious/build/intermediates/exploded-aar/com.facebook.android/facebook/3.22.0/res/values/values.xml -->
+    <!-- From: file:/Users/yukimatsuyama/AndroidStudioProjects/SENS/Scrumptious/build/intermediates/exploded-aar/com.facebook.android/facebook/3.22.0/res/values/values.xml -->
     <eat-comment/>
     <color name="com_facebook_blue">#3B5998</color>
     <color name="com_facebook_likeboxcountview_border_color">#6a7180</color>
@@ -37,7 +37,7 @@
     <color name="com_facebook_usersettingsfragment_connected_shadow_color">#000000</color>
     <color name="com_facebook_usersettingsfragment_connected_text_color">#FFFFFF</color>
     <color name="com_facebook_usersettingsfragment_not_connected_text_color">#A6AED7</color>
-    <!-- From: file:/Users/yukimatsuyama/AndroidStudioProjects/SENS_dev/Scrumptious/res/values/colors.xml -->
+    <!-- From: file:/Users/yukimatsuyama/AndroidStudioProjects/SENS/Scrumptious/res/values/colors.xml -->
     <eat-comment/>
     <color name="disabled_button_color">#FFB7B7B7</color>
     <color name="scrumptious_main_orange">#FFFD5720</color>
@@ -47,7 +47,7 @@
     <declare-styleable name="com_facebook_picker_fragment"><attr format="boolean" name="show_pictures"/><attr format="string" name="extra_fields"/><attr format="boolean" name="show_title_bar"/><attr format="string" name="title_text"/><attr format="string" name="done_button_text"/><attr format="reference" name="title_bar_background"/><attr format="reference" name="done_button_background"/></declare-styleable>
     <declare-styleable name="com_facebook_place_picker_fragment"><attr format="integer" name="radius_in_meters"/><attr format="integer" name="results_limit"/><attr format="string" name="search_text"/><attr format="boolean" name="show_search_box"/></declare-styleable>
     <declare-styleable name="com_facebook_profile_picture_view"><attr name="preset_size"><enum name="small" value="-2"/><enum name="normal" value="-3"/><enum name="large" value="-4"/></attr><attr format="boolean" name="is_cropped"/></declare-styleable>
-    <!-- From: file:/Users/yukimatsuyama/AndroidStudioProjects/SENS_dev/Scrumptious/build/intermediates/exploded-aar/com.facebook.android/facebook/3.22.0/res/values/values.xml -->
+    <!-- From: file:/Users/yukimatsuyama/AndroidStudioProjects/SENS/Scrumptious/build/intermediates/exploded-aar/com.facebook.android/facebook/3.22.0/res/values/values.xml -->
     <eat-comment/>
     <dimen name="com_facebook_likeboxcountview_border_radius">3dp</dimen>
     <dimen name="com_facebook_likeboxcountview_border_width">1dp</dimen>
@@ -77,13 +77,13 @@
     <dimen name="com_facebook_tooltip_horizontal_padding">10dp</dimen>
     <dimen name="com_facebook_usersettingsfragment_profile_picture_height">64dp</dimen>
     <dimen name="com_facebook_usersettingsfragment_profile_picture_width">64dp</dimen>
-    <!-- From: file:/Users/yukimatsuyama/AndroidStudioProjects/SENS_dev/Scrumptious/res/values/dimens.xml -->
+    <!-- From: file:/Users/yukimatsuyama/AndroidStudioProjects/SENS/Scrumptious/res/values/dimens.xml -->
     <eat-comment/>
     <dimen name="item_list_padding">14dp</dimen>
-    <!-- From: file:/Users/yukimatsuyama/AndroidStudioProjects/SENS_dev/Scrumptious/build/intermediates/exploded-aar/com.facebook.android/facebook/3.22.0/res/values/values.xml -->
+    <!-- From: file:/Users/yukimatsuyama/AndroidStudioProjects/SENS/Scrumptious/build/intermediates/exploded-aar/com.facebook.android/facebook/3.22.0/res/values/values.xml -->
     <eat-comment/>
     <drawable name="com_facebook_picker_default_separator_color">#33464c59</drawable>
-    <!-- From: file:/Users/yukimatsuyama/AndroidStudioProjects/SENS_dev/Scrumptious/res/values/strings.xml -->
+    <!-- From: file:/Users/yukimatsuyama/AndroidStudioProjects/SENS/Scrumptious/res/values/strings.xml -->
     <eat-comment/>
     <string name="action_eating">Pick Meal</string>
     <string name="action_eating_default">Select a meal</string>
@@ -100,7 +100,7 @@
     <string name="app_id">233936543368280</string>
     <string name="app_name">Scrumptious</string>
     <string name="cancel">Cancel</string>
-    <!-- From: file:/Users/yukimatsuyama/AndroidStudioProjects/SENS_dev/Scrumptious/build/intermediates/exploded-aar/com.facebook.android/facebook/3.22.0/res/values/values.xml -->
+    <!-- From: file:/Users/yukimatsuyama/AndroidStudioProjects/SENS/Scrumptious/build/intermediates/exploded-aar/com.facebook.android/facebook/3.22.0/res/values/values.xml -->
     <eat-comment/>
     <string name="com_facebook_choose_friends">Choose Friends</string>
     <string name="com_facebook_dialogloginactivity_ok_button">OK</string>
@@ -131,7 +131,7 @@
     <string name="com_facebook_usersettingsfragment_log_in_button">Log in…</string>
     <string name="com_facebook_usersettingsfragment_logged_in">Logged in</string>
     <string name="com_facebook_usersettingsfragment_not_logged_in">Not logged in</string>
-    <!-- From: file:/Users/yukimatsuyama/AndroidStudioProjects/SENS_dev/Scrumptious/res/values/strings.xml -->
+    <!-- From: file:/Users/yukimatsuyama/AndroidStudioProjects/SENS/Scrumptious/res/values/strings.xml -->
     <eat-comment/>
     <string name="enter_meal">Enter meal</string>
     <string name="error_authentication_reopen">An error occurred, please re-login.</string>
@@ -162,12 +162,12 @@
     <string name="single_user_selected">%1$s</string>
     <string name="skip_login">continue as a guest</string>
     <string name="two_users_selected">%1$s and %2$s</string>
-    <!-- From: file:/Users/yukimatsuyama/AndroidStudioProjects/SENS_dev/Scrumptious/res/values/styles.xml -->
+    <!-- From: file:/Users/yukimatsuyama/AndroidStudioProjects/SENS/Scrumptious/res/values/styles.xml -->
     <eat-comment/>
     <style name="Theme.Scrumptious" parent="android:Theme">
         <item name="android:windowNoTitle">true</item>
     </style>
-    <!-- From: file:/Users/yukimatsuyama/AndroidStudioProjects/SENS_dev/Scrumptious/build/intermediates/exploded-aar/com.facebook.android/facebook/3.22.0/res/values/values.xml -->
+    <!-- From: file:/Users/yukimatsuyama/AndroidStudioProjects/SENS/Scrumptious/build/intermediates/exploded-aar/com.facebook.android/facebook/3.22.0/res/values/values.xml -->
     <eat-comment/>
     <style name="com_facebook_loginview_default_style" parent="@android:style/Widget.Button">
         <item name="android:layout_width">wrap_content</item>

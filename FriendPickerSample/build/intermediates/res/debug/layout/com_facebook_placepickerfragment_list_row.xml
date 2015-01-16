@@ -88,4 +88,4 @@
             android:background="@drawable/com_facebook_picker_default_separator_color"
             />
 </RelativeLayout>
-<!-- From: file:/Users/yukimatsuyama/AndroidStudioProjects/SENS_dev/facebook/res/layout/com_facebook_placepickerfragment_list_row.xml --><!-- From: file:/Users/yukimatsuyama/AndroidStudioProjects/SENS_dev/FriendPickerSample/build/intermediates/exploded-aar/com.facebook.android/facebook/3.22.0/res/layout/com_facebook_placepickerfragment_list_row.xml -->
+<!-- From: file:/Users/yukimatsuyama/AndroidStudioProjects/SENS/facebook/res/layout/com_facebook_placepickerfragment_list_row.xml --><!-- From: file:/Users/yukimatsuyama/AndroidStudioProjects/SENS/FriendPickerSample/build/intermediates/exploded-aar/com.facebook.android/facebook/3.22.0/res/layout/com_facebook_placepickerfragment_list_row.xml -->

@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merger version="3"><dataSet config="main"><source path="/Users/yukimatsuyama/AndroidStudioProjects/SENS_dev/facebook/src/main/assets"/></dataSet><dataSet config="debug"><source path="/Users/yukimatsuyama/AndroidStudioProjects/SENS_dev/facebook/src/debug/assets"/></dataSet></merger>
+<merger version="3"><dataSet config="main"><source path="/Users/yukimatsuyama/AndroidStudioProjects/SENS/facebook/src/main/assets"/></dataSet><dataSet config="debug"><source path="/Users/yukimatsuyama/AndroidStudioProjects/SENS/facebook/src/debug/assets"/></dataSet></merger>
