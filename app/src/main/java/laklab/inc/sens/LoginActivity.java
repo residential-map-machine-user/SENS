@@ -4,9 +4,11 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.facebook.Request;
+import com.facebook.RequestBatch;
 import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.SessionState;
@@ -32,6 +34,8 @@ public class LoginActivity extends Activity {
         }
     };
     private TextView userInfoTextView;
+    private Button batchRequestButton;
+    private TextView textViewResults;
 
 
     @Override
@@ -43,7 +47,13 @@ public class LoginActivity extends Activity {
         userInfoTextView = (TextView)findViewById(R.id.userInfoTextView);
         LoginButton authButton = (LoginButton)findViewById(R.id.authButton);
         authButton.setReadPermissions(Arrays.asList("user_location", "user_birthday", "user_likes"));
-
+        batchRequestButton = (Button)findViewById(R.id.batchRequestButton);
+        batchRequestButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                doBatchRequest();
+            }
+        });
     }
 
 
@@ -57,6 +67,7 @@ public class LoginActivity extends Activity {
 //        }
         if (state.isOpened()) {
             userInfoTextView.setVisibility(View.VISIBLE);
+            batchRequestButton.setVisibility(View.VISIBLE);
 
             // Request user data and show the results
             Request.executeMeRequestAsync(session, new Request.GraphUserCallback() {
@@ -71,6 +82,7 @@ public class LoginActivity extends Activity {
             });
         }else if (state.isClosed()) {
             userInfoTextView.setVisibility(View.INVISIBLE);
+            batchRequestButton.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -178,5 +190,35 @@ public class LoginActivity extends Activity {
         // Create a setter to enable easy extraction of the languages field
         GraphObjectList<MyGraphLanguage> getLanguages();
     }
+
+    private void doBatchRequest() {
+//        getViewが何の働きをしているのかいまいちよくわからないs
+//        textViewResults = (TextView) this.getView().findViewById(R.id.textViewResults);
+        textViewResults = (TextView) findViewById(R.id.textViewResults);
+        textViewResults.setText("");
+
+        String[] requestIds = {"me", "4"};
+
+        RequestBatch requestBatch = new RequestBatch();
+        for (final String requestId : requestIds) {
+            requestBatch.add(new Request(Session.getActiveSession(),
+                    requestId, null, null, new Request.Callback() {
+                public void onCompleted(Response response) {
+                    GraphObject graphObject = response.getGraphObject();
+                    String s = textViewResults.getText().toString();
+                    if (graphObject != null) {
+                        if (graphObject.getProperty("id") != null) {
+                            s = s + String.format("%s: %s\n",
+                                    graphObject.getProperty("id"),
+                                    graphObject.getProperty("name"));
+                        }
+                    }
+                    textViewResults.setText(s);
+                }
+            }));
+        }
+        requestBatch.executeAsync();
+    }
+
 
 }

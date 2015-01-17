@@ -42,6 +42,23 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:visibility="invisible"
         />
+    <Button
+        android:id="@+id/batchRequestButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_marginTop="30dp"
+        android:visibility="invisible"
+        android:text="@string/batchRequest"
+        />
+
+    <TextView
+        android:id="@+id/textViewResults"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        />
 
 
 </LinearLayout>
