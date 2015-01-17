@@ -114,9 +114,7 @@ package laklab.inc.sens;
             }
     
                 @Override
-        public View onCreateView(LayoutInflater inflater,
-                                                               ViewGroup container,
-                                                               Bundle savedInstanceState) {
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
                 View view = inflater.inflate(R.layout.fragment_main, container, false);
                 LoginButton authButton = (LoginButton) view.findViewById(R.id.authButton);
                 authButton.setFragment(this);

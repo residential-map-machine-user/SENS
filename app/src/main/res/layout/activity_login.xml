@@ -33,23 +33,15 @@
         android:layout_marginTop="30dp" />
 
 
-    <Button
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/next_page"
-        android:id="@+id/button_login"
-        android:layout_below="@+id/textView"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:onClick="annualSchedule"
-        android:layout_gravity="bottom"
-        android:layout_marginTop="170dp"
-        android:layout_marginLeft="80dp"
-        android:layout_marginRight="80dp"
-        android:background="#ff5690e9"
-        android:textColor="#fff" />
+    <TextView
+        android:id="@+id/userInfoTextView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:visibility="invisible"
+        />
 
 
 </LinearLayout>
