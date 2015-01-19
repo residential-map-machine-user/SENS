@@ -124,6 +124,9 @@ public class Facebook {
         mAppId = appId;
     }
 
+    public Facebook(int facebook_app_id) {
+    }
+
     /**
      * Default authorize method. Grants only basic permissions.
      * <p/>

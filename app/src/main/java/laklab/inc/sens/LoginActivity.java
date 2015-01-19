@@ -3,10 +3,12 @@ package laklab.inc.sens;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.facebook.HttpMethod;
 import com.facebook.Request;
 import com.facebook.RequestBatch;
 import com.facebook.Response;
@@ -18,12 +20,15 @@ import com.facebook.model.GraphObjectList;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class LoginActivity extends Activity {
 
-    private final static String TAG = "MainActivity";
+    private final static String TAG = "LoginActivity";
 
     private UiLifecycleHelper uiHelper;
 
@@ -37,41 +42,132 @@ public class LoginActivity extends Activity {
     private Button batchRequestButton;
     private TextView textViewResults;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
         uiHelper = new UiLifecycleHelper(this, callback);
         uiHelper.onCreate(savedInstanceState);
-        userInfoTextView = (TextView)findViewById(R.id.userInfoTextView);
-        LoginButton authButton = (LoginButton)findViewById(R.id.authButton);
-        authButton.setReadPermissions(Arrays.asList("user_location", "user_birthday", "user_likes"));
-        batchRequestButton = (Button)findViewById(R.id.batchRequestButton);
+        userInfoTextView = (TextView) findViewById(R.id.userInfoTextView);
+        LoginButton authButton = (LoginButton) findViewById(R.id.authButton);
+
+//        authButton.setReadPermissions(Arrays.asList("user_location", "user_birthday", "user_likes"));
+
+        /////////////////投稿用の機能実装/////////////////
+        authButton.setPublishPermissions(Arrays.asList("publish_actions"));
+        Button postButton = (Button) findViewById(R.id.postButton);
+        postButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                Session session = Session.getActiveSession();
+                String sendText = "テストですよ";
+
+                if (session.isOpened()) {
+                    Request.newStatusUpdateRequest(session, sendText, new
+                            Request.Callback() {
+                                @Override
+                                public void onCompleted(Response response) {
+                                    if (response.getError() == null) {
+                                        Log.i(TAG, "投稿しました。");
+                                    } else {
+                                        Log.i(TAG, "投稿エラー");
+                                    }
+                                }
+                            }).executeAsync();
+                }
+            }
+        });
+        /////////////////////////////////////////////////
+
+        /////////////投稿情報取得機能の実装/////////////////
+        Button getWallInfo = (Button) findViewById(R.id.getWallinfo);
+        final Bundle params = new Bundle();
+        params.putString("limit", "100");
+        getWallInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Session session = Session.getActiveSession();
+                new Request(
+                        session,
+                        "/me/feed",
+                        params,
+                        HttpMethod.GET,
+                        new Request.Callback() {
+                            public void onCompleted(Response response) {
+                                try {
+                                    JSONArray feedArr = response.getGraphObject().getInnerJSONObject().getJSONArray("data");
+                                    Integer numLikes = 0;
+                                    numLikes += feedArr.length();
+                                    Log.i(TAG, numLikes.toString());
+                                }catch(JSONException e){
+                                    e.printStackTrace();
+                                }
+                                if (response.getError() == null) {
+                                    Log.i(TAG, "投稿取得成功");
+
+                                } else {
+                                    Log.i(TAG, "投稿取得エラー");
+                                }
+
+                            }
+                        }
+                ).executeAsync();
+
+            }
+        });
+        ////////////////////////////////////////////////////////////////////
+
+
+        ///////////////////////batch requestのためのコード///////////////////////////
+        batchRequestButton = (Button) findViewById(R.id.batchRequestButton);
         batchRequestButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                doBatchRequest();
+                textViewResults = (TextView) findViewById(R.id.textViewResults);
+                textViewResults.setText("");
+
+                String[] requestIds = {"me", "4"};
+
+                RequestBatch requestBatch = new RequestBatch();
+                for (final String requestId : requestIds) {
+                    requestBatch.add(new Request(Session.getActiveSession(),
+                            requestId, null, null, new Request.Callback() {
+                        public void onCompleted(Response response) {
+                            GraphObject graphObject = response.getGraphObject();
+                            String s = textViewResults.getText().toString();
+                            if (graphObject != null) {
+                                if (graphObject.getProperty("id") != null) {
+                                    s = s + String.format("%s: %s\n",
+                                            graphObject.getProperty("id"),
+                                            graphObject.getProperty("name"));
+                                }
+                            }
+                            textViewResults.setText(s);
+                        }
+                    }));
+                }
+                requestBatch.executeAsync();
             }
         });
+        //////////////////////////////////////////////////////////////////////////
     }
 
+    /**
+     * ここではsessionがどの状態を取っているかによって処理を実装している主にボタンが見えるか見えないかを決めている
+     * @param session
+     * @param state
+     * @param exception
+     */
 
     private void onSessionStateChange(Session session, SessionState state, Exception exception) {
-//        if (state.isOpened()) {
-//            userInfoTextView.setVisibility(View.VISIBLE);
-//            Intent intent = new Intent(LoginActivity.this, TopActivity.class);
-//            startActivity(intent);
-//        } else if (state.isClosed()) {
-//            userInfoTextView.setVisibility(View.INVISIBLE);
-//        }
         if (state.isOpened()) {
             userInfoTextView.setVisibility(View.VISIBLE);
             batchRequestButton.setVisibility(View.VISIBLE);
-
             // Request user data and show the results
             Request.executeMeRequestAsync(session, new Request.GraphUserCallback() {
-
                 @Override
                 public void onCompleted(GraphUser user, Response response) {
                     if (user != null) {
@@ -115,6 +211,7 @@ public class LoginActivity extends Activity {
         super.onSaveInstanceState(outState);
         uiHelper.onSaveInstanceState(outState);
     }
+    ///////////////// ユーザーデータを取得するための機能を実装/////////////////////////
 
     private String buildUserInfoDisplay(GraphUser user) {
         StringBuilder userInfo = new StringBuilder("");
@@ -139,29 +236,6 @@ public class LoginActivity extends Activity {
         // - no special permissions required
         userInfo.append(String.format("Locale: %s\n\n",
                 user.getProperty("locale")));
-
-        // Example: access via key for array (languages)
-        // - requires user_likes permission
-//        JSONArray languages = (JSONArray)user.getProperty("languages");
-//        if (languages.length() > 0) {
-//            ArrayList<String> languageNames = new ArrayList<String> ();
-//
-//            // Get the data from creating a typed interface
-//            // for the language data.
-//            GraphObjectList<MyGraphLanguage> graphObjectLanguages =
-//                    GraphObject.Factory.createList(languages,
-//                            MyGraphLanguage.class);
-//
-//            // Iterate through the list of languages
-//            for (MyGraphLanguage language : graphObjectLanguages) {
-//                // Add the language name to a list. Use the name
-//                // getter method to get access to the name field.
-//                languageNames.add(language.getName());
-//            }
-//
-//            userInfo.append(String.format("Languages: %s\n\n",
-//                    languageNames.toString()));
-//        }
         GraphObjectList<MyGraphLanguage> languages =
                 (user.cast(MyGraphUser.class)).getLanguages();
         if (languages.size() > 0) {
@@ -179,6 +253,7 @@ public class LoginActivity extends Activity {
 
         return userInfo.toString();
     }
+
     private interface MyGraphLanguage extends GraphObject {
         // Getter for the ID field
         String getId();
@@ -190,35 +265,6 @@ public class LoginActivity extends Activity {
         // Create a setter to enable easy extraction of the languages field
         GraphObjectList<MyGraphLanguage> getLanguages();
     }
-
-    private void doBatchRequest() {
-//        getViewが何の働きをしているのかいまいちよくわからないs
-//        textViewResults = (TextView) this.getView().findViewById(R.id.textViewResults);
-        textViewResults = (TextView) findViewById(R.id.textViewResults);
-        textViewResults.setText("");
-
-        String[] requestIds = {"me", "4"};
-
-        RequestBatch requestBatch = new RequestBatch();
-        for (final String requestId : requestIds) {
-            requestBatch.add(new Request(Session.getActiveSession(),
-                    requestId, null, null, new Request.Callback() {
-                public void onCompleted(Response response) {
-                    GraphObject graphObject = response.getGraphObject();
-                    String s = textViewResults.getText().toString();
-                    if (graphObject != null) {
-                        if (graphObject.getProperty("id") != null) {
-                            s = s + String.format("%s: %s\n",
-                                    graphObject.getProperty("id"),
-                                    graphObject.getProperty("name"));
-                        }
-                    }
-                    textViewResults.setText(s);
-                }
-            }));
-        }
-        requestBatch.executeAsync();
-    }
-
-
+    /////////////////////////////////////////////////////////////////
 }
+
