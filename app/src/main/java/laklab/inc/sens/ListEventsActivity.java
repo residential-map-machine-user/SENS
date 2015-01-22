@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 
 public class ListEventsActivity extends ActionBarActivity {
+    private ListView _eventList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

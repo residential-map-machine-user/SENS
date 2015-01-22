@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.facebook.HttpMethod;
@@ -19,9 +20,6 @@ import com.facebook.model.GraphObject;
 import com.facebook.model.GraphObjectList;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
-
-import org.json.JSONArray;
-import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,6 +39,8 @@ public class LoginActivity extends Activity {
     private TextView userInfoTextView;
     private Button batchRequestButton;
     private TextView textViewResults;
+    private ListView _eventList;
+    private String _pageId = "684530848329994";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,20 +89,19 @@ public class LoginActivity extends Activity {
         getWallInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Session session = Session.getActiveSession();
+                final Session session = Session.getActiveSession();
                 new Request(
                         session,
-                        "/me/feed",
+                        "/" + _pageId + "/feed",
                         params,
                         HttpMethod.GET,
                         new Request.Callback() {
                             public void onCompleted(Response response) {
                                 try {
-                                    JSONArray feedArr = response.getGraphObject().getInnerJSONObject().getJSONArray("data");
-                                    Integer numLikes = 0;
-                                    numLikes += feedArr.length();
-                                    Log.i(TAG, numLikes.toString());
-                                }catch(JSONException e){
+                                    Log.i(TAG, response.toString());
+                                    String feedArr = (String) response.getGraphObject().getProperty("name");
+                                    Log.i(TAG, feedArr);
+                                }catch(Exception e){
                                     e.printStackTrace();
                                 }
                                 if (response.getError() == null) {
@@ -111,7 +110,6 @@ public class LoginActivity extends Activity {
                                 } else {
                                     Log.i(TAG, "投稿取得エラー");
                                 }
-
                             }
                         }
                 ).executeAsync();
@@ -119,7 +117,6 @@ public class LoginActivity extends Activity {
             }
         });
         ////////////////////////////////////////////////////////////////////
-
 
         ///////////////////////batch requestのためのコード///////////////////////////
         batchRequestButton = (Button) findViewById(R.id.batchRequestButton);
