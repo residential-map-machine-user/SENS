@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.facebook.HttpMethod;
@@ -27,9 +26,7 @@ import java.util.Arrays;
 public class LoginActivity extends Activity {
 
     private final static String TAG = "LoginActivity";
-
     private UiLifecycleHelper uiHelper;
-
     private Session.StatusCallback callback = new Session.StatusCallback() {
         @Override
         public void call(Session session, SessionState state, Exception exception) {
@@ -39,23 +36,35 @@ public class LoginActivity extends Activity {
     private TextView userInfoTextView;
     private Button batchRequestButton;
     private TextView textViewResults;
-    private ListView _eventList;
     private String _pageId = "684530848329994";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        Button toTopButton = (Button)findViewById(R.id.event_button);
+        LoginButton authButton = (LoginButton) findViewById(R.id.authButton);
+        authButton.setPublishPermissions(Arrays.asList("publish_actions"));
+        //authButton.setReadPermissions(Arrays.asList("user_location", "user_birthday", "user_likes"));
 
+
+        /////////////TopActivityへの遷移するためのボタンとその時に付属させる情報の取得/////////////////
+        toTopButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent showTop = new Intent(LoginActivity.this, TopActivity.class);
+                startActivity(showTop);
+            }
+        });
         uiHelper = new UiLifecycleHelper(this, callback);
         uiHelper.onCreate(savedInstanceState);
         userInfoTextView = (TextView) findViewById(R.id.userInfoTextView);
-        LoginButton authButton = (LoginButton) findViewById(R.id.authButton);
 
-//        authButton.setReadPermissions(Arrays.asList("user_location", "user_birthday", "user_likes"));
+        ///////////////////////////////////////////////////////////////////////////////////
+
 
         /////////////////投稿用の機能実装/////////////////
-        authButton.setPublishPermissions(Arrays.asList("publish_actions"));
+
         Button postButton = (Button) findViewById(R.id.postButton);
         postButton.setOnClickListener(new View.OnClickListener() {
 
@@ -84,38 +93,50 @@ public class LoginActivity extends Activity {
 
         /////////////投稿情報取得機能の実装/////////////////
         Button getWallInfo = (Button) findViewById(R.id.getWallinfo);
-        final Bundle params = new Bundle();
-        params.putString("limit", "100");
         getWallInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Session session = Session.getActiveSession();
-                new Request(
-                        session,
-                        "/" + _pageId + "/feed",
-                        params,
-                        HttpMethod.GET,
-                        new Request.Callback() {
-                            public void onCompleted(Response response) {
-                                try {
-                                    Log.i(TAG, response.toString());
-                                    String feedArr = (String) response.getGraphObject().getProperty("name");
-                                    Log.i(TAG, feedArr);
-                                }catch(Exception e){
-                                    e.printStackTrace();
-                                }
-                                if (response.getError() == null) {
-                                    Log.i(TAG, "投稿取得成功");
-
-                                } else {
-                                    Log.i(TAG, "投稿取得エラー");
-                                }
+                final Session currentSession = Session.getActiveSession();
+                    Request.newMeRequest(currentSession, new Request.GraphUserCallback(){
+                        @Override
+                    public void onCompleted(GraphUser user, Response response){
+                            if (user != null){
+                                Log.i(TAG, user.getName());
                             }
-                        }
-                ).executeAsync();
 
+                            if (currentSession == null) {
+                                Log.i("TODO", "No Active Session!");
+                                return;
+                            }
+                            Request getPageRequest = new Request(
+                                    currentSession,
+                                    "/" + getString(R.string.pageId),
+                                    null,
+                                    HttpMethod.GET,
+                                    new Request.Callback() {
+                                        @Override
+                                        public void onCompleted(Response response) {
+                                            Log.i("RESPONSE", response.toString());
+                                            if (response.getError() != null) {
+                                                Log.i("RESPONSE", response.getError().getErrorMessage());
+                                                return;
+                                            }
+                                            // メンバーの数を取得する＝いいねの数
+                                            GraphObject graphObject = response.getGraphObject();
+                                            int memberCount = (int) graphObject.getProperty("likes");
+                                            Log.i(TAG, "メンバー数：" + memberCount);
+                                            boolean postState = (boolean) graphObject.getProperty("can_post");
+                                            Log.i(TAG, "投稿可能：" + postState);
+
+                                        }
+                                    });
+                            getPageRequest.executeAsync();
+                        }
+                    }).executeAsync();
             }
         });
+
+
         ////////////////////////////////////////////////////////////////////
 
         ///////////////////////batch requestのためのコード///////////////////////////
@@ -152,33 +173,6 @@ public class LoginActivity extends Activity {
         //////////////////////////////////////////////////////////////////////////
     }
 
-    /**
-     * ここではsessionがどの状態を取っているかによって処理を実装している主にボタンが見えるか見えないかを決めている
-     * @param session
-     * @param state
-     * @param exception
-     */
-
-    private void onSessionStateChange(Session session, SessionState state, Exception exception) {
-        if (state.isOpened()) {
-            userInfoTextView.setVisibility(View.VISIBLE);
-            batchRequestButton.setVisibility(View.VISIBLE);
-            // Request user data and show the results
-            Request.executeMeRequestAsync(session, new Request.GraphUserCallback() {
-                @Override
-                public void onCompleted(GraphUser user, Response response) {
-                    if (user != null) {
-                        // Display the parsed user info
-                        userInfoTextView.setText(buildUserInfoDisplay(user));
-                    }
-                }
-            });
-        }else if (state.isClosed()) {
-            userInfoTextView.setVisibility(View.INVISIBLE);
-            batchRequestButton.setVisibility(View.INVISIBLE);
-        }
-    }
-
     @Override
     public void onResume() {
         super.onResume();
@@ -209,6 +203,33 @@ public class LoginActivity extends Activity {
         uiHelper.onSaveInstanceState(outState);
     }
     ///////////////// ユーザーデータを取得するための機能を実装/////////////////////////
+    /**
+     * ここではsessionがどの状態を取っているかによって処理を実装している主にボタンが見えるか見えないかを決めている
+     * @param session
+     * @param state
+     * @param exception
+     */
+
+    private void onSessionStateChange(Session session, SessionState state, Exception exception) {
+        if (state.isOpened()) {
+            userInfoTextView.setVisibility(View.VISIBLE);
+            batchRequestButton.setVisibility(View.VISIBLE);
+            // Request user data and show the results
+            Request.newMeRequest(session, new Request.GraphUserCallback() {
+                @Override
+                public void onCompleted(GraphUser user, Response response) {
+                    if (user != null) {
+                        // Display the parsed user info
+                        userInfoTextView.setText(buildUserInfoDisplay(user));
+                    }
+                }
+            });
+        }else if (state.isClosed()) {
+            userInfoTextView.setVisibility(View.INVISIBLE);
+            batchRequestButton.setVisibility(View.INVISIBLE);
+        }
+    }
+
 
     private String buildUserInfoDisplay(GraphUser user) {
         StringBuilder userInfo = new StringBuilder("");

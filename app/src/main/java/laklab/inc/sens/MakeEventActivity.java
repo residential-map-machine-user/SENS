@@ -13,9 +13,10 @@ import android.widget.TextView;
 public class MakeEventActivity extends ActionBarActivity implements View.OnClickListener {
 
     private String _eventName;
-    private TextView _eventDay;
-    private TextView _eventPlace;
-    private TextView _eventContent;
+    private String _eventDay;
+    private String _eventPlace;
+    private String _eventContent;
+    private String _eventCost;
 
 
     @Override
@@ -28,13 +29,13 @@ public class MakeEventActivity extends ActionBarActivity implements View.OnClick
         TextView eventDay = (TextView) findViewById(R.id.eventDay);
         TextView eventPlace = (TextView) findViewById(R.id.eventPlace);
         TextView eventContent = (TextView) findViewById(R.id.eventContent);
+        TextView eventCost = (TextView) findViewById(R.id.eventCost);
 
         _eventName = eventName.getText().toString();
-        _eventDay = eventDay;
-        _eventPlace = eventPlace;
-        _eventContent = eventContent;
-
-
+        _eventDay = eventDay.getText().toString();
+        _eventPlace = eventPlace.getText().toString();
+        _eventContent = eventContent.getText().toString();
+        _eventContent = eventCost.getText().toString();
     }
 
 
@@ -63,7 +64,7 @@ public class MakeEventActivity extends ActionBarActivity implements View.OnClick
     @Override
     public void onClick(View v) {
 
-        SharedPreferences pref = getSharedPreferences("EVENT_NAME",MODE_PRIVATE);
+        SharedPreferences pref = getSharedPreferences("EVENT_NAME", MODE_PRIVATE);
         Boolean saveState = pref.edit().putString("EVENT_NAME",_eventName).commit();
         if (saveState){
             finish();

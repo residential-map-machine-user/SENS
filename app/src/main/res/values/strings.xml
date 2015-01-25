@@ -19,4 +19,8 @@
     <string name="title_activity_main">MainActivity</string>
     <string name="batchRequest">Batch Request</string>
 
+    <!-- イベント一覧画面で使う文字列 -->
+    <string name="eventlist_nothing">イベントがありません</string>
+    <!-- facebook のpageID-->
+    <string name="pageId">684530848329994</string>
 </resources>

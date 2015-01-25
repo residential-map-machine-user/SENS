@@ -2,44 +2,138 @@ package laklab.inc.sens;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
+
+import com.facebook.HttpMethod;
+import com.facebook.Request;
+import com.facebook.Response;
+import com.facebook.Session;
+import com.facebook.model.GraphObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class ChooseEventActivity extends ActionBarActivity {
-
+    List<String> _eventNameList = new ArrayList<>();
+    List<String> _eventDayList = new ArrayList<>();
+    List<String> _eventPlaceList = new ArrayList<>();
+    List<String> _eventCostList = new ArrayList<>();
+    List<String> _eventContentList = new ArrayList<>();
+    List<String> _eventAttendanceList = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        String[] sampleString = {"桜Discussion","Ruby Discussion","Freshman Speech","Welcome Freshman Party","Summer Camp"};
         setContentView(R.layout.activity_choose_event);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,sampleString);
-        ListView listView =(ListView) findViewById(R.id.choose_event_list);
-        listView.setAdapter(adapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView parent, View view,
-                                    int position, long id) {
-                //listView　parentでlistView全体を取得する
-                ListView listView = (ListView) parent;
-                //getItemAtPositionでクリックされたItemを取得する
-                String item = (String) listView.getItemAtPosition(position);
-                //Toastでクリックされたitem が取得されているか確認する
-                Toast.makeText(ChooseEventActivity.this,item, Toast.LENGTH_SHORT).show();
-                //つぎのアクティビティを開始する
-                Intent intent = new Intent(ChooseEventActivity.this, MakeTaskActivity.class);
-                startActivity(intent);
+        final ListView listView =(ListView) findViewById(R.id.choose_event_list);
+        final Session session = Session.getActiveSession();
+        if (session.isOpened()) {
+            new Request(session,
+                    "/" + getString(R.string.pageId),
+                    null,
+                    HttpMethod.GET,
+                    new Request.Callback() {
+                        @Override
+                        public void onCompleted(Response response) {
+                            GraphObject graph = response.getGraphObject();
+                            int likeCount = (int) graph.getProperty("likes");
+                            boolean canPost = (boolean) graph.getProperty("can_post");
+                            Log.i("page", "メンバー数：" + likeCount);
+                            Log.i("page", "投稿可能：" + canPost);
+                            new Request(session,
+                                    "/" + getString(R.string.pageId) + "/feed",
+                                    null,
+                                    HttpMethod.GET,
+                                    new Request.Callback() {
+                                        @Override
+                                        public void onCompleted(Response feeds) {
+                                            List<GraphObject> feedList = feeds.getGraphObject().getPropertyAsList("data", GraphObject.class);
+                                            List<GraphObject> eventList = new ArrayList<>();
+                                            for (GraphObject feed : feedList) {
+                                                if (feed.getProperty("message") != null
+                                                        && feed.getProperty("message").toString().length() > 0) {
+                                                    eventList.add(feed);
+                                                }
+                                            }
+                                            Log.i("RESPONSE", "イベント数：" + eventList.size());
+                                            // イベント名リスト
 
-            }
-        });
+                                            // イベントから情報とタスクを取得
+                                            for (GraphObject event : eventList) {
+                                                String message = (String) event.getProperty("message");
+                                                String[] eventInfo = message.split(",");
+                                                // イベント名
+                                                Log.i("チェック", "------------------------");
+                                                if (eventInfo.length > 0 && eventInfo[0] != null) {
+                                                    Log.i("チェック", "イベント名：" + eventInfo[0]);
+                                                    _eventNameList.add(eventInfo[0]);
+                                                }
+                                                // イベント日時
+                                                if (eventInfo.length > 1 && eventInfo[1] != null) {
+                                                    Log.i("チェック", "イベント日時：" + eventInfo[1]);
+                                                    _eventDayList.add(eventInfo[1]);
+                                                }
+                                                // イベント場所
+                                                if (eventInfo.length > 1 && eventInfo[2] != null) {
+                                                    Log.i("チェック", "イベント場所：" + eventInfo[2]);
+                                                    _eventPlaceList.add(eventInfo[2]);
+                                                }
+                                                // 参加費
+                                                if (eventInfo.length > 1 && eventInfo[3] != null) {
+                                                    Log.i("チェック", "参加費：" + eventInfo[3]);
+                                                    _eventCostList.add(eventInfo[3]);
+                                                }
+                                                // 内容
+                                                if (eventInfo.length > 1 && eventInfo[4] != null) {
+                                                    Log.i("チェック", "イベント内容：" + eventInfo[4]);
+                                                    _eventContentList.add(eventInfo[4]);
+                                                }
+                                                // イベント参加者数
+                                                if (event.getProperty("like_count") != null) {
+                                                    Log.i("チェック", "イベント参加者：" + event.getProperty("like_count"));
+                                                    _eventAttendanceList.add(event.getProperty("likes_count").toString());
+                                                }
+
+                                            ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                                                    getApplicationContext(),
+                                                    android.R.layout.simple_list_item_1,
+                                                    _eventNameList);
+                                            ArrayList<String> eventLists = new ArrayList<>();
 
 
+                                            if (listView != null) {
+                                                listView.setAdapter(adapter);
+                                                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                                    @Override
+                                                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                                        ArrayList<String> item1 = new ArrayList<String>();
+                                                        item1.add(_eventNameList.get(position));
+                                                        Intent intent = new Intent(ChooseEventActivity.this, MakeTaskActivity.class);
+                                                        Log.i("eventInfo", item1.toString());
+                                                        intent.putExtra("eventInfo", item1);
+                                                        startActivity(intent);
+                                                    }
+                                                }
+
+
+                                                );
+                                            }
+                                            }
+                                        }
+                                    }
+                            ).executeAsync();
+                        }
+                    }
+            ).executeAsync();
+        }
     }
 
     @Override
@@ -48,8 +142,6 @@ public class ChooseEventActivity extends ActionBarActivity {
         SharedPreferences pref = getSharedPreferences("tasks", MODE_PRIVATE);
         String taskName = pref.getString("TASK_NAME", null);
         String taskLimit = pref.getString("TASK_LIMIT", null);
-        System.out.println(taskName);
-        System.out.println(taskLimit);
     }
 
 

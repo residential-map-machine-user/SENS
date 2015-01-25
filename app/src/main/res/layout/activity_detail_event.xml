@@ -22,7 +22,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="桜 Discussion"
-            android:id="@+id/textView10"
+            android:id="@+id/eventName"
             android:layout_gravity="center_horizontal"
             android:textSize="20dp" />
 
@@ -45,7 +45,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="2015年5月6日"
-            android:id="@+id/textView21"
+            android:id="@+id/eventDay"
             android:layout_marginLeft="50dp" />
 
         <TextView
@@ -60,14 +60,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="青少年オリンピックセンター"
-            android:id="@+id/textView19"
-            android:layout_marginLeft="50dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="https://goo.gl/maps/vNx9v"
-            android:id="@+id/textView20"
+            android:id="@+id/eventPlace"
             android:layout_marginLeft="50dp" />
 
         <TextView
@@ -82,7 +75,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="500円"
-            android:id="@+id/textView22"
+            android:id="@+id/eventCost"
             android:layout_marginLeft="50dp" />
 
         <TextView
@@ -96,7 +89,7 @@
             android:layout_width="283dp"
             android:layout_height="179dp"
             android:text="E.S.S一年生のための大会。初めてESSのdiscussionに参加する人たちに対してもやさしいTOPICを使。テーマ大学に入って何をしいか。What do you want to do in your univercity life? and why? tell me your detail. what do you think is the most important element in your student life? for example part-time work, grade, club-activity."
-            android:id="@+id/textView23"
+            android:id="@+id/eventContent"
             android:layout_marginLeft="30dp"
             android:layout_marginTop="20dp" />
 
