@@ -6,7 +6,6 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -219,10 +218,15 @@ public class ListEventsActivity extends ActionBarActivity {
                                                 }
                                             }
                                         }
-                                        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+//                                        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+//                                                getApplicationContext(),
+//                                                android.R.layout.simple_list_item_1,
+//                                                _eventNameList);
+                                        EventListAdapter adapter = new EventListAdapter(
                                                 getApplicationContext(),
-                                                android.R.layout.simple_list_item_1,
-                                                _eventNameList);
+                                                0,
+                                                _eventNameList
+                                        );
                                         if (listView != null) {
                                             listView.setAdapter(adapter);
                                             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
