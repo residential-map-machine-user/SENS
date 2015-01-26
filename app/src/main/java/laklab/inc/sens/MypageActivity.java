@@ -178,9 +178,9 @@ public class MyPageActivity extends ActionBarActivity{
                                             });
                                         }
                                         //ここでlistViewにセットするAdapterの内容を記述
-                                        ArrayAdapter<String> taskContentAdapter = new ArrayAdapter<String>(
+                                        EventListAdapter taskContentAdapter = new EventListAdapter(
                                                 getApplicationContext(),
-                                                android.R.layout.simple_list_item_1,
+                                                0,
                                                 _taskContentList);
 
                                         if(taskContentView == null){

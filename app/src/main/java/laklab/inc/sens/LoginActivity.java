@@ -36,8 +36,6 @@ public class LoginActivity extends Activity {
     private TextView userInfoTextView;
     private Button batchRequestButton;
     private TextView textViewResults;
-    private String _pageId = "684530848329994";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

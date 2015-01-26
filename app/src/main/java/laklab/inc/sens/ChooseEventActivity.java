@@ -9,7 +9,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.facebook.HttpMethod;
@@ -102,13 +101,10 @@ public class ChooseEventActivity extends ActionBarActivity {
                                                     _eventAttendanceList.add(event.getProperty("likes_count").toString());
                                                 }
 
-                                            ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                                            EventListAdapter adapter = new EventListAdapter(
                                                     getApplicationContext(),
-                                                    android.R.layout.simple_list_item_1,
+                                                    0,
                                                     _eventNameList);
-                                            ArrayList<String> eventLists = new ArrayList<>();
-
-
                                             if (listView != null) {
                                                 listView.setAdapter(adapter);
                                                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
