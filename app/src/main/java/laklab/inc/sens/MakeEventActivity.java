@@ -46,16 +46,6 @@ public class MakeEventActivity extends ActionBarActivity implements View.OnClick
         uiHelper.onCreate(savedInstanceState);
         Button send = (Button)findViewById(R.id.send);
         send.setOnClickListener(this);
-        TextView eventName = (TextView) findViewById(R.id.eventName);
-        TextView eventDay = (TextView) findViewById(R.id.eventDay);
-        TextView eventPlace = (TextView) findViewById(R.id.eventPlace);
-        TextView eventContent = (TextView) findViewById(R.id.eventContent);
-        TextView eventCost = (TextView) findViewById(R.id.eventCost);
-        _eventName = eventName.getText().toString();
-        _eventDay = eventDay.getText().toString();
-        _eventPlace = eventPlace.getText().toString();
-        _eventContent = eventContent.getText().toString();
-        _eventCost = eventCost.getText().toString();
     }
 
 
@@ -83,6 +73,16 @@ public class MakeEventActivity extends ActionBarActivity implements View.OnClick
 
     @Override
     public void onClick(View v) {
+        TextView eventName = (TextView) findViewById(R.id.eventName);
+        TextView eventDay = (TextView) findViewById(R.id.eventDay);
+        TextView eventPlace = (TextView) findViewById(R.id.eventPlace);
+        TextView eventContent = (TextView) findViewById(R.id.eventContent);
+        TextView eventCost = (TextView) findViewById(R.id.eventCost);
+        _eventName = eventName.getText().toString();
+        _eventDay = eventDay.getText().toString();
+        _eventPlace = eventPlace.getText().toString();
+        _eventContent = eventContent.getText().toString();
+        _eventCost = eventCost.getText().toString();
         _inputtedEventInfo += _eventName + ",";
         _inputtedEventInfo += _eventDay + ",";
         _inputtedEventInfo += _eventPlace + ",";
