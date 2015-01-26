@@ -25,7 +25,6 @@ import java.util.List;
 
 
 public class ListEventsActivity extends ActionBarActivity {
-    private ListView _eventList;
     private UiLifecycleHelper _uiHelper;
     List<String> _eventNameList = new ArrayList<>();
     List<String> _eventDayList = new ArrayList<>();
@@ -224,24 +223,20 @@ public class ListEventsActivity extends ActionBarActivity {
                                                 getApplicationContext(),
                                                 android.R.layout.simple_list_item_1,
                                                 _eventNameList);
-                                        ArrayList<String> eventLists = new ArrayList<>();
-
-
-
                                         if (listView != null) {
                                             listView.setAdapter(adapter);
                                             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                                 @Override
                                                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                                    ArrayList <String> item1 = new ArrayList<String>();
-                                                    item1.add(_eventNameList.get(position));
-                                                    item1.add(_eventDayList.get(position));
-                                                    item1.add(_eventPlaceList.get(position));
-                                                    item1.add(_eventCostList.get(position));
-                                                    item1.add(_eventContentList.get(position));
+                                                    ArrayList <String> eachEventInfo = new ArrayList<String>();
+                                                    eachEventInfo.add(_eventNameList.get(position));
+                                                    eachEventInfo.add(_eventDayList.get(position));
+                                                    eachEventInfo.add(_eventPlaceList.get(position));
+                                                    eachEventInfo.add(_eventCostList.get(position));
+                                                    eachEventInfo.add(_eventContentList.get(position));
                                                     Intent intent = new Intent(ListEventsActivity.this, DetailEventActivity.class);
-                                                    Log.i("eventInfo", item1.toString());
-                                                    intent.putExtra("eventInfo", item1);
+                                                    Log.i("eventInfo", eachEventInfo.toString());
+                                                    intent.putExtra("eventInfo", eachEventInfo);
                                                     startActivity(intent);
                                                 }
                                             });

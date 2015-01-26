@@ -45,7 +45,7 @@
             android:label="@string/title_activity_making_new_event" >
         </activity>
         <activity
-            android:name=".MypageActivity"
+            android:name=".MyPageActivity"
             android:label="@string/title_activity_mypage" >
         </activity>
         <activity

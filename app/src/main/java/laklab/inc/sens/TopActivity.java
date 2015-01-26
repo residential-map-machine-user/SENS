@@ -45,7 +45,7 @@ public class TopActivity extends ActionBarActivity {
         myPage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(TopActivity.this, MypageActivity.class);
+                Intent intent = new Intent(TopActivity.this, MyPageActivity.class);
                 startActivity(intent);
             }
         });
