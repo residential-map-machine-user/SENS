@@ -3,10 +3,14 @@ package laklab.inc.sens;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.facebook.HttpMethod;
+import com.facebook.Request;
+import com.facebook.Response;
 import com.facebook.Session;
 
 import java.util.ArrayList;
@@ -49,5 +53,18 @@ public class DetailEventActivity extends ActionBarActivity implements View.OnCli
          * TODO　ここでRequestを送るRequestの内容はPostされた投稿に対していいねを送る
          * TODO まずはpage/feed/likesのようなURIをしっかり把握する
          */
+        Session session = Session.getActiveSession();
+        new Request(
+                session,
+                getString(R.string.pageId) + "/feed",
+                null,
+                HttpMethod.POST,
+                new Request.Callback() {
+                    public void onCompleted(Response response) {
+            /* handle the result */
+                        Log.d("チェック", response.toString());
+                    }
+                }
+        ).executeAsync();
     }
 }

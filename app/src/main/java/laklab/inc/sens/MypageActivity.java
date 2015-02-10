@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.facebook.HttpMethod;
 import com.facebook.Request;
@@ -48,10 +49,10 @@ public class MyPageActivity extends ActionBarActivity {
         _uiHelper = new UiLifecycleHelper(this, callback);
         _uiHelper.onCreate(savedInstanceState);
         //listViewのdefaultの設定
-//        TextView nothing = new TextView(this);
-//        nothing.setText(getString(R.string.eventlist_nothing));
-//        eventNameView.setEmptyView(nothing);
-//        taskContentView.setEmptyView(nothing);
+        TextView nothing = new TextView(this);
+        nothing.setText(getString(R.string.eventlist_nothing));
+        eventNameList.setEmptyView(nothing);
+        taskContentList.setEmptyView(nothing);
         final Session session = Session.getActiveSession();
         new Request(session,
                 "/" + getString(R.string.pageId),
@@ -158,41 +159,45 @@ public class MyPageActivity extends ActionBarActivity {
                                                 android.R.layout.simple_list_item_1,
                                                 _eventNameList);
                                         Log.d("チェック",_eventNameList.toString());
-                                        eventNameList.setAdapter(eventNameAdapter);
-                                        eventNameList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                            @Override
-                                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                                ArrayList<String> eachEventList = new ArrayList<String>();
-                                                eachEventList.add(_eventNameList.get(position));
-                                                eachEventList.add(_eventDayList.get(position));
-                                                eachEventList.add(_eventPlaceList.get(position));
-                                                eachEventList.add(_eventCostList.get(position));
-                                                eachEventList.add(_eventContentList.get(position));
-                                                Intent intent = new Intent(MyPageActivity.this, DetailEventActivity.class);
-                                                Log.d("チェック", eachEventList.toString());
-                                                intent.putExtra("eventInfo", eachEventList);
-                                                startActivity(intent);
-                                            }
-                                        });
+                                        if (eventNameList != null) {
+                                            eventNameList.setAdapter(eventNameAdapter);
+                                            eventNameList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                                @Override
+                                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                                    ArrayList<String> eachEventList = new ArrayList<String>();
+                                                    eachEventList.add(_eventNameList.get(position));
+                                                    eachEventList.add(_eventDayList.get(position));
+                                                    eachEventList.add(_eventPlaceList.get(position));
+                                                    eachEventList.add(_eventCostList.get(position));
+                                                    eachEventList.add(_eventContentList.get(position));
+                                                    Intent intent = new Intent(MyPageActivity.this, DetailEventActivity.class);
+                                                    Log.d("チェック", eachEventList.toString());
+                                                    intent.putExtra("eventInfo", eachEventList);
+                                                    startActivity(intent);
+                                                }
+                                            });
+                                        }
                                         //ここでlistViewにセットするための Adapterを記述
-                                        EventListAdapter taskContentAdapter= new EventListAdapter(
-                                                getApplicationContext(),
-                                                0,
-                                                _taskContentList);
-                                        Log.i("taskContent", taskContentAdapter.toString());
-                                        Log.i("taskContent", taskContentList.toString());
-                                        taskContentList.setAdapter(taskContentAdapter);
-                                        taskContentList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                            @Override
-                                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                                ArrayList<String> eachTaskList = new ArrayList<String>();
-                                                eachTaskList.add(_taskContentList.get(position));
-                                                eachTaskList.add(_taskLimitList.get(position));
-                                                Intent intent = new Intent(MyPageActivity.this, DetailTaskActivity.class);
-                                                Log.i("taskInfo", eachTaskList.toString());
-                                                intent.putExtra("taskInfo", eachTaskList);
-                                            }
-                                        });
+                                        if (taskContentList != null) {
+                                            EventListAdapter taskContentAdapter = new EventListAdapter(
+                                                    getApplicationContext(),
+                                                    0,
+                                                    _taskContentList);
+                                            Log.i("taskContent", taskContentAdapter.toString());
+                                            Log.i("taskContent", taskContentList.toString());
+                                            taskContentList.setAdapter(taskContentAdapter);
+                                            taskContentList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                                @Override
+                                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                                    ArrayList<String> eachTaskList = new ArrayList<String>();
+                                                    eachTaskList.add(_taskContentList.get(position));
+                                                    eachTaskList.add(_taskLimitList.get(position));
+                                                    Intent intent = new Intent(MyPageActivity.this, DetailTaskActivity.class);
+                                                    Log.i("taskInfo", eachTaskList.toString());
+                                                    intent.putExtra("taskInfo", eachTaskList);
+                                                }
+                                            });
+                                        }
                                     }
                                 }
                         ).executeAsync();

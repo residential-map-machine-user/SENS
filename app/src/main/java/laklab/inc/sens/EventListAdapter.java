@@ -30,18 +30,11 @@ public class EventListAdapter extends ArrayAdapter<String> {
         if (convertedView == null){
             convertedView = View.inflate(getContext(), R.layout.list_item_original, null);
             viewHolder = new ViewHolder();
-            //ここでしている処理はViewという方のconvertedViewをキャストしている.
-            /**
-             * いつものfindViewByIdとは若干違う
-             * どこが違うかというといつもはInstanveにたいしてではなくキャストしたらそのままfindViewById
-             * しかし今回はInstanceにたいして使用指定いる。これは
-             * Button button = (Button) findViewById(R.id.button);
-             * の場合はxmlの方ですでにInstanceを作成しているのでそのまま使える。けれど今回はまだViewは作成していないため
-             * viewHolder._eventIcon = (ImageView)convertedView.findViewById(R.id.eventIcon);
-             *
-             */
             viewHolder._eventIcon = (ImageView)convertedView.findViewById(R.id.eventIcon);
             viewHolder._eventTitle = (TextView)convertedView.findViewById(R.id.eventTitle);
+            //TODO setTagがどんな役割をしているのか調べる
+            //情報を渡したい時に使われる
+            //今回で言う所のiconとtitle
             convertedView.setTag(viewHolder);
         }else{
             viewHolder = (ViewHolder)convertedView.getTag();
