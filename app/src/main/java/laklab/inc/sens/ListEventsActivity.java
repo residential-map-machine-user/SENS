@@ -72,75 +72,9 @@ public class ListEventsActivity extends ActionBarActivity {
                                 new Request.Callback(){
                                     @Override
                                     public void onCompleted(Response feeds){
-//                                        GraphObject feedGraph = feeds.getGraphObject();
-//                                        List<GraphObject> feedList = feedGraph.getPropertyAsList("data", GraphObject.class);
-//                                        /**
-//                                         *ここのコードは冗長なのでループさせるwhileがいいかも
-//                                         *Log.i("feed",feedList.get(1).getProperty("message").toString());
-//                                         *Log.i("feed",feedList.toString());
-// */
-//                                        部分的にとってこようとするとget(position)でとってintent.putExtraに渡したいが失敗していまう。rootは一つで少しずつ分岐させて取得していくかたちがよい.
-//                                        List<String> eventInfo = new ArrayList<>();
-//                                        String [] eventContent1 = feedList.get(1).getProperty("message").toString().split(",");
-//                                        String [] eventContent2 = feedList.get(2).getProperty("message").toString().split(",");
-//                                        String [] eventContent3 = feedList.get(3).getProperty("message").toString().split(",");
-//                                        eventInfo.add(eventContent1[0]);
-//                                        eventInfo.add(eventContent2[0]);
-//                                        eventInfo.add(eventContent3[0]);
-//                                        ArrayAdapter<String> eventNameAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_activated_1, eventInfo);
-//                                        listView.setAdapter(eventNameAdapter);
-//                                        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//                                                                            public void onItemClick(AdapterView parent, View view, int position, long id) {
-//                                                                                ListView listView = (ListView) parent;
-//                                                                                String item = (String) listView.getItemAtPosition(position);
-//                                                                                Toast.makeText(ListEventsActivity.this, item, Toast.LENGTH_SHORT).show();
-//                                                                                Intent intent = new Intent(ListEventsActivity.this, DetailEventActivity.class);
-//                                                                                String selectedContent = eventContent1.get(position);
-//                                                                                intent.putExtra("", eventContent1);
-//                                                                                startActivity(intent);
-//                                                                            }
-//                                        });
-//                                        if (feeds.getError() != null) {
-//                                            Log.i("RESPONSE", feeds.getError().getErrorMessage());
-//                                            return;
-//                                        }
-//                                        List<GraphObject> feedList = feeds.getGraphObject().getPropertyAsList("data", GraphObject.class);
-//                                        List<GraphObject> eventList = new ArrayList<>();
-//                                        Log.i("feed", feedList.get(1).toString());
-//                                        for (GraphObject feed : feedList){
-//                                            if (feed.getProperty("member") != null && feed.getProperty("member").toString().length() > 0){
-//                                                eventList.add(feed);
-//                                            }
-//                                        }
-//                                        Log.i("RESPONSE", "イベント数：" + eventList.size());
-//
-//                                        List<String> eventNameList = new ArrayList<>();
-//                                        for ( GraphObject event :eventList){
-//                                            if (event.getProperty("message") != null){
-//                                                String [] eventInfo = event.getProperty("message").toString().split(",");
-//                                            }
-//                                        } if (feeds.getError() != null) {
-//                                            Log.i("RESPONSE", feeds.getError().getErrorMessage());
-//                                            return;
-//                                        }
-//                                        List<GraphObject> feedList = feeds.getGraphObject().getPropertyAsList("data", GraphObject.class);
-//                                        List<GraphObject> eventList = new ArrayList<>();
-//                                        Log.i("feed", feedList.get(1).toString());
-//                                        for (GraphObject feed : feedList){
-//                                            if (feed.getProperty("member") != null && feed.getProperty("member").toString().length() > 0){
-//                                                eventList.add(feed);
-//                                            }
-//                                        }
-//                                        Log.i("RESPONSE", "イベント数：" + eventList.size());
-//
-//                                        List<String> eventNameList = new ArrayList<>();
-//                                        for ( GraphObject event :eventList){
-//                                            if (event.getProperty("message") != null){
-//                                                String [] eventInfo = event.getProperty("message").toString().split(",");
-//                                            }
-//                                        }
-
+                                        Log.d("feedsのaslistdata",feeds.getGraphObject().toString());
                                         List<GraphObject> feedList = feeds.getGraphObject().getPropertyAsList("data", GraphObject.class);
+                                        Log.d("Response feeds getPropertydata", feeds.toString());
                                         List<GraphObject> eventList = new ArrayList<>();
                                         for (GraphObject feed : feedList) {
                                             if (feed.getProperty("message") != null
@@ -251,9 +185,7 @@ public class ListEventsActivity extends ActionBarActivity {
                     }
                 }
             ).executeAsync();
-
         }
-
     }
 
     @Override

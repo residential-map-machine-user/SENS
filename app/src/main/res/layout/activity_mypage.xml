@@ -14,7 +14,7 @@
         android:layout_gravity="center_horizontal"
         android:textSize="20dp" />
     <ListView
-        android:id="@+id/my_event"
+        android:id="@+id/myEvent"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"/>
 
@@ -26,7 +26,7 @@
         android:layout_gravity="center_horizontal"
         android:textSize="20dp" />
     <ListView
-        android:id="@+id/my_task"
+        android:id="@+id/myTask"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="#fffffdec"

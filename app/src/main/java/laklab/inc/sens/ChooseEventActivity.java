@@ -1,12 +1,9 @@
 package laklab.inc.sens;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -32,7 +29,7 @@ public class ChooseEventActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_event);
-        final ListView listView =(ListView) findViewById(R.id.choose_event_list);
+        final ListView listView = (ListView) findViewById(R.id.choose_event_list);
         final Session session = Session.getActiveSession();
         if (session.isOpened()) {
             new Request(session,
@@ -63,8 +60,6 @@ public class ChooseEventActivity extends ActionBarActivity {
                                                 }
                                             }
                                             Log.i("RESPONSE", "イベント数：" + eventList.size());
-                                            // イベント名リスト
-
                                             // イベントから情報とタスクを取得
                                             for (GraphObject event : eventList) {
                                                 String message = (String) event.getProperty("message");
@@ -101,27 +96,24 @@ public class ChooseEventActivity extends ActionBarActivity {
                                                     _eventAttendanceList.add(event.getProperty("likes_count").toString());
                                                 }
 
-                                            EventListAdapter adapter = new EventListAdapter(
-                                                    getApplicationContext(),
-                                                    0,
-                                                    _eventNameList);
-                                            if (listView != null) {
-                                                listView.setAdapter(adapter);
-                                                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                                    @Override
-                                                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                                        ArrayList<String> item1 = new ArrayList<String>();
-                                                        item1.add(_eventNameList.get(position));
-                                                        Intent intent = new Intent(ChooseEventActivity.this, MakeTaskActivity.class);
-                                                        Log.i("eventInfo", item1.toString());
-                                                        intent.putExtra("eventInfo", item1);
-                                                        startActivity(intent);
-                                                    }
+                                                EventListAdapter adapter = new EventListAdapter(
+                                                        getApplicationContext(),
+                                                        0,
+                                                        _eventNameList);
+                                                if (listView != null) {
+                                                    listView.setAdapter(adapter);
+                                                    listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                                        @Override
+                                                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                                            ArrayList<String> item1 = new ArrayList<String>();
+                                                            item1.add(_eventNameList.get(position));
+                                                            Intent intent = new Intent(ChooseEventActivity.this, MakeTaskActivity.class);
+                                                            Log.i("eventInfo", item1.toString());
+                                                            intent.putExtra("eventInfo", item1);
+                                                            startActivity(intent);
+                                                        }
+                                                    });
                                                 }
-
-
-                                                );
-                                            }
                                             }
                                         }
                                     }
@@ -130,37 +122,5 @@ public class ChooseEventActivity extends ActionBarActivity {
                     }
             ).executeAsync();
         }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        SharedPreferences pref = getSharedPreferences("tasks", MODE_PRIVATE);
-        String taskName = pref.getString("TASK_NAME", null);
-        String taskLimit = pref.getString("TASK_LIMIT", null);
-    }
-
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_choose_event, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 }

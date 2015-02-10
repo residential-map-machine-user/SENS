@@ -39,47 +39,21 @@ public class MakeTaskActivity extends ActionBarActivity implements View.OnClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_make_task);
+        //Tasakの内容を表示するためのViewを取得する
         _eventName = (TextView) findViewById(R.id.eventName);
         _dueDate = (EditText) findViewById(R.id.dueDate);
         _taskContent = (EditText) findViewById(R.id.taskContent);
         _send = (Button) findViewById(R.id.send);
         Intent intent = getIntent();
         ArrayList<String> eventName = intent.getStringArrayListExtra("eventInfo");
-        Log.i("maketask", eventName.get(0).toString());
         _eventName.setText(eventName.get(0));
         _send.setOnClickListener(this);
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_making_task, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
     public void onClick(View v) {
-        //
+        //TODO taskの内容をfacebookのコメント欄に送るためのRequestを書く
         String taskName = _taskContent.getText().toString();
         String taskLimit = _dueDate.getText().toString();
-        SharedPreferences pref = getSharedPreferences("tasks", MODE_PRIVATE);
-        boolean saveState = pref.edit().putString("TASK_NAME", taskName).putString("TASK_LIMIT", taskLimit).commit();
-        if (saveState) {
-            finish();
-        }
     }
 }
