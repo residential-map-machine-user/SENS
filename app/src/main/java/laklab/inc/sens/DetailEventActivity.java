@@ -8,12 +8,18 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.facebook.FacebookAuthorizationException;
+import com.facebook.FacebookOperationCanceledException;
 import com.facebook.HttpMethod;
 import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.Session;
+import com.facebook.SessionState;
+import com.facebook.UiLifecycleHelper;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 
 public class DetailEventActivity extends ActionBarActivity implements View.OnClickListener {
@@ -21,6 +27,17 @@ public class DetailEventActivity extends ActionBarActivity implements View.OnCli
      * _attendTokenはイベントに参加するかどうか判定するための変数
      */
     private boolean _attendToken = false;
+    private class SessionStatusCallback implements Session.StatusCallback {
+        @Override
+        public void call(Session session, SessionState state, Exception exception) {
+            //updateView();
+            Log.d("ステータスチェック", "SessionStatusCallback");
+            onSessionStateChange(session, state, exception);
+        }
+    }
+    //callbackとは
+    private Session.StatusCallback statusCallback = new SessionStatusCallback();
+    private UiLifecycleHelper uiHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +52,6 @@ public class DetailEventActivity extends ActionBarActivity implements View.OnCli
         final TextView eventCost = (TextView) findViewById(R.id.eventCost);
         final TextView eventName = (TextView) findViewById(R.id.eventName);
         final TextView eventContent = (TextView) findViewById(R.id.eventContent);
-        final Session session = Session.getActiveSession();
         //listEventsActivityでIntentにセットしたイベント情報を取得する
         Intent intent = getIntent();
         ArrayList<String> eventInfo = intent.getStringArrayListExtra("eventInfo");
@@ -45,8 +61,51 @@ public class DetailEventActivity extends ActionBarActivity implements View.OnCli
         eventPlace.setText(eventInfo.get(2));
         eventCost.setText(eventInfo.get(3));
         eventContent.setText(eventInfo.get(4));
+
+//        LikeView likeView = (LikeView)findViewById(R.id.like);
+//        likeView.setObjectId("https://www.facebook.com/684530848329994/posts/695663580550054");
+        uiHelper = new UiLifecycleHelper(this, statusCallback);
+
+        // Facebook ログイン管理sessionがOpenがどうかの確認
+        Session session = Session.getActiveSession();
+        if (session == null) {
+            if (savedInstanceState != null) {
+                session = Session.restoreSession(this, null, statusCallback, savedInstanceState);
+            }
+            if (session == null) {
+                session = new Session(this);
+            }
+            Session.setActiveSession(session);
+            if (session.getState().equals(SessionState.CREATED_TOKEN_LOADED)) {
+                //session.openForPublish(getOpenRequest());
+                session.openForRead(new Session.OpenRequest(this));
+            }
+        }
+        // ログイン状態の確認セッションが投稿可能かどうかの確認
+        if (! session.isOpened()) {
+            doLogin();
+        }
     }
 
+    @Override
+    public void onStart(){
+        super.onStart();
+        Session.getActiveSession().addCallback(statusCallback);
+    }
+
+    @Override
+    public void onStop(){
+        super.onStop();
+        Session.getActiveSession().removeCallback(statusCallback);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d("リザルト","onActivityResult");
+        Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
+        uiHelper.onActivityResult(requestCode, resultCode, data, null);
+    }
     @Override
     public void onClick(View v) {
         /**
@@ -54,9 +113,38 @@ public class DetailEventActivity extends ActionBarActivity implements View.OnCli
          * TODO まずはpage/feed/likesのようなURIをしっかり把握する
          */
         Session session = Session.getActiveSession();
+        List <String> permission = Arrays.asList("publish_actions");
+        if(checkPermission(permission) == true){
+            doPost();
+        } else {
+            session.requestNewPublishPermissions(new Session.NewPermissionsRequest(this, permission));
+        }
+    }
+
+    /**
+     * permissionのチェックをする関数
+     * @param permissions チェックするpermissionの種類
+     * @return
+     */
+    public boolean checkPermission(List<String> permissions){
+        Session session = Session.getActiveSession();
+        if (session != null && session.getPermissions().contains(permissions)){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * facebookに投稿するための関数
+     * これがよばれるんと特定のidのobjectにたいしていいねが送信される
+     *HttpMe
+     */
+    public void doPost(){
+        Session session = Session.getActiveSession();
         new Request(
                 session,
-                getString(R.string.pageId) + "/feed",
+                "/684530848329994_687799074669838/likes",
                 null,
                 HttpMethod.POST,
                 new Request.Callback() {
@@ -66,5 +154,31 @@ public class DetailEventActivity extends ActionBarActivity implements View.OnCli
                     }
                 }
         ).executeAsync();
+    }
+
+    public void onSessionStateChange(Session session, SessionState state, Exception exception){
+        Log.i("実行","実行されてるよ");
+        Log.i("セッションチェック", session.getPermissions().toString());
+        if ((exception instanceof FacebookOperationCanceledException ||
+                exception instanceof FacebookAuthorizationException)) {
+            Log.w("チェック", "error occured:" + exception.getMessage());
+        } else if (state == SessionState.OPENED_TOKEN_UPDATED) {
+            doPost();
+        }
+    }
+
+    private void doLogin() {
+        Session session = Session.getActiveSession();
+        Log.d("ログイン","doLogin: session state is " + session.getState() + ", isOpend:" + session.isOpened() + ", isClosed:" + session.isClosed());
+        if (!session.isOpened()) {
+            if (session.isClosed()) {
+                session = new Session(this);
+                Session.setActiveSession(session);
+            }
+            //session.openForPublish(getOpenRequest());
+            session.openForRead(new Session.OpenRequest(this));
+        } else {
+            Session.openActiveSession(this, true, statusCallback);
+        }
     }
 }

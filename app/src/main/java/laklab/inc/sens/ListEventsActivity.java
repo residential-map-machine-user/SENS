@@ -31,6 +31,7 @@ public class ListEventsActivity extends ActionBarActivity {
     List<String> _eventCostList = new ArrayList<>();
     List<String> _eventContentList = new ArrayList<>();
     List<String> _eventAttendanceList = new ArrayList<>();
+    List<GraphObject> _feedObjectIdList = new ArrayList<>();
     private Session.StatusCallback callback = new Session.StatusCallback() {
         @Override
         public void call(Session session, SessionState state, Exception exception) {
@@ -72,8 +73,16 @@ public class ListEventsActivity extends ActionBarActivity {
                                 new Request.Callback(){
                                     @Override
                                     public void onCompleted(Response feeds){
-                                        Log.d("feedsのaslistdata",feeds.getGraphObject().toString());
+                                        Log.d("feedsのaslistdata", feeds.getGraphObject().getPropertyAsList("data", GraphObject.class).toString());
                                         List<GraphObject> feedList = feeds.getGraphObject().getPropertyAsList("data", GraphObject.class);
+                                        //いいねをポストするためにfeedのobjectIdを取得
+                                        for(GraphObject feed: feedList){
+                                            if (feed.getProperty("id") != null
+                                                    && feed.getProperty("id").toString().length() > 0){
+                                                _feedObjectIdList.add(feed);
+                                                Log.d("チェックobjectId", _feedObjectIdList.toString());
+                                            }
+                                        }
                                         Log.d("Response feeds getPropertydata", feeds.toString());
                                         List<GraphObject> eventList = new ArrayList<>();
                                         for (GraphObject feed : feedList) {
@@ -83,7 +92,6 @@ public class ListEventsActivity extends ActionBarActivity {
                                             }
                                         }
                                         Log.i("RESPONSE", "イベント数：" + eventList.size());
-                                        // イベント名リスト
 
                                         // イベントから情報とタスクを取得
                                         for (GraphObject event : eventList) {
