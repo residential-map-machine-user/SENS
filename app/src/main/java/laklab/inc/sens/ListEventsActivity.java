@@ -20,7 +20,9 @@ import com.facebook.model.GraphObject;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class ListEventsActivity extends ActionBarActivity {
@@ -32,6 +34,7 @@ public class ListEventsActivity extends ActionBarActivity {
     List<String> _eventContentList = new ArrayList<>();
     List<String> _eventAttendanceList = new ArrayList<>();
     List<GraphObject> _feedObjectIdList = new ArrayList<>();
+    Map<String, String> _eventIdMap = new HashMap<>();
     private Session.StatusCallback callback = new Session.StatusCallback() {
         @Override
         public void call(Session session, SessionState state, Exception exception) {
@@ -50,6 +53,25 @@ public class ListEventsActivity extends ActionBarActivity {
         TextView nothing = new TextView(this);
         nothing.setText(getString(R.string.eventlist_nothing));
         listView.setEmptyView(nothing);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                TextView eventLabel = (TextView)view.findViewById(R.id.eventTitle);
+                String eventName = eventLabel.getText().toString();
+                String eventId = _eventIdMap.get(eventName);
+                ArrayList <String> eachEventInfo = new ArrayList<String>();
+                eachEventInfo.add(eventId);
+                eachEventInfo.add(_eventNameList.get(position));
+                eachEventInfo.add(_eventDayList.get(position));
+                eachEventInfo.add(_eventPlaceList.get(position));
+                eachEventInfo.add(_eventCostList.get(position));
+                eachEventInfo.add(_eventContentList.get(position));
+                Intent intent = new Intent(ListEventsActivity.this, DetailEventActivity.class);
+                Log.i("eventInfo", eachEventInfo.toString());
+                intent.putExtra("eventInfo", eachEventInfo);
+                startActivity(intent);
+            }
+        });
         /////////////////////////////////////////////////////////
         //この時点でlistにAdapterを設定すると同時にAdapterに中身を設定する
         final Session session = Session.getActiveSession();
@@ -74,6 +96,7 @@ public class ListEventsActivity extends ActionBarActivity {
                                     @Override
                                     public void onCompleted(Response feeds){
                                         Log.d("feedsのaslistdata", feeds.getGraphObject().getPropertyAsList("data", GraphObject.class).toString());
+
                                         List<GraphObject> feedList = feeds.getGraphObject().getPropertyAsList("data", GraphObject.class);
                                         //いいねをポストするためにfeedのobjectIdを取得
                                         for(GraphObject feed: feedList){
@@ -102,6 +125,9 @@ public class ListEventsActivity extends ActionBarActivity {
                                             if (eventInfo.length > 0 && eventInfo[0] != null) {
                                                 Log.i("チェック", "イベント名：" + eventInfo[0]);
                                                 _eventNameList.add(eventInfo[0]);
+                                                String objectId = (String) event.getProperty("id");
+                                                Log.d("チェックId", objectId.toString());
+                                                _eventIdMap.put(eventInfo[0], objectId);
                                             }
                                             // イベント日時
                                             if (eventInfo.length > 1 && eventInfo[1] != null){
@@ -171,21 +197,6 @@ public class ListEventsActivity extends ActionBarActivity {
                                         );
                                         if (listView != null) {
                                             listView.setAdapter(adapter);
-                                            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                                                @Override
-                                                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                                    ArrayList <String> eachEventInfo = new ArrayList<String>();
-                                                    eachEventInfo.add(_eventNameList.get(position));
-                                                    eachEventInfo.add(_eventDayList.get(position));
-                                                    eachEventInfo.add(_eventPlaceList.get(position));
-                                                    eachEventInfo.add(_eventCostList.get(position));
-                                                    eachEventInfo.add(_eventContentList.get(position));
-                                                    Intent intent = new Intent(ListEventsActivity.this, DetailEventActivity.class);
-                                                    Log.i("eventInfo", eachEventInfo.toString());
-                                                    intent.putExtra("eventInfo", eachEventInfo);
-                                                    startActivity(intent);
-                                                }
-                                            });
                                         }
                                     }
                                 }
