@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class ChooseEventActivity extends ActionBarActivity {
+public class ChooseEventActivityForTask extends ActionBarActivity {
     List<String> _eventNameList = new ArrayList<>();
     List<String> _eventDayList = new ArrayList<>();
     List<String> _eventPlaceList = new ArrayList<>();
@@ -31,6 +31,12 @@ public class ChooseEventActivity extends ActionBarActivity {
         setContentView(R.layout.activity_choose_event);
         final ListView listView = (ListView) findViewById(R.id.choose_event_list);
         final Session session = Session.getActiveSession();
+        final ArrayList<List> eachEventInfo = new ArrayList<List>();
+        eachEventInfo.add(_eventNameList);
+        eachEventInfo.add(_eventDayList);
+        eachEventInfo.add(_eventPlaceList);
+        eachEventInfo.add(_eventCostList);
+        eachEventInfo.add(_eventContentList);
         if (session.isOpened()) {
             new Request(session,
                     "/" + getString(R.string.pageId),
@@ -51,51 +57,40 @@ public class ChooseEventActivity extends ActionBarActivity {
                                     new Request.Callback() {
                                         @Override
                                         public void onCompleted(Response feeds) {
+                                            //GraphObjectにある複数の"data"の値を取得してListで保存
                                             List<GraphObject> feedList = feeds.getGraphObject().getPropertyAsList("data", GraphObject.class);
+                                            //"message"単位でGraphObjectを保存するListを作成
                                             List<GraphObject> eventList = new ArrayList<>();
                                             for (GraphObject feed : feedList) {
-                                                if (feed.getProperty("message") != null
-                                                        && feed.getProperty("message").toString().length() > 0) {
+                                                if (checkGraphObjectContent(feed, "message")) {
                                                     eventList.add(feed);
                                                 }
                                             }
                                             Log.i("RESPONSE", "イベント数：" + eventList.size());
                                             // イベントから情報とタスクを取得
                                             for (GraphObject event : eventList) {
+                                                String eventId = (String) event.getProperty("id");
+
                                                 String message = (String) event.getProperty("message");
-                                                String[] eventInfo = message.split(",");
-                                                // イベント名
-                                                Log.i("チェック", "------------------------");
-                                                if (eventInfo.length > 0 && eventInfo[0] != null) {
-                                                    Log.i("チェック", "イベント名：" + eventInfo[0]);
-                                                    _eventNameList.add(eventInfo[0]);
-                                                }
-                                                // イベント日時
-                                                if (eventInfo.length > 1 && eventInfo[1] != null) {
-                                                    Log.i("チェック", "イベント日時：" + eventInfo[1]);
-                                                    _eventDayList.add(eventInfo[1]);
-                                                }
-                                                // イベント場所
-                                                if (eventInfo.length > 1 && eventInfo[2] != null) {
-                                                    Log.i("チェック", "イベント場所：" + eventInfo[2]);
-                                                    _eventPlaceList.add(eventInfo[2]);
-                                                }
-                                                // 参加費
-                                                if (eventInfo.length > 1 && eventInfo[3] != null) {
-                                                    Log.i("チェック", "参加費：" + eventInfo[3]);
-                                                    _eventCostList.add(eventInfo[3]);
-                                                }
-                                                // 内容
-                                                if (eventInfo.length > 1 && eventInfo[4] != null) {
-                                                    Log.i("チェック", "イベント内容：" + eventInfo[4]);
-                                                    _eventContentList.add(eventInfo[4]);
+                                                /**
+                                                 *eventInfoには一つのイベントの詳細な情報全て保存されている
+                                                 * 0 eventId
+                                                 * 1 eventName
+                                                 * 2 eventDay
+                                                 * 3 eventPlace
+                                                 * 4 eventCost
+                                                 * 5 eventContent
+                                                 */
+                                                String[] eventInfo = new String[6];
+                                                eventInfo[0] = eventId;
+                                                eventInfo = message.split(",");
+                                                //ここでイベントの情報を情報の種類ごとに保存している
+                                                for(int i = 0; i < eventInfo.length; i ++){
+                                                    storeDetailEventInfoToList(i, eventInfo, eachEventInfo);
                                                 }
                                                 // イベント参加者数
-                                                if (event.getProperty("like_count") != null) {
-                                                    Log.i("チェック", "イベント参加者：" + event.getProperty("like_count"));
-                                                    _eventAttendanceList.add(event.getProperty("likes_count").toString());
-                                                }
-
+                                                Log.i("チェック", "イベント参加者：" + event.getProperty("like_count"));
+                                                _eventAttendanceList.add(event.getProperty("likes_count").toString());
                                                 EventListAdapter adapter = new EventListAdapter(
                                                         getApplicationContext(),
                                                         0,
@@ -107,7 +102,7 @@ public class ChooseEventActivity extends ActionBarActivity {
                                                         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                                                             ArrayList<String> item1 = new ArrayList<String>();
                                                             item1.add(_eventNameList.get(position));
-                                                            Intent intent = new Intent(ChooseEventActivity.this, MakeTaskActivity.class);
+                                                            Intent intent = new Intent(ChooseEventActivityForTask.this, MakeTaskActivity.class);
                                                             Log.i("eventInfo", item1.toString());
                                                             intent.putExtra("eventInfo", item1);
                                                             startActivity(intent);
@@ -123,4 +118,42 @@ public class ChooseEventActivity extends ActionBarActivity {
             ).executeAsync();
         }
     }
+
+    /**
+     * このメソッドはsplitで分解されたデータをeventの持つ情報の種類群でまとめて保存する
+     * ex eventNameList()には登録されていてるevent名が全て保存されている
+     * @param evenInfoType 0:イベント名 1:イベント日時　2:イベント場所　3:イベント参加費　4:イベント内容;
+     * @param storedEventInf イベントの詳細情報が入っている渡すためのデータ
+     * @param eachEventList イベントを保存しておくためのList
+     */
+    public void storeDetailEventInfoToList(int evenInfoType, String[] storedEventInf, ArrayList<List> eachEventList){
+        Log.i("チェック", "------------------------");
+        if (storedEventInf.length > evenInfoType && storedEventInf[evenInfoType] != null) {
+            Log.i("チェック", storedEventInf[evenInfoType]);
+            eachEventList.get(evenInfoType).add(storedEventInf[evenInfoType]);
+        }
+    }
+
+    /**
+     * 取得するGraphObjectの中身があるかチェックするメソッド
+     * @param graph 取得したいプロパティが属するgraphObject
+     * @param property GraphObjectの中から取得したいproperty
+     */
+    public boolean checkGraphObjectContent(GraphObject graph,String property){
+        if(graph.getProperty(property) != null && graph.getProperty(property).toString().length() > 0){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    /**
+     * ここではobjectIdで指定したGraphObjectがもつlikesの中身を取得する。いいねを押したUserのnameが表示される
+     */
+
+//    public void getLikesUser(Session session,){
+//        new Request(session,)
+//    }
+
+
 }

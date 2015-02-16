@@ -51,7 +51,7 @@
             android:label="@string/title_activity_mypage" >
         </activity>
         <activity
-            android:name=".ChooseEventActivity"
+            android:name=".ChooseEventActivityForTask"
             android:label="@string/title_activity_choose_event" >
         </activity>
         <activity

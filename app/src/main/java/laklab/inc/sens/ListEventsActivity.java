@@ -43,12 +43,12 @@ public class ListEventsActivity extends ActionBarActivity {
     };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //////////////デフォルトで表示したいViewの作成////////////////
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_events);
         _uiHelper = new UiLifecycleHelper(this, callback);
         _uiHelper.onCreate(savedInstanceState);
-        //listViewのdefaultの設定
+
+        //listViewに関する記述
         final ListView listView = (ListView) findViewById(R.id.listview);
         TextView nothing = new TextView(this);
         nothing.setText(getString(R.string.eventlist_nothing));
@@ -72,8 +72,8 @@ public class ListEventsActivity extends ActionBarActivity {
                 startActivity(intent);
             }
         });
-        /////////////////////////////////////////////////////////
-        //この時点でlistにAdapterを設定すると同時にAdapterに中身を設定する
+
+        //facebookにrequestを送る処理
         final Session session = Session.getActiveSession();
         if (session.isOpened()) {
             new Request(session,
@@ -96,12 +96,10 @@ public class ListEventsActivity extends ActionBarActivity {
                                     @Override
                                     public void onCompleted(Response feeds){
                                         Log.d("feedsのaslistdata", feeds.getGraphObject().getPropertyAsList("data", GraphObject.class).toString());
-
                                         List<GraphObject> feedList = feeds.getGraphObject().getPropertyAsList("data", GraphObject.class);
                                         //いいねをポストするためにfeedのobjectIdを取得
                                         for(GraphObject feed: feedList){
-                                            if (feed.getProperty("id") != null
-                                                    && feed.getProperty("id").toString().length() > 0){
+                                            if (checkGraphObject(feed, "id")){
                                                 _feedObjectIdList.add(feed);
                                                 Log.d("チェックobjectId", _feedObjectIdList.toString());
                                             }
@@ -109,13 +107,11 @@ public class ListEventsActivity extends ActionBarActivity {
                                         Log.d("Response feeds getPropertydata", feeds.toString());
                                         List<GraphObject> eventList = new ArrayList<>();
                                         for (GraphObject feed : feedList) {
-                                            if (feed.getProperty("message") != null
-                                                    && feed.getProperty("message").toString().length() > 0) {
+                                            if (checkGraphObject(feed, "message")) {
                                                 eventList.add(feed);
                                             }
                                         }
                                         Log.i("RESPONSE", "イベント数：" + eventList.size());
-
                                         // イベントから情報とタスクを取得
                                         for (GraphObject event : eventList) {
                                             String message = (String) event.getProperty("message");
@@ -161,8 +157,7 @@ public class ListEventsActivity extends ActionBarActivity {
                                                 ).getPropertyAsList("data", GraphObject.class);
                                                 List<GraphObject> taskList = new ArrayList<>();
                                                 for (GraphObject task : tasks) {
-                                                    if (task.getProperty("message") != null
-                                                            && task.getProperty("message").toString().length() > 0) {
+                                                    if (checkGraphObject(task, "comments")) {
                                                         taskList.add(task);
                                                     }
                                                 }
@@ -201,6 +196,27 @@ public class ListEventsActivity extends ActionBarActivity {
                                     }
                                 }
                         ).executeAsync();
+
+                        /**
+                         * TODO それぞれのobjectIdにたいしてrequestを送る
+                         */
+                        for (GraphObject feedObId : _feedObjectIdList) {
+                            new Request(session,
+                                    "/" + feedObId + "/likes",
+                                    null,
+                                    HttpMethod.GET, new Request.Callback() {
+                                @Override
+                                    public void onCompleted(Response likesUser) {
+                                    Log.i("likesUserの中身", likesUser.toString());
+                                    List<GraphObject> likesUserList = likesUser.getGraphObject().getPropertyAsList("likes", GraphObject.class);
+                                    Log.i("チェックグラフ", likesUserList.toString());
+                                    for (GraphObject user : likesUserList) {
+                                        user.getProperty("id");
+                                        Log.i("チェックオブジェクトID", user.getProperty("likes").toString());
+                                    }
+                                }
+                            }).executeAsync();
+                        }
                     }
                 }
             ).executeAsync();
@@ -238,6 +254,24 @@ public class ListEventsActivity extends ActionBarActivity {
     }
 
     /**
+     *
+     * @param graph 取得したいpropertyが属するgraphObject
+     * @param property 取得したいgraphObjectの特定のproperty
+     * @return 内容があったらtrueを返す
+     */
+    public boolean checkGraphObject(GraphObject graph, String property){
+        if(graph.getProperty(property) != null && graph.getProperty(property).toString().length() >0){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public void getLikesUser (){
+
+    }
+
+    /**
      * Facebookとのセッションの状態が変化したときに呼び出される処理
      * @param session
      * @param state
@@ -250,5 +284,5 @@ public class ListEventsActivity extends ActionBarActivity {
             Log.i("SessionClose", "セッションはクローズ");
         }
     }
-
+    public void storeEachEventInfo(){}
 }

@@ -44,24 +44,30 @@ public class DetailEventActivity extends ActionBarActivity implements View.OnCli
         }
     }
     //callbackとは
-    private Session.StatusCallback statusCallback = new SessionStatusCallback();
-    private UiLifecycleHelper uiHelper;
-    private String eventId;
-    Button attend;
-    Button notAttend;
+    private Session.StatusCallback _statusCallback = new SessionStatusCallback();
+    private UiLifecycleHelper _uiHelper;
+    private String _eventId;
+    Button _attend;
+    Button _notAttend;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_event);
         //参加表明のためのボタンをIdより取得してくる
-        attend = (Button)findViewById(R.id.button_attend);
-        notAttend = (Button)findViewById(R.id.button_notAttend);
+        _attend = (Button)findViewById(R.id.button_attend);
+        _notAttend = (Button)findViewById(R.id.button_notAttend);
         //参加するボタンのにリスナーをつける
-        attend.setOnClickListener(this);
-        notAttend.setOnClickListener(this);
-        attend.setBackgroundColor(Color.WHITE);
-        notAttend.setBackgroundColor(Color.WHITE);
+        _attend.setOnClickListener(this);
+        _notAttend.setOnClickListener(this);
+        _attend.setBackgroundColor(Color.WHITE);
+        _notAttend.setBackgroundColor(Color.WHITE);
+//        int[] layoutInt = {R.id.button_attend, R.id.button_notAttend, R.id.eventDay,
+//                R.id.eventPlace, R.id.eventCost, R.id.eventName, R.id.eventContent};
+//        final TextView[] textViews = new TextView[layoutInt.length];
+//        for(int i = 0; i < layoutInt.length; i ++){
+//            textViews[i] = (TextView)findViewById(i);
+//        }
         final TextView eventDay = (TextView) findViewById (R.id.eventDay);
         final TextView eventPlace = (TextView) findViewById(R.id.eventPlace);
         final TextView eventCost = (TextView) findViewById(R.id.eventCost);
@@ -73,7 +79,7 @@ public class DetailEventActivity extends ActionBarActivity implements View.OnCli
             Intent intent = getIntent();
             ArrayList<String> eventInfo = intent.getStringArrayListExtra("eventInfo");
             //それぞれのテキストviewにイベント情報をセット
-            eventId = eventInfo.get(0);
+            _eventId = eventInfo.get(0);
             eventName.setText(eventInfo.get(1));
             eventDay.setText(eventInfo.get(2));
             eventPlace.setText(eventInfo.get(3));
@@ -85,13 +91,13 @@ public class DetailEventActivity extends ActionBarActivity implements View.OnCli
         }
 //        LikeView likeView = (LikeView)findViewById(R.id.like);
 //        likeView.setObjectId("https://www.facebook.com/684530848329994/posts/695663580550054");
-        uiHelper = new UiLifecycleHelper(this, statusCallback);
+        _uiHelper = new UiLifecycleHelper(this, _statusCallback);
 
         // Facebook ログイン管理sessionがOpenがどうかの確認
         Session session = Session.getActiveSession();
         if (session == null) {
             if (savedInstanceState != null) {
-                session = Session.restoreSession(this, null, statusCallback, savedInstanceState);
+                session = Session.restoreSession(this, null, _statusCallback, savedInstanceState);
             }
             if (session == null) {
                 session = new Session(this);
@@ -111,13 +117,13 @@ public class DetailEventActivity extends ActionBarActivity implements View.OnCli
     @Override
     public void onStart(){
         super.onStart();
-        Session.getActiveSession().addCallback(statusCallback);
+        Session.getActiveSession().addCallback(_statusCallback);
     }
 
     @Override
     public void onStop(){
         super.onStop();
-        Session.getActiveSession().removeCallback(statusCallback);
+        Session.getActiveSession().removeCallback(_statusCallback);
     }
 
     @Override
@@ -125,27 +131,22 @@ public class DetailEventActivity extends ActionBarActivity implements View.OnCli
         super.onActivityResult(requestCode, resultCode, data);
         Log.d("リザルト","onActivityResult");
         Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
-        uiHelper.onActivityResult(requestCode, resultCode, data, null);
+        _uiHelper.onActivityResult(requestCode, resultCode, data, null);
     }
+
     @Override
     public void onClick(View v) {
-        /**
-         * TODO　ここでRequestを送るRequestの内容はPostされた投稿に対していいねを送る
-         * TODO まずはpage/feed/likesのようなURIをしっかり把握する
-         */
-//        String buttonType = ((Button) v).getText().toString();
-//        showUserCount();
         if (v.getId() == R.id.button_attend) {
             doPost(POSTREQUEST, new Request.Callback(){
                 @Override
                 public void onCompleted(Response response) {
                     if((boolean)response.getGraphObject().getProperty("success")) {
-                        attend.setBackgroundColor(Color.BLUE);
-                        attend.setTextColor(Color.WHITE);
-                        notAttend.setBackgroundColor(Color.WHITE);
-                        notAttend.setTextColor(Color.BLACK);
+                        _attend.setBackgroundColor(Color.BLUE);
+                        _attend.setTextColor(Color.WHITE);
+                        _notAttend.setBackgroundColor(Color.WHITE);
+                        _notAttend.setTextColor(Color.BLACK);
                     } else {
-                        Toast.makeText(getApplicationContext(), "参加するが実行されませんでした", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "正しく実行されませんでした", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
@@ -154,10 +155,10 @@ public class DetailEventActivity extends ActionBarActivity implements View.OnCli
                 @Override
                 public void onCompleted(Response response) {
                     if((boolean)response.getGraphObject().getProperty("success")) {
-                        attend.setBackgroundColor(Color.WHITE);
-                        attend.setTextColor(Color.BLACK);
-                        notAttend.setBackgroundColor(Color.BLUE);
-                        notAttend.setTextColor(Color.WHITE);
+                        _attend.setBackgroundColor(Color.WHITE);
+                        _attend.setTextColor(Color.BLACK);
+                        _notAttend.setBackgroundColor(Color.BLUE);
+                        _notAttend.setTextColor(Color.WHITE);
                     } else {
                         Toast.makeText(getApplicationContext(), "正しく実行されませんでした", Toast.LENGTH_LONG).show();
                     }
@@ -191,8 +192,8 @@ public class DetailEventActivity extends ActionBarActivity implements View.OnCli
     }
 
     /**
-     * facebookに投稿するための関数
-     * これがよばれるんと特定のidのobjectにたいしていいねが送信される
+     * facebookに投稿するためのメソッド
+     * これがよばれると特定のidのobjectにたいしていいねが送信される
      *HttpMe
      * @param requestType リクエストの種類 0:GET 1:いいね　2:取り消し
      * @param callback callback処理
@@ -218,18 +219,19 @@ public class DetailEventActivity extends ActionBarActivity implements View.OnCli
         Session session = Session.getActiveSession();
         new Request(
                 session,
-                "/" + eventId + "/likes",
+                "/" + _eventId + "/likes",
                 null,
                 method,
                 callback
         ).executeAsync();
     }
 
+
     public void onSessionStateChange(Session session, SessionState state, Exception exception){
         Log.i("実行","実行されてるよ");
         Log.i("セッションチェック", session.getPermissions().toString());
 //        if ((exception instanceof FacebookOperationCanceledException ||
-//                exception instanceof FacebookAuthorizationException)) {
+//                exception instan   ceof FacebookAuthorizationException)) {
 //            Log.w("チェック", "error occured:" + exception.getMessage());
 //        } else if (state == SessionState.OPENED_TOKEN_UPDATED) {
 //            doPost();
@@ -247,7 +249,7 @@ public class DetailEventActivity extends ActionBarActivity implements View.OnCli
             //session.openForPublish(getOpenRequest());
             session.openForRead(new Session.OpenRequest(this));
         } else {
-            Session.openActiveSession(this, true, statusCallback);
+            Session.openActiveSession(this, true, _statusCallback);
         }
     }
 }
