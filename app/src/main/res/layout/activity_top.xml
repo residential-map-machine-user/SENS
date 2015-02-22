@@ -54,4 +54,11 @@
         android:id="@+id/button_mypage"
         android:layout_gravity="center_horizontal" />
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="タスク一覧"
+        android:id="@+id/button_task_list"
+        android:layout_gravity="center_horizontal" />
+
 </LinearLayout>

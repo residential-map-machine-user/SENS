@@ -41,6 +41,7 @@ public class ListEventsActivity extends ActionBarActivity {
             onSessionStateChange(session, state, exception);
         }
     };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,6 +89,7 @@ public class ListEventsActivity extends ActionBarActivity {
                         boolean canPost = (boolean) graph.getProperty("can_post");
                         Log.i("page", "メンバー数：" + likeCount);
                         Log.i("page", "投稿可能：" + canPost);
+
                         new Request(session,
                                 "/" + getString(R.string.pageId) + "/feed",
                                 null,
@@ -181,14 +183,11 @@ public class ListEventsActivity extends ActionBarActivity {
                                                 }
                                             }
                                         }
-//                                        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-//                                                getApplicationContext(),
-//                                                android.R.layout.simple_list_item_1,
-//                                                _eventNameList);
                                         EventListAdapter adapter = new EventListAdapter(
                                                 getApplicationContext(),
                                                 0,
-                                                _eventNameList
+                                                _eventNameList,
+                                                _eventIdMap
                                         );
                                         if (listView != null) {
                                             listView.setAdapter(adapter);
@@ -196,27 +195,11 @@ public class ListEventsActivity extends ActionBarActivity {
                                     }
                                 }
                         ).executeAsync();
-
                         /**
                          * TODO それぞれのobjectIdにたいしてrequestを送る
+                         *
                          */
-                        for (GraphObject feedObId : _feedObjectIdList) {
-                            new Request(session,
-                                    "/" + feedObId + "/likes",
-                                    null,
-                                    HttpMethod.GET, new Request.Callback() {
-                                @Override
-                                    public void onCompleted(Response likesUser) {
-                                    Log.i("likesUserの中身", likesUser.toString());
-                                    List<GraphObject> likesUserList = likesUser.getGraphObject().getPropertyAsList("likes", GraphObject.class);
-                                    Log.i("チェックグラフ", likesUserList.toString());
-                                    for (GraphObject user : likesUserList) {
-                                        user.getProperty("id");
-                                        Log.i("チェックオブジェクトID", user.getProperty("likes").toString());
-                                    }
-                                }
-                            }).executeAsync();
-                        }
+
                     }
                 }
             ).executeAsync();
@@ -284,5 +267,4 @@ public class ListEventsActivity extends ActionBarActivity {
             Log.i("SessionClose", "セッションはクローズ");
         }
     }
-    public void storeEachEventInfo(){}
 }

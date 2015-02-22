@@ -57,7 +57,6 @@ public class TopActivity extends ActionBarActivity {
                 startActivity(intent);
             }
         });
-
     }
     @Override
     protected void onResume(){

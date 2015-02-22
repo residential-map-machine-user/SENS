@@ -182,7 +182,9 @@ public class MyPageActivity extends ActionBarActivity {
                                             EventListAdapter taskContentAdapter = new EventListAdapter(
                                                     getApplicationContext(),
                                                     0,
-                                                    _taskContentList);
+                                                    _taskContentList,
+                                                    null
+                                            );
                                             Log.i("taskContent", taskContentAdapter.toString());
                                             Log.i("taskContent", taskContentList.toString());
                                             taskContentList.setAdapter(taskContentAdapter);

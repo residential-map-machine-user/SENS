@@ -21,6 +21,8 @@
 
     <!-- イベント一覧画面で使う文字列 -->
     <string name="eventlist_nothing">イベントがありません</string>
-    <!-- facebook のpageID-->
+    <!-- facebook のpageID -->
     <string name="pageId">684530848329994</string>
+    <string name="title_activity_list_task">ListTaskActivity</string>
+
 </resources>

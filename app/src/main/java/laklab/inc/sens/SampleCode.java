@@ -265,7 +265,8 @@ public class SampleCode extends ActionBarActivity implements View.OnClickListene
                                             EventListAdapter adapter = new EventListAdapter(
                                                     getApplicationContext(),
                                                     android.R.layout.simple_list_item_1,
-                                                    eventNameList);
+                                                    eventNameList,
+                                                    null);
                                             if (_eventList != null) {
                                                 _eventList.setAdapter(adapter);
                                             }

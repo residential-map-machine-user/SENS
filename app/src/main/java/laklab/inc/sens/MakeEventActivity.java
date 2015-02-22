@@ -63,6 +63,7 @@ public class MakeEventActivity extends ActionBarActivity implements View.OnClick
 
         Bundle params = new Bundle();
         params.putString("message", _inputtedEventInfo);
+        params.putBoolean("is_hidden", true);
         Session session = Session.getActiveSession();
         new Request(
                 session,
@@ -82,5 +83,4 @@ public class MakeEventActivity extends ActionBarActivity implements View.OnClick
 
     private void onSessionStateChange(Session session, SessionState state, Exception exception) {
     }
-
 }

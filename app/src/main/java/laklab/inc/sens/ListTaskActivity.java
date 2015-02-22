@@ -25,7 +25,8 @@ import java.util.List;
 import java.util.Map;
 
 
-public class ChooseEventActivityForTask extends ActionBarActivity {
+public class ListTaskActivity extends ActionBarActivity {
+
     private UiLifecycleHelper _uiHelper;
     List<String> _eventNameList = new ArrayList<>();
     List<String> _eventDayList = new ArrayList<>();
@@ -57,17 +58,17 @@ public class ChooseEventActivityForTask extends ActionBarActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                TextView eventLabel = (TextView)view.findViewById(R.id.eventTitle);
+                TextView eventLabel = (TextView) view.findViewById(R.id.eventTitle);
                 String eventName = eventLabel.getText().toString();
                 String eventId = _eventIdMap.get(eventName);
-                ArrayList <String> eachEventInfo = new ArrayList<String>();
+                ArrayList<String> eachEventInfo = new ArrayList<String>();
                 eachEventInfo.add(eventId);
                 eachEventInfo.add(_eventNameList.get(position));
                 eachEventInfo.add(_eventDayList.get(position));
                 eachEventInfo.add(_eventPlaceList.get(position));
                 eachEventInfo.add(_eventCostList.get(position));
                 eachEventInfo.add(_eventContentList.get(position));
-                Intent intent = new Intent(ChooseEventActivityForTask.this, MakeTaskActivity.class);
+                Intent intent = new Intent(ListTaskActivity.this, DetailEventActivity.class);
                 Log.i("eventInfo", eachEventInfo.toString());
                 intent.putExtra("eventInfo", eachEventInfo);
                 startActivity(intent);
@@ -83,7 +84,7 @@ public class ChooseEventActivityForTask extends ActionBarActivity {
                     HttpMethod.GET,
                     new Request.Callback() {
                         @Override
-                        public void onCompleted(Response response){
+                        public void onCompleted(Response response) {
                             GraphObject graph = response.getGraphObject();
                             int likeCount = (int) graph.getProperty("likes");
                             boolean canPost = (boolean) graph.getProperty("can_post");
@@ -94,14 +95,14 @@ public class ChooseEventActivityForTask extends ActionBarActivity {
                                     "/" + getString(R.string.pageId) + "/feed",
                                     null,
                                     HttpMethod.GET,
-                                    new Request.Callback(){
+                                    new Request.Callback() {
                                         @Override
-                                        public void onCompleted(Response feeds){
+                                        public void onCompleted(Response feeds) {
                                             Log.d("feedsのaslistdata", feeds.getGraphObject().getPropertyAsList("data", GraphObject.class).toString());
                                             List<GraphObject> feedList = feeds.getGraphObject().getPropertyAsList("data", GraphObject.class);
                                             //いいねをポストするためにfeedのobjectIdを取得
-                                            for(GraphObject feed: feedList){
-                                                if (checkGraphObject(feed, "id")){
+                                            for (GraphObject feed : feedList) {
+                                                if (checkGraphObject(feed, "id")) {
                                                     _feedObjectIdList.add(feed);
                                                     Log.d("チェックobjectId", _feedObjectIdList.toString());
                                                 }
@@ -128,22 +129,22 @@ public class ChooseEventActivityForTask extends ActionBarActivity {
                                                     _eventIdMap.put(eventInfo[0], objectId);
                                                 }
                                                 // イベント日時
-                                                if (eventInfo.length > 1 && eventInfo[1] != null){
+                                                if (eventInfo.length > 1 && eventInfo[1] != null) {
                                                     Log.i("チェック", "イベント日時：" + eventInfo[1]);
                                                     _eventDayList.add(eventInfo[1]);
                                                 }
                                                 // イベント場所
-                                                if (eventInfo.length > 1 && eventInfo[2] != null){
+                                                if (eventInfo.length > 1 && eventInfo[2] != null) {
                                                     Log.i("チェック", "イベント場所：" + eventInfo[2]);
                                                     _eventPlaceList.add(eventInfo[2]);
                                                 }
                                                 // 参加費
-                                                if (eventInfo.length > 1 && eventInfo[3] != null){
+                                                if (eventInfo.length > 1 && eventInfo[3] != null) {
                                                     Log.i("チェック", "参加費：" + eventInfo[3]);
                                                     _eventCostList.add(eventInfo[3]);
                                                 }
                                                 // 内容
-                                                if (eventInfo.length > 1 && eventInfo[4] != null){
+                                                if (eventInfo.length > 1 && eventInfo[4] != null) {
                                                     Log.i("チェック", "イベント内容：" + eventInfo[4]);
                                                     _eventContentList.add(eventInfo[4]);
                                                 }
@@ -206,52 +207,12 @@ public class ChooseEventActivityForTask extends ActionBarActivity {
         }
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        _uiHelper.onResume();
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        _uiHelper.onActivityResult(requestCode, resultCode, data);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        _uiHelper.onPause();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        _uiHelper.onDestroy();
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        _uiHelper.onSaveInstanceState(outState);
-    }
-
-    /**
-     *
-     * @param graph 取得したいpropertyが属するgraphObject
-     * @param property 取得したいgraphObjectの特定のproperty
-     * @return 内容があったらtrueを返す
-     */
     public boolean checkGraphObject(GraphObject graph, String property){
         if(graph.getProperty(property) != null && graph.getProperty(property).toString().length() >0){
             return true;
         } else {
             return false;
         }
-    }
-
-    public void getLikesUser (){
-
     }
 
     /**
