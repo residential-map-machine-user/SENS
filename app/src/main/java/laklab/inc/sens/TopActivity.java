@@ -57,6 +57,14 @@ public class TopActivity extends ActionBarActivity {
                 startActivity(intent);
             }
         });
+        Button listTask = (Button)findViewById(R.id.button_task_list);
+        listTask.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(TopActivity.this, ListTaskActivity.class);
+                startActivity(intent);
+            }
+        });
     }
     @Override
     protected void onResume(){

@@ -35,6 +35,9 @@ public class ListTaskActivity extends ActionBarActivity {
     List<String> _eventContentList = new ArrayList<>();
     List<String> _eventAttendanceList = new ArrayList<>();
     List<GraphObject> _feedObjectIdList = new ArrayList<>();
+    List<String> _taskNameList = new ArrayList<>();
+    List<String> _taskLimitList = new ArrayList<>();
+    List<String> _taskContentList = new ArrayList<>();
     Map<String, String> _eventIdMap = new HashMap<>();
     private Session.StatusCallback callback = new Session.StatusCallback() {
         @Override
@@ -68,7 +71,9 @@ public class ListTaskActivity extends ActionBarActivity {
                 eachEventInfo.add(_eventPlaceList.get(position));
                 eachEventInfo.add(_eventCostList.get(position));
                 eachEventInfo.add(_eventContentList.get(position));
-                Intent intent = new Intent(ListTaskActivity.this, DetailEventActivity.class);
+                eachEventInfo.add(_taskLimitList.get(position));
+                eachEventInfo.add(_taskContentList.get(position));
+                Intent intent = new Intent(ListTaskActivity.this, DetailTaskActivity.class);
                 Log.i("eventInfo", eachEventInfo.toString());
                 intent.putExtra("eventInfo", eachEventInfo);
                 startActivity(intent);
@@ -155,14 +160,10 @@ public class ListTaskActivity extends ActionBarActivity {
                                                 }
                                                 // タスク抽出
                                                 if (event.getProperty("comments") != null) {
-                                                    List<GraphObject> tasks = GraphObject.Factory.create(
-                                                            (JSONObject) event.getProperty("comments")
-                                                    ).getPropertyAsList("data", GraphObject.class);
+                                                    List<GraphObject> tasks = GraphObject.Factory.create((JSONObject) event.getProperty("comments")).getPropertyAsList("data", GraphObject.class);
                                                     List<GraphObject> taskList = new ArrayList<>();
                                                     for (GraphObject task : tasks) {
-                                                        if (checkGraphObject(task, "comments")) {
                                                             taskList.add(task);
-                                                        }
                                                     }
                                                     Log.i("チェック", "タスク数：" + taskList.size());
                                                     for (GraphObject taskData : taskList) {
@@ -171,10 +172,13 @@ public class ListTaskActivity extends ActionBarActivity {
                                                         // タスク期限
                                                         if (taskInfo.length > 1 && taskInfo[0] != null) {
                                                             Log.i("チェック", ">>>>タスク期限：" + taskInfo[0]);
+                                                            _taskLimitList.add(taskInfo[0]);
                                                         }
                                                         // タスク名
-                                                        if (taskInfo.length > 0 && taskInfo[1] != null)
+                                                        if (taskInfo.length > 0 && taskInfo[1] != null) {
                                                             Log.i("チェック", ">>>>タスク内容：" + taskInfo[1]);
+                                                            _taskContentList.add(taskInfo[1]);
+                                                        }
                                                         // タスクの状態
                                                         // 割当済みか
                                                         if ((int) taskData.getProperty("like_count") > 0)

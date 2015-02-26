@@ -44,4 +44,16 @@
         android:id="@+id/taskContentTextView"
         android:layout_marginLeft="30dp"
         android:layout_marginBottom="10dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Button"
+        android:id="@+id/button_assigned" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Button"
+        android:id="@+id/button_unassigned" />
 </LinearLayout>

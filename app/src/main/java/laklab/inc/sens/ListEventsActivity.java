@@ -33,6 +33,7 @@ public class ListEventsActivity extends ActionBarActivity {
     List<String> _eventCostList = new ArrayList<>();
     List<String> _eventContentList = new ArrayList<>();
     List<String> _eventAttendanceList = new ArrayList<>();
+    List<String> _commentIdList = new ArrayList<>();
     List<GraphObject> _feedObjectIdList = new ArrayList<>();
     Map<String, String> _eventIdMap = new HashMap<>();
     private Session.StatusCallback callback = new Session.StatusCallback() {
@@ -67,6 +68,7 @@ public class ListEventsActivity extends ActionBarActivity {
                 eachEventInfo.add(_eventPlaceList.get(position));
                 eachEventInfo.add(_eventCostList.get(position));
                 eachEventInfo.add(_eventContentList.get(position));
+                eachEventInfo.add(_commentIdList.get(position));
                 Intent intent = new Intent(ListEventsActivity.this, DetailEventActivity.class);
                 Log.i("eventInfo", eachEventInfo.toString());
                 intent.putExtra("eventInfo", eachEventInfo);
@@ -157,11 +159,14 @@ public class ListEventsActivity extends ActionBarActivity {
                                                 List<GraphObject> tasks = GraphObject.Factory.create(
                                                         (JSONObject) event.getProperty("comments")
                                                 ).getPropertyAsList("data", GraphObject.class);
+
                                                 List<GraphObject> taskList = new ArrayList<>();
                                                 for (GraphObject task : tasks) {
                                                     if (checkGraphObject(task, "comments")) {
                                                         taskList.add(task);
                                                     }
+                                                    String commentId =(String)task.getProperty("id");
+                                                    _commentIdList.add(commentId);
                                                 }
                                                 Log.i("チェック", "タスク数：" + taskList.size());
                                                 for (GraphObject taskData : taskList) {
