@@ -30,6 +30,7 @@ public class EventListAdapter extends ArrayAdapter<String> {
     private List<String> _src;
     private Map<String, String> _eventMap;
     private Map<String, Integer> _memberBuffer;
+    private boolean _useForMyPage = false;
     //クラスと同じ名前のメソッドがクラスの中に記述されているとコンストラクタになる
 
     /**
@@ -78,10 +79,12 @@ public class EventListAdapter extends ArrayAdapter<String> {
                         public void onCompleted(Response response) {
                             Log.i("likesUserの中身", response.toString());
                             try {
-                                int likesUser = ((JSONObject) response.getGraphObject().getProperty("summary")).getInt("total_count");
-                                Log.i("チェックグラフ", likesUser + "");
-                                _memberBuffer.put(objectId, likesUser);
-                                notifyDataSetChanged();
+                                if(!_useForMyPage) {
+                                    int likesUser = ((JSONObject) response.getGraphObject().getProperty("summary")).getInt("total_count");
+                                    Log.i("チェックグラフ", likesUser + "");
+                                    _memberBuffer.put(objectId, likesUser);
+                                    notifyDataSetChanged();
+                                }
                             } catch (JSONException dataNotFound){
                                 //ここは処理しない
                             }
@@ -91,6 +94,10 @@ public class EventListAdapter extends ArrayAdapter<String> {
             viewHolder._likesUser.setText("参加者" + _memberBuffer.get(objectId));
         }
         return convertedView;
+    }
+
+    public void setUseForMyPage(boolean useForMyPage){
+        _useForMyPage = useForMyPage;
     }
 
     class ViewHolder {
