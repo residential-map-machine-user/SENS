@@ -42,6 +42,12 @@ public class LoginActivity extends Activity {
         });
         uiHelper = new UiLifecycleHelper(this, callback);
         uiHelper.onCreate(savedInstanceState);
+        Session session = Session.getActiveSession();
+
+        if(session.isOpened()){
+            Intent showTop = new Intent(LoginActivity.this, TopActivity.class);
+            startActivity(showTop);
+        }
     }
 
     @Override

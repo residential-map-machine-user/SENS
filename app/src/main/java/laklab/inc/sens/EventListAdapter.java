@@ -23,55 +23,78 @@ import java.util.Map;
 
 /**
  * Created by yukimatsuyama on 2015/01/19.
-
  */
 public class EventListAdapter extends ArrayAdapter<String> {
 
-    private List<String> _src;
+    private List<String> _dataSet;
     private Map<String, String> _eventMap;
     private Map<String, Integer> _memberBuffer;
-    private boolean _useForMyPage = false;
-    //クラスと同じ名前のメソッドがクラスの中に記述されているとコンストラクタになる
-
     /**
      *
-     * @param context
-     * @param resource
-     * @param objects 表示される
+     */
+    private boolean _useForMyPage = false;
+
+    /**
+     *コンストラクタ
+     * @param context　コンテキスト
+     * @param resource　どのリスト化を示す
+     * @param objects 表示するためのデータセット
+     * @param eventMap イベントのnameがkeyイベントIDがvalue
      */
     public EventListAdapter(Context context, int resource, List<String> objects, Map<String, String> eventMap) {
-        //ここのsuperはメソッドとしてのsuper?
         super(context, resource, objects);
-        //_src = objectsのobjectsは初期化されるときに引数として渡される
-        _src = objects;
+        _dataSet = objects;
         _eventMap = eventMap;
         _memberBuffer = new HashMap<>();
     }
-    //行数分だけ呼ばれるgetView
+
+    /**
+     *
+     * @param position 生成されるリストの位置
+     * @param convertedView　表示する１行分のView
+     * @param parent リストビュー
+     * @return　表示する１行分のView
+     */
     @Override
     public View getView(int position, View convertedView, ViewGroup parent){
+        //初期化
         ViewHolder viewHolder = null;
+        //表示したいデータのセット
+        /**
+         * この分岐は抜け目なくデータをセットするための分岐
+         * nullな場合はタグでインスタンスを保持
+         * null出ない場合はインスタンスを取得してくる
+         */
         if (convertedView == null){
+            //システムで用意されているViewではないViewを使うことを宣言
             convertedView = View.inflate(getContext(), R.layout.list_item_original, null);
+            //常時するデータを保持するインスタンスの生成
             viewHolder = new ViewHolder();
+            //表示するためのViewを取得
             viewHolder._eventIcon = (ImageView)convertedView.findViewById(R.id.eventIcon);
             viewHolder._eventTitle = (TextView)convertedView.findViewById(R.id.eventTitle);
-            viewHolder._likesUser = (TextView)convertedView.findViewById(R.id.likesUser);
-            //TODO setTagがどんな役割をしているのか調べる
-            //情報を渡したい時に使われる
-            //今回で言う所のiconとtitle
+            viewHolder._attendUserStatus = (TextView)convertedView.findViewById(R.id.likesUser);
+            //タグ付けしてデータを保存
             convertedView.setTag(viewHolder);
         }else{
+            //タグ付けしてあったデータを取得
             viewHolder = (ViewHolder)convertedView.getTag();
         }
-        viewHolder._eventTitle.setText(_src.get(position));
-        final String objectId = _eventMap.get(_src.get(position));
-        if(!_memberBuffer.containsKey(objectId)){
+        //タイトルのセット
+        viewHolder._eventTitle.setText(_dataSet.get(position));
+        //イベントのIdを取得
+        final String eventId = _eventMap.get(_dataSet.get(position));
+        /**
+         * この分岐はデータを持っていなかったらデータをセットする仕組み
+         * メリット　データの重複がなく取得したデータを保存できる
+         */
+        if(!_memberBuffer.containsKey(eventId)){
             Session session = Session.getActiveSession();
             Bundle bundle = new Bundle();
+            //いいねしているユーザーの総数を取得するためのパラメータ
             bundle.putBoolean("summary", true);
             new Request(session,
-                    "/" + objectId + "/likes",
+                    "/" + eventId + "/likes",
                     bundle,
                     HttpMethod.GET,
                     new Request.Callback() {
@@ -80,10 +103,17 @@ public class EventListAdapter extends ArrayAdapter<String> {
                             Log.i("likesUserの中身", response.toString());
                             try {
                                 if(!_useForMyPage) {
-                                    int likesUser = ((JSONObject) response.getGraphObject().getProperty("summary")).getInt("total_count");
-                                    Log.i("チェックグラフ", likesUser + "");
-                                    _memberBuffer.put(objectId, likesUser);
-                                    notifyDataSetChanged();
+                                    if(response.getGraphObject() != null) {
+                                        //JsonObjectからint型で値を取得
+                                        int likesUser = ((JSONObject) response.getGraphObject().getProperty("summary")).getInt("total_count");
+                                        //イベントIdと参加者数を保持
+                                        _memberBuffer.put(eventId, likesUser);
+                                        //動的なデータ変更がある場合にデータはcallbackする
+                                        notifyDataSetChanged();
+                                    }else{
+                                        _memberBuffer.put(eventId, 0);
+                                        notifyDataSetChanged();
+                                    }
                                 }
                             } catch (JSONException dataNotFound){
                                 //ここは処理しない
@@ -91,11 +121,16 @@ public class EventListAdapter extends ArrayAdapter<String> {
                         }
                     }).executeAsync();
         } else {
-            viewHolder._likesUser.setText("参加者" + _memberBuffer.get(objectId));
+            viewHolder._attendUserStatus.setText("参加者" + _memberBuffer.get(eventId));
         }
+        //eventMapがnullの時は何も表示しない
         return convertedView;
     }
 
+    /**
+     * 外部のクラスから扱う時に使う。
+     * @param useForMyPage　
+     */
     public void setUseForMyPage(boolean useForMyPage){
         _useForMyPage = useForMyPage;
     }
@@ -103,6 +138,6 @@ public class EventListAdapter extends ArrayAdapter<String> {
     class ViewHolder {
         public ImageView _eventIcon;
         public TextView _eventTitle;
-        public TextView _likesUser;
+        public TextView _attendUserStatus;
     }
 }

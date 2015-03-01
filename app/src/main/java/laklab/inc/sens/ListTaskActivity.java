@@ -35,9 +35,11 @@ public class ListTaskActivity extends ActionBarActivity {
     List<String> _eventContentList = new ArrayList<>();
     List<String> _eventAttendanceList = new ArrayList<>();
     List<GraphObject> _feedObjectIdList = new ArrayList<>();
-    List<String> _taskNameList = new ArrayList<>();
     List<String> _taskLimitList = new ArrayList<>();
     List<String> _taskContentList = new ArrayList<>();
+    List<String> _commentIdList = new ArrayList<>();
+    List<String> _eventIdList = new ArrayList<>();
+    Map<String, String> _commentIdMap = new HashMap<>();
     Map<String, String> _eventIdMap = new HashMap<>();
     private Session.StatusCallback callback = new Session.StatusCallback() {
         @Override
@@ -49,12 +51,11 @@ public class ListTaskActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list_events);
+        setContentView(R.layout.activity_list_task);
         _uiHelper = new UiLifecycleHelper(this, callback);
         _uiHelper.onCreate(savedInstanceState);
-
         //listViewに関する記述
-        final ListView listView = (ListView) findViewById(R.id.listview);
+        final ListView listView = (ListView) findViewById(R.id.listViewTaskList);
         TextView nothing = new TextView(this);
         nothing.setText(getString(R.string.eventlist_nothing));
         listView.setEmptyView(nothing);
@@ -66,13 +67,14 @@ public class ListTaskActivity extends ActionBarActivity {
                 String eventId = _eventIdMap.get(eventName);
                 ArrayList<String> eachEventInfo = new ArrayList<String>();
                 eachEventInfo.add(eventId);
-                eachEventInfo.add(_eventNameList.get(position));
-                eachEventInfo.add(_eventDayList.get(position));
-                eachEventInfo.add(_eventPlaceList.get(position));
-                eachEventInfo.add(_eventCostList.get(position));
-                eachEventInfo.add(_eventContentList.get(position));
+//                eachEventInfo.add(_eventNameList.get(position));
+//                eachEventInfo.add(_eventDayList.get(position));
+//                eachEventInfo.add(_eventPlaceList.get(position));
+//                eachEventInfo.add(_eventCostList.get(position));
+//                eachEventInfo.add(_eventContentList.get(position));
                 eachEventInfo.add(_taskLimitList.get(position));
                 eachEventInfo.add(_taskContentList.get(position));
+                eachEventInfo.add(_commentIdList.get(position));
                 Intent intent = new Intent(ListTaskActivity.this, DetailTaskActivity.class);
                 Log.i("eventInfo", eachEventInfo.toString());
                 intent.putExtra("eventInfo", eachEventInfo);
@@ -125,13 +127,14 @@ public class ListTaskActivity extends ActionBarActivity {
                                                 String message = (String) event.getProperty("message");
                                                 String[] eventInfo = message.split(",");
                                                 // イベント名
-                                                Log.i("チェック", "------------------------");
+                                               Log.i("チェック", "------------------------");
                                                 if (eventInfo.length > 0 && eventInfo[0] != null) {
                                                     Log.i("チェック", "イベント名：" + eventInfo[0]);
                                                     _eventNameList.add(eventInfo[0]);
                                                     String objectId = (String) event.getProperty("id");
                                                     Log.d("チェックId", objectId.toString());
                                                     _eventIdMap.put(eventInfo[0], objectId);
+                                                    _eventIdList.add(objectId);
                                                 }
                                                 // イベント日時
                                                 if (eventInfo.length > 1 && eventInfo[1] != null) {
@@ -188,10 +191,16 @@ public class ListTaskActivity extends ActionBarActivity {
                                                     }
                                                 }
                                             }
+                                            getCommentId(_eventIdList, session);
+                                            for(String commentId :_commentIdList){
+                                                for(String taskContent : _taskContentList) {
+                                                    _commentIdMap.put(commentId, taskContent);
+                                                }
+                                            }
                                             EventListAdapter adapter = new EventListAdapter(
                                                     getApplicationContext(),
                                                     0,
-                                                    _eventNameList,
+                                                    _taskContentList,
                                                     _eventIdMap
                                             );
                                             if (listView != null) {
@@ -200,11 +209,6 @@ public class ListTaskActivity extends ActionBarActivity {
                                         }
                                     }
                             ).executeAsync();
-                            /**
-                             * TODO それぞれのobjectIdにたいしてrequestを送る
-                             *
-                             */
-
                         }
                     }
             ).executeAsync();
@@ -219,10 +223,31 @@ public class ListTaskActivity extends ActionBarActivity {
         }
     }
 
+    public void getCommentId(List<String> eventIdList, Session session){
+        //全てのイベントに対して処理をする
+        for(String eachEventId : eventIdList){
+            new Request(session,
+                    "/" + eachEventId + "/comments",
+                    null,
+                    HttpMethod.GET,
+                    new Request.Callback() {
+                        @Override
+                        public void onCompleted(Response response) {
+                            Log.i("チェックコメントID", response.getGraphObject().getPropertyAsList("data", GraphObject.class).toString());
+                                List<GraphObject> comments = response.getGraphObject().getPropertyAsList("data", GraphObject.class);
+                                for(GraphObject comment :comments){
+                                    _commentIdList.add((String)comment.getProperty("id"));
+                            }
+                        }
+                    }
+            ).executeAsync();
+        }
+    }
+
     /**
      * Facebookとのセッションの状態が変化したときに呼び出される処理
-     * @param session
      * @param state
+     * @param session
      * @param exception
      */
     private void onSessionStateChange(Session session, SessionState state, Exception exception) {

@@ -16,10 +16,8 @@ import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
-import com.facebook.model.GraphObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 public class DetailTaskActivity extends ActionBarActivity implements View.OnClickListener {
@@ -50,6 +48,7 @@ public class DetailTaskActivity extends ActionBarActivity implements View.OnClic
     Button _assigned;
     Button _unassigned;
     String _commentId;
+    private Session session;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,42 +61,20 @@ public class DetailTaskActivity extends ActionBarActivity implements View.OnClic
         _unassigned.setOnClickListener(this);
         _assigned.setBackgroundColor(Color.WHITE);
         _unassigned.setBackgroundColor(Color.WHITE);
-//        int[] layoutInt = {R.id.button_assign, R.id.button_notAttend, R.id.eventDay,
-//                R.id.eventPlace, R.id.eventCost, R.id.eventName, R.id.eventContent};
-//        final TextView[] textViews = new TextView[layoutInt.length];
-//        for(int i = 0; i < layoutInt.length; i ++){
-//            textViews[i] = (TextView)findViewById(i);
-//        }
         final TextView taskContent = (TextView)findViewById(R.id.taskContentTextView);
         final TextView taskLimit = (TextView)findViewById(R.id.taskDueDateTextView);
-//        final TextView eventDay = (TextView) findViewById (R.id.eventDay);
-//        final TextView eventPlace = (TextView) findViewById(R.id.eventPlace);
-//        final TextView eventCost = (TextView) findViewById(R.id.eventCost);
-//        final TextView eventName = (TextView) findViewById(R.id.eventName);
-//        final TextView eventContent = (TextView) findViewById(R.id.eventContent);
-        //listEventsActivityでIntentにセットしたイベント情報を取得する
-        try {
-            //dataの初期化
-            Intent intent = getIntent();
-            ArrayList<String> eventInfo = intent.getStringArrayListExtra("eventInfo");
-            //それぞれのテキストviewにイベント情報をセット
-            _eventId = eventInfo.get(0);
-            taskContent.setText(eventInfo.get(6));
-            taskLimit.setText(eventInfo.get(7));
-            _commentId = eventInfo.get(8);
-//            eventName.setText(eventInfo.get(1));
-//            eventDay.setText(eventInfo.get(2));
-//            eventPlace.setText(eventInfo.get(3));
-//            eventCost.setText(eventInfo.get(4));
-//            eventContent.setText(eventInfo.get(5));
-        }catch(Exception dataNotFoundException){
-            finish();
-            Toast.makeText(getApplicationContext(), "イベント情報が取得できませんでした", Toast.LENGTH_SHORT).show();
-        }
+        //dataの初期化
+        Intent intent = getIntent();
+        ArrayList<String> eventInfo = intent.getStringArrayListExtra("eventInfo");
+        //それぞれのテキストviewにイベント情報をセット
+        _eventId = eventInfo.get(0);
+        taskContent.setText(eventInfo.get(1));
+        taskLimit.setText(eventInfo.get(2));
+        _commentId = eventInfo.get(3);
+        Log.i("fadgs2", _commentId.toString());
         _uiHelper = new UiLifecycleHelper(this, _statusCallback);
-
         // Facebook ログイン管理sessionがOpenがどうかの確認
-        Session session = Session.getActiveSession();
+        session = Session.getActiveSession();
         if (session == null) {
             if (savedInstanceState != null) {
                 session = Session.restoreSession(this, null, _statusCallback, savedInstanceState);
@@ -140,10 +117,12 @@ public class DetailTaskActivity extends ActionBarActivity implements View.OnClic
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.button_assigned) {
-            doPost(POSTREQUEST, new Request.Callback(){
+            doPost(POSTREQUEST, new Request.Callback() {
                 @Override
                 public void onCompleted(Response response) {
-                    if((boolean)response.getGraphObject().getProperty("success")) {
+                    Log.i("チェック１",response.toString());
+                    Log.i("チェック",response.getGraphObject().toString());
+                    if ((boolean) response.getGraphObject().getProperty("success")) {
                         _assigned.setBackgroundColor(Color.BLUE);
                         _assigned.setTextColor(Color.WHITE);
                         _unassigned.setBackgroundColor(Color.WHITE);
@@ -167,30 +146,6 @@ public class DetailTaskActivity extends ActionBarActivity implements View.OnClic
                     }
                 }
             });
-        }
-    }
-
-    public void showUserCount(){
-        doPost(GETREUEST, new Request.Callback() {
-            @Override
-            public void onCompleted(Response response) {
-                GraphObject likes = response.getGraphObject();
-                Log.i("チェックGraph", response.toString());
-            }
-        });
-    }
-
-    /**
-     * permissionのチェックをする関数
-     * @param permissions チェックするpermissionの種類
-     * @return
-     */
-    public boolean checkPermission(List<String> permissions){
-        Session session = Session.getActiveSession();
-        if (session != null && session.getPermissions().contains(permissions)){
-            return true;
-        } else {
-            return false;
         }
     }
 
@@ -220,7 +175,6 @@ public class DetailTaskActivity extends ActionBarActivity implements View.OnClic
                 return;
         }
         Session session = Session.getActiveSession();
-        //TODO イベン  IDではなくcommentIdが存在する。データで取得してきたグラフオブジェクトに対してidをさらに取得する
         new Request(
                 session,
                 "/" + _commentId + "/likes",
@@ -230,16 +184,7 @@ public class DetailTaskActivity extends ActionBarActivity implements View.OnClic
         ).executeAsync();
     }
 
-
     public void onSessionStateChange(Session session, SessionState state, Exception exception){
-        Log.i("実行","実行されてるよ");
-        Log.i("セッションチェック", session.getPermissions().toString());
-//        if ((exception instanceof FacebookOperationCanceledException ||
-//                exception instan   ceof FacebookAuthorizationException)) {
-//            Log.w("チェック", "error occured:" + exception.getMessage());
-//        } else if (state == SessionState.OPENED_TOKEN_UPDATED) {
-//            doPost();
-//        }
     }
 
     private void doLogin() {

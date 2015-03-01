@@ -34,6 +34,7 @@ public class ListEventsActivity extends ActionBarActivity {
     List<String> _eventContentList = new ArrayList<>();
     List<String> _eventAttendanceList = new ArrayList<>();
     List<String> _commentIdList = new ArrayList<>();
+    List<String> _pictureURLList = new ArrayList<>();
     List<GraphObject> _feedObjectIdList = new ArrayList<>();
     Map<String, String> _eventIdMap = new HashMap<>();
     private Session.StatusCallback callback = new Session.StatusCallback() {
@@ -69,6 +70,7 @@ public class ListEventsActivity extends ActionBarActivity {
                 eachEventInfo.add(_eventCostList.get(position));
                 eachEventInfo.add(_eventContentList.get(position));
                 eachEventInfo.add(_commentIdList.get(position));
+                eachEventInfo.add(_pictureURLList.get(position));
                 Intent intent = new Intent(ListEventsActivity.this, DetailEventActivity.class);
                 Log.i("eventInfo", eachEventInfo.toString());
                 intent.putExtra("eventInfo", eachEventInfo);
@@ -118,6 +120,8 @@ public class ListEventsActivity extends ActionBarActivity {
                                         Log.i("RESPONSE", "イベント数：" + eventList.size());
                                         // イベントから情報とタスクを取得
                                         for (GraphObject event : eventList) {
+                                            String pictureURL = (String)event.getProperty("picture");
+                                            _pictureURLList.add(pictureURL);
                                             String message = (String) event.getProperty("message");
                                             String[] eventInfo = message.split(",");
                                             // イベント名

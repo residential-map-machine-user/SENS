@@ -50,10 +50,10 @@ public class MyPageActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mypage);
+        //facebookのセッションを管理する
         _uiHelper = new UiLifecycleHelper(this, callback);
         _uiHelper.onCreate(savedInstanceState);
-
-        //listViewに関する記述
+        //listViewにの設定
         listView = (ListView) findViewById(R.id.myEvent);
         TextView nothing = new TextView(this);
         nothing.setText(getString(R.string.eventlist_nothing));
@@ -78,10 +78,9 @@ public class MyPageActivity extends ActionBarActivity {
 //                startActivity(intent);
             }
         });
-
         //facebookにrequestを送る処理
         final Session session = Session.getActiveSession();
-        if (session.isOpened()) {
+        if(session.isOpened()){
             new Request(session,
                     "/" + getString(R.string.pageId),
                     null,
@@ -94,7 +93,6 @@ public class MyPageActivity extends ActionBarActivity {
                             boolean canPost = (boolean) graph.getProperty("can_post");
                             Log.i("page", "メンバー数：" + likeCount);
                             Log.i("page", "投稿可能：" + canPost);
-
                             new Request(session,
                                     "/" + getString(R.string.pageId) + "/feed",
                                     null,
@@ -193,15 +191,6 @@ public class MyPageActivity extends ActionBarActivity {
                                             }
                                             //ユーザが参加しているイベントIDを取得
                                             checkLikesState(_eventIdMap, session);
-//                                            EventListAdapter adapter = new EventListAdapter(
-//                                                    getApplicationContext(),
-//                                                    0,
-//                                                    _eventNameList,
-//                                                    _eventIdMap
-//                                            );
-//                                            if (listView != null) {
-//                                                listView.setAdapter(adapter);
-//                                            }
                                         }
                                     }
                             ).executeAsync();
