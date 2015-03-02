@@ -41,7 +41,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/dueDate"
-        android:text="2014年５月６日まで" />
+        android:hint="期限を入力してください"
+        />
 
     <TextView
         android:layout_width="wrap_content"
@@ -54,7 +55,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/taskContent"
-        android:text="優秀者への商品購入" />
+        android:hint="仕事内容を入力してください"
+        />
 
     <Button
         android:layout_width="wrap_content"

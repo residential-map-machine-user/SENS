@@ -27,6 +27,7 @@ import java.util.Set;
 
 
 public class MyPageActivity extends ActionBarActivity {
+
     private UiLifecycleHelper _uiHelper;
     List<String> _eventNameList = new ArrayList<>();
     List<String> _eventDayList = new ArrayList<>();
@@ -39,6 +40,7 @@ public class MyPageActivity extends ActionBarActivity {
     List<String> _userJoined = new ArrayList<>();
     Map<String, String> _eventIdMap = new HashMap<>();
     ListView listView;
+
     private Session.StatusCallback callback = new Session.StatusCallback() {
         @Override
         public void call(Session session, SessionState state, Exception exception) {
@@ -54,7 +56,7 @@ public class MyPageActivity extends ActionBarActivity {
         _uiHelper = new UiLifecycleHelper(this, callback);
         _uiHelper.onCreate(savedInstanceState);
         //listViewにの設定
-        listView = (ListView) findViewById(R.id.myEvent);
+        listView = (ListView) findViewById(R.id.list_card);
         TextView nothing = new TextView(this);
         nothing.setText(getString(R.string.eventlist_nothing));
         listView.setEmptyView(nothing);

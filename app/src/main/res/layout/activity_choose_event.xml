@@ -7,10 +7,12 @@
     tools:context="laklab.inc.sens.ChooseEventActivityForTask">
 
     <ListView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/choose_event_list"
-    />
+        android:id="@+id/list_card"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fadingEdge="none"
+        android:divider="#808080"
+        android:dividerHeight="8dp"/>
 
 
 </LinearLayout>

@@ -55,7 +55,7 @@ public class ListTaskActivity extends ActionBarActivity {
         _uiHelper = new UiLifecycleHelper(this, callback);
         _uiHelper.onCreate(savedInstanceState);
         //listViewに関する記述
-        final ListView listView = (ListView) findViewById(R.id.listViewTaskList);
+        final ListView listView = (ListView) findViewById(R.id.list_card);
         TextView nothing = new TextView(this);
         nothing.setText(getString(R.string.eventlist_nothing));
         listView.setEmptyView(nothing);

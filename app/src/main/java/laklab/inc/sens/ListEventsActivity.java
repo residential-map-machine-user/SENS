@@ -52,7 +52,7 @@ public class ListEventsActivity extends ActionBarActivity {
         _uiHelper.onCreate(savedInstanceState);
 
         //listViewに関する記述
-        final ListView listView = (ListView) findViewById(R.id.listview);
+        final ListView listView = (ListView) findViewById(R.id.list_card);
         TextView nothing = new TextView(this);
         nothing.setText(getString(R.string.eventlist_nothing));
         listView.setEmptyView(nothing);

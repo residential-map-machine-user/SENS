@@ -7,10 +7,8 @@
     >
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-        android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:layout_height="match_parent"
         android:paddingTop="@dimen/activity_vertical_margin"
-        android:paddingBottom="@dimen/activity_vertical_margin"
         tools:context="laklab.inc.sens.MakeEventActivity"
         android:weightSum="1"
         android:id="@+id/making_new_event"
@@ -40,7 +38,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/eventName"
             android:layout_gravity="center_horizontal"
-            android:text="イベント名を入力してください" />
+            android:hint="イベント名を入力してください"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -53,7 +51,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/eventDay"
-            android:text="日時を入力してください" />
+            android:hint="日時を入力してください" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -67,7 +65,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/eventPlace"
-            android:text="場所を入力してください" />
+            android:hint="場所を入力してください" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -80,7 +78,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/eventCost"
-            android:text="参加費を入力してください" />
+            android:hint="参加費を入力してください" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -95,7 +93,8 @@
             android:id="@+id/eventContent"
             android:layout_gravity="center_horizontal"
             android:layout_weight="0.64"
-            android:text="イベントの内容を入力してください" />
+            android:hint="イベントの内容を入力してください"
+            />
 
         <Button
             android:layout_width="wrap_content"
