@@ -63,7 +63,9 @@
             android:layout_gravity="center_horizontal"
             android:gravity="center_vertical|center_horizontal"
             android:layout_marginTop="50dp"
-            android:background="@drawable/back"/>
+            android:background="@drawable/back"
+            android:textColor="#fff2f2f2"
+            android:alpha="0.5" />
 
     </LinearLayout>
 </ScrollView>

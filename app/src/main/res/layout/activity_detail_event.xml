@@ -9,10 +9,6 @@
     <LinearLayout
         android:layout_height="match_parent"
         android:layout_width="match_parent"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin"
-        android:paddingBottom="@dimen/activity_vertical_margin"
 
         android:orientation="vertical"
         android:weightSum="1">
@@ -24,86 +20,155 @@
             android:text="桜 Discussion"
             android:id="@+id/eventName"
             android:layout_gravity="center_horizontal"
-            android:textSize="20dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="基本情報"
-            android:id="@+id/textView14"
+            android:textSize="20dp"
             android:layout_marginTop="20dp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="日時"
-            android:id="@+id/textView15"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="10dp" />
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="30dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:background="#dbd3d3d3">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="2015年5月6日"
-            android:id="@+id/eventDay"
-            android:layout_marginLeft="50dp" />
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:focusable="false"
+                android:dividerPadding="1dp"
+                android:layout_marginTop="1dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="場所"
-            android:id="@+id/textView16"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="10dp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="日時"
+                    android:id="@+id/textView15"
+                    android:layout_weight="1" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="青少年オリンピックセンター"
-            android:id="@+id/eventPlace"
-            android:layout_marginLeft="50dp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textView2"
+                    android:layout_weight="10" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="参加費"
-            android:id="@+id/textView17"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="10dp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2015年5月6日"
+                    android:id="@+id/eventDay"
+                    android:layout_weight="1" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="500円"
-            android:id="@+id/eventCost"
-            android:layout_marginLeft="50dp" />
+            </LinearLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="内容"
-            android:id="@+id/textView18"
-            android:layout_marginTop="20dp" />
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:focusable="false"
+                android:dividerPadding="1dp"
+                android:layout_marginTop="1dp">
 
-        <TextView
-            android:layout_width="283dp"
-            android:layout_height="179dp"
-            android:text="E.S.S一年生のための大会。初めてESSのdiscussionに参加する人たちに対してもやさしいTOPICを使。テーマ大学に入って何をしいか。What do you want to do in your univercity life? and why? tell me your detail. what do you think is the most important element in your student life? for example part-time work, grade, club-activity."
-            android:id="@+id/eventContent"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="20dp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="場所"
+                    android:id="@+id/textView16"
+                    android:layout_weight="1" />
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="参加する"
-            android:id="@+id/button_attend" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textView3"
+                    android:layout_weight="4" />
 
-        <Button
-            android:layout_width="wrap_content"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="青少年オリンピックセンター"
+                    android:id="@+id/eventPlace"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:focusable="false"
+                android:dividerPadding="1dp"
+                android:layout_marginTop="1dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="参加費"
+                    android:id="@+id/textView17"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textView4"
+                    android:layout_weight="10" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="500円"
+                    android:id="@+id/eventCost"
+                    android:layout_weight="1" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_marginTop="40dp"
+            android:background="#dbd3d3d3"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="内容"
+                android:id="@+id/textView18" />
+
+            <TextView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="E.S.S一年生のための大会。初めてESSのdiscussionに参加する人たちに対してもやさしいTOPICを使。テーマ大学に入って何をしいか。What do you want to do in your univercity life? and why? tell me your detail. what do you think is the most important element in your student life? for example part-time work, grade, club-activity."
+                android:id="@+id/eventContent" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="参加しない"
-            android:id="@+id/button_notAttend" />
+            android:layout_marginTop="40dp"
+            android:gravity="center_horizontal">
+
+            <Button
+                android:layout_width="100dp"
+                android:layout_height="60dp"
+                android:text="参加する"
+                android:id="@+id/button_attend"
+                android:background="@drawable/back"
+                android:textColor="#bfe6e6e6"
+                android:alpha="0.5" />
+
+            <Button
+                android:layout_width="100dp"
+                android:layout_height="60dp"
+                android:text="参加しない"
+                android:id="@+id/button_notAttend"
+                android:background="@drawable/back"
+                android:layout_marginLeft="30dp"
+                android:textColor="#bfe6e6e6"
+                android:alpha="0.5" />
+        </LinearLayout>
 
     </LinearLayout>
 </ScrollView>
