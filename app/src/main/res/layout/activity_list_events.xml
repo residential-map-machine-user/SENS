@@ -4,7 +4,8 @@
     android:layout_height="match_parent"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="laklab.inc.sens.ListEventsActivity"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:background="#1b84f6e6">
     <ListView
         android:id="@+id/list_card"
         android:layout_width="match_parent"

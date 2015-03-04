@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">SENS</string>
+    <string name="app_name">TASK SHARE</string>
     <string name="hello_world">SENS</string>
     <string name="action_settings">設定</string>
     <string name="next_page">ログイン</string>

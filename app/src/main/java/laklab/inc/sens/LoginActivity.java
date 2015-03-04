@@ -3,8 +3,6 @@ package laklab.inc.sens;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
 
 import com.facebook.Session;
 import com.facebook.SessionState;
@@ -28,32 +26,24 @@ public class LoginActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        Button toTopButton = (Button)findViewById(R.id.event_button);
         LoginButton authButton = (LoginButton) findViewById(R.id.authButton);
         authButton.setPublishPermissions(Arrays.asList("publish_actions"));
-        //TopActivityへの遷移するためのボタンとその時に付属させる情報の取得
-        toTopButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Topボタンに遷移するためのIntentを作成
-                Intent showTop = new Intent(LoginActivity.this, TopActivity.class);
-                startActivity(showTop);
-            }
-        });
         uiHelper = new UiLifecycleHelper(this, callback);
         uiHelper.onCreate(savedInstanceState);
         Session session = Session.getActiveSession();
 
-        if(session.isOpened()){
-            Intent showTop = new Intent(LoginActivity.this, TopActivity.class);
-            startActivity(showTop);
-        }
+
     }
 
     @Override
     public void onResume() {
         super.onResume();
         uiHelper.onResume();
+        Session session = Session.getActiveSession();
+        if(session.isOpened()){
+            Intent showTop = new Intent(LoginActivity.this, TopActivity.class);
+            startActivity(showTop);
+        }
     }
 
     @Override

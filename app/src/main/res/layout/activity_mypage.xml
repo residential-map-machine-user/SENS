@@ -4,7 +4,8 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="laklab.inc.sens.MyPageActivity"
     android:orientation="vertical"
-    android:id="@+id/myPage">
+    android:id="@+id/myPage"
+    android:background="#1b84f6e6">
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

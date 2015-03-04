@@ -13,18 +13,26 @@
         android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity"
         android:weightSum="1"
         android:orientation="vertical"
-        android:background="@drawable/com_facebook_place_default_icon"
+        android:background="#1b84f6e6"
         android:id="@+id/linear">
-        <TextView android:text="@string/hello_world" android:layout_width="169dp"
+        <TextView android:text="TASK  SHARE" android:layout_width="169dp"
             android:layout_height="91dp"
             android:id="@+id/textView"
             android:layout_gravity="center_horizontal"
             android:gravity="center"
             android:textSize="27dp"
-            android:textColor="#ff1e8e24"
+            android:textColor="#69221c1e"
             android:textStyle="bold"
             android:fontFamily="游ゴシック" />
-        <com.facebook.widget.LoginButton
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/dash" />
+
+    <com.facebook.widget.LoginButton
             android:id="@+id/authButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -39,19 +47,8 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:visibility="invisible"
             />
-        <Button
-            android:layout_width="100dp"
-            android:layout_height="40dp"
-            android:text="Top画面へ"
-            android:id="@+id/event_button"
-            android:layout_gravity="center_horizontal|top"
-            style="@style/Base.TextAppearance.AppCompat.Button"
-            android:clickable="true"
-            android:elegantTextHeight="true"
-            android:focusable="true"
-            android:outlineProvider="bounds" />
 
-        <!--<Button-->
+    <!--<Button-->
             <!--android:id="@+id/postButton"-->
             <!--android:text="投稿"-->
             <!--android:layout_width="316dp"-->

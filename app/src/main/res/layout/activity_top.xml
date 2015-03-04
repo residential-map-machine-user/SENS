@@ -3,95 +3,212 @@
     android:layout_height="match_parent"
     tools:context="laklab.inc.sens.TopActivity"
     android:id="@+id/main_view"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="#1b84f6e6">
 
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="fill_parent"
-        android:layout_height="150dp"
+        android:layout_height="wrap_content"
         android:layout_weight="0"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="30dp"
         android:layout_gravity="center_horizontal"
         android:gravity="center_horizontal"
         android:layout_marginBottom="5dp">
 
-        <ImageButton
+        <FrameLayout
             android:layout_width="120dp"
             android:layout_height="120dp"
-            android:id="@+id/annual_schedule_button"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="15dp"
-            android:layout_margin="10dp"
-            android:background="#ff89dfff"
-            />
+            android:background="@android:drawable/dialog_holo_light_frame">
 
-        <ImageButton
+            <ImageButton
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/annual_schedule_button"
+                android:src="@drawable/calender"
+                android:scaleType="fitCenter"
+                android:background="#17fff60f"
+                android:layout_gravity="center" />
+
+        </FrameLayout>
+
+        <FrameLayout
             android:layout_width="120dp"
             android:layout_height="120dp"
-            android:id="@+id/show_event_button"
-            android:layout_marginRight="30dp"
-            android:layout_marginLeft="15dp"
-            android:layout_margin="10dp"
-            android:background="#ff89dfff" />
+            android:background="@android:drawable/dialog_holo_light_frame"
+            android:layout_marginLeft="7dp"
+            android:layout_marginRight="7dp">
+
+            <ImageButton
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/show_event_button"
+                android:background="#17fff60f"
+                android:src="@drawable/event"
+                android:scaleType="fitCenter"
+                />
+        </FrameLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center_vertical|center_horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CALENDER"
+            android:id="@+id/textView19"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="30dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="EVENT LIST"
+            android:id="@+id/textView22"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="10dp" />
     </LinearLayout>
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="fill_parent"
-        android:layout_height="150dp"
+        android:layout_height="wrap_content"
         android:layout_weight="0"
         android:layout_gravity="center_horizontal"
         android:gravity="center_horizontal"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="5dp">
 
-        <ImageButton
+        <FrameLayout
             android:layout_width="120dp"
             android:layout_height="120dp"
-            android:id="@+id/make_task_button"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="15dp"
-            android:layout_margin="10dp"
-            android:background="#ff89dfff" />
+            android:background="@android:drawable/dialog_holo_light_frame"
+            android:layout_marginLeft="7dp"
+            android:layout_marginRight="7dp">
 
-        <ImageButton
+            <ImageButton
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/make_task_button"
+                android:background="#17fff60f"
+                android:scaleType="fitCenter"
+                android:src="@drawable/plus" />
+        </FrameLayout>
+
+        <FrameLayout
             android:layout_width="120dp"
             android:layout_height="120dp"
-            android:id="@+id/button_make_event"
-            android:layout_marginRight="30dp"
-            android:layout_marginLeft="15dp"
-            android:layout_margin="10dp"
-            android:background="#ff89dfff" />
+            android:background="@android:drawable/dialog_holo_light_frame"
+            android:layout_marginLeft="7dp"
+            android:layout_marginRight="7dp">
+
+            <ImageButton
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/button_make_event"
+                android:background="#17fff60f"
+                android:scaleType="fitCenter"
+                android:src="@drawable/add" />
+        </FrameLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical|center_horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="NEW TASK"
+            android:id="@+id/textView20"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="30dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="NEW EVENT"
+            android:id="@+id/textView21"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="10dp" />
     </LinearLayout>
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="fill_parent"
-        android:layout_height="150dp"
+        android:layout_height="wrap_content"
         android:layout_weight="0"
         android:layout_marginBottom="5dp"
         android:layout_gravity="center_horizontal"
         android:gravity="center_horizontal"
         android:layout_marginTop="5dp">
 
-        <ImageButton
+        <FrameLayout
             android:layout_width="120dp"
             android:layout_height="120dp"
-            android:id="@+id/button_mypage"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="15dp"
-            android:layout_margin="10dp"
-            android:background="#ff89dfff" />
+            android:background="@android:drawable/dialog_holo_light_frame"
+            android:layout_marginLeft="7dp"
+            android:layout_marginRight="7dp">
 
-        <ImageButton
+            <ImageButton
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/button_mypage"
+                android:background="#17fff60f"
+                android:scaleType="fitCenter"
+                android:src="@drawable/human" />
+        </FrameLayout>
+
+        <FrameLayout
             android:layout_width="120dp"
             android:layout_height="120dp"
-            android:id="@+id/button_task_list"
-            android:layout_marginRight="30dp"
-            android:layout_marginLeft="15dp"
-            android:layout_margin="10dp"
-            android:background="#ff89dfff" />
+            android:background="@android:drawable/dialog_holo_light_frame"
+            android:layout_marginLeft="7dp"
+            android:layout_marginRight="7dp">
+
+            <ImageButton
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/button_task_list"
+                android:background="#17fff60f"
+                android:scaleType="fitCenter"
+                android:src="@drawable/task"
+                android:padding="7dp" />
+        </FrameLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical|center_horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="MY PAGE"
+            android:id="@+id/textView8"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="30dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TASK LIST"
+            android:id="@+id/textView10"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="10dp" />
     </LinearLayout>
 
 </LinearLayout>

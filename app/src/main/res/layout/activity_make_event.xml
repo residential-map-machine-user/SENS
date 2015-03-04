@@ -4,7 +4,7 @@
     tools:context="laklab.inc.sens.DetailEventActivity"
     android:layout_height="fill_parent"
     android:layout_width="fill_parent"
-    >
+    android:background="#1b84f6e6">
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -15,77 +15,36 @@
         android:orientation="vertical">
 
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="イベント新規作成"
-            android:id="@+id/textView3"
-            android:gravity="left|top"
-            android:layout_marginLeft="80dp"
-            android:layout_marginRight="80dp"
-            android:layout_gravity="center_horizontal" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/textView4"
-            android:layout_gravity="center_vertical|top"
-            android:text="イベント名"
-            android:layout_marginTop="30dp" />
-
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/eventName"
             android:layout_gravity="center_horizontal"
-            android:hint="イベント名を入力してください"/>
+            android:hint="イベント名"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/textView5"
-            android:text="日時"
-            android:layout_marginTop="30dp" />
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/eventDay"
-            android:hint="日時を入力してください" />
+            android:hint="日時" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/textView7"
-            android:text="場所"
-            android:layout_gravity="center_horizontal|left"
-            android:layout_marginTop="30dp" />
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/eventPlace"
-            android:hint="場所を入力してください" />
+            android:hint="場所" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="参加費"
-            android:id="@+id/buttontext"
-            android:layout_marginTop="30dp" />
+
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/eventCost"
-            android:hint="参加費を入力してください" />
+            android:hint="参加費" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/textView6"
-            android:text="イベント概要"
-            android:layout_marginTop="30dp" />
+
 
         <EditText
             android:layout_width="match_parent"
@@ -93,17 +52,18 @@
             android:id="@+id/eventContent"
             android:layout_gravity="center_horizontal"
             android:layout_weight="0.64"
-            android:hint="イベントの内容を入力してください"
+            android:hint="詳細"
             />
 
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="196dp"
+            android:layout_height="60dp"
             android:text="送信"
             android:id="@+id/send"
             android:layout_gravity="center_horizontal"
             android:gravity="center_vertical|center_horizontal"
-            android:layout_marginTop="50dp" />
+            android:layout_marginTop="50dp"
+            android:background="@drawable/back"/>
 
     </LinearLayout>
 </ScrollView>

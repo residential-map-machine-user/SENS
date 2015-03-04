@@ -8,7 +8,7 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="70dp"
         android:layout_marginLeft="15dp"
         android:layout_marginTop="5dp"
         android:layout_marginRight="15dp"
@@ -19,7 +19,7 @@
             android:orientation="horizontal"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:background="#ffffffff"
+            android:background="#17fff60f"
             android:gravity="center_vertical">
 
             <LinearLayout
@@ -32,13 +32,13 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="30dp"
-                    android:text="eventTitle"
+                    android:text="イベント名"
                     android:id="@+id/eventTitle"
-                    android:textColor="#ff82e0d4"
+                    android:textColor="#ff74c0e0"
                     android:layout_gravity="center_horizontal"
                     android:gravity="center_vertical|left"
                     android:layout_marginTop="3dp"
-                    android:textSize="22dp"
+                    android:textSize="19dp"
                     android:layout_marginLeft="5dp" />
 
                 <TextView
@@ -47,9 +47,10 @@
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:id="@+id/likesUser"
                     android:text="参加者"
-                    android:textColor="#ff353535"
-                    android:layout_marginLeft="5dp"
+                    android:textColor="#b7525252"
+                    android:layout_marginLeft="7dp"
                     android:textSize="10dp"
+                    android:layout_marginTop="2dp"
                     android:gravity="center_vertical" />
             </LinearLayout>
 
@@ -57,7 +58,7 @@
                 android:layout_width="80dp"
                 android:layout_height="match_parent"
                 android:id="@+id/eventIcon"
-                android:src="@android:drawable/ic_delete"
+                android:src="@drawable/human"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="5dp"
                 android:layout_weight="1" />

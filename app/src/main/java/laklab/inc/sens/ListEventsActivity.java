@@ -4,6 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -275,5 +278,31 @@ public class ListEventsActivity extends ActionBarActivity {
         }else if (state.isClosed()) {
             Log.i("SessionClose", "セッションはクローズ");
         }
+    }
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // メニューの要素を追加して取得
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+
+        return super.onCreateOptionsMenu(menu);
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        item.getItemId();
+        switch(item.getItemId()){
+            case R.id.event_list:
+                Intent listEventIntent = new Intent(ListEventsActivity.this, ListEventsActivity.class);
+                startActivity(listEventIntent);
+                break;
+            case R.id.task_list:
+                Intent listTaskIntent = new Intent(ListEventsActivity.this, ListTaskActivity.class);
+                startActivity(listTaskIntent);
+                break;
+            case R.id.myPage:
+                Intent myPage = new Intent(ListEventsActivity.this, MyPageActivity.class);
+                startActivity(myPage);
+                break;
+        }
+        return true;
     }
 }
