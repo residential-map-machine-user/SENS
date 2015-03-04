@@ -1,73 +1,97 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:layout_height="match_parent"
     tools:context="laklab.inc.sens.TopActivity"
     android:id="@+id/main_view"
-    android:orientation="vertical"
-    android:weightSum="1">
+    android:orientation="vertical">
 
 
-    <Button
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="年間スケジュール"
-        android:id="@+id/annual_schedule_button"
-        android:layout_below="@+id/annual_calander_text"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
+        android:layout_height="150dp"
+        android:layout_weight="0"
+        android:layout_marginTop="5dp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="100dp" />
+        android:gravity="center_horizontal"
+        android:layout_marginBottom="5dp">
 
-    <Button
+        <ImageButton
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:id="@+id/annual_schedule_button"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="15dp"
+            android:layout_margin="10dp"
+            android:background="#ff89dfff"
+            />
+
+        <ImageButton
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:id="@+id/show_event_button"
+            android:layout_marginRight="30dp"
+            android:layout_marginLeft="15dp"
+            android:layout_margin="10dp"
+            android:background="#ff89dfff" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="イベント一覧"
-        android:id="@+id/show_event_button"
-        android:layout_below="@+id/event_button"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_gravity="center_horizontal" />
-
-    <Button
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="タスク作成"
-        android:id="@+id/make_task_button"
-        android:layout_below="@+id/send"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_gravity="center_horizontal" />
-
-    <Button
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="新規イベント作成"
-        android:id="@+id/button_make_event"
-        android:layout_gravity="center_horizontal" />
-
-    <Button
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="マイページ"
-        android:id="@+id/button_mypage"
-        android:layout_gravity="center_horizontal" />
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="タスク一覧"
-        android:id="@+id/button_task_list"
-        android:layout_gravity="center_horizontal" />
-
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/imageButton"
+        android:layout_height="150dp"
+        android:layout_weight="0"
         android:layout_gravity="center_horizontal"
-        android:layout_weight="0.25"
-        android:src="@drawable/com_facebook_button_check_on" />
+        android:gravity="center_horizontal"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp">
+
+        <ImageButton
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:id="@+id/make_task_button"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="15dp"
+            android:layout_margin="10dp"
+            android:background="#ff89dfff" />
+
+        <ImageButton
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:id="@+id/button_make_event"
+            android:layout_marginRight="30dp"
+            android:layout_marginLeft="15dp"
+            android:layout_margin="10dp"
+            android:background="#ff89dfff" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="150dp"
+        android:layout_weight="0"
+        android:layout_marginBottom="5dp"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="5dp">
+
+        <ImageButton
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:id="@+id/button_mypage"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="15dp"
+            android:layout_margin="10dp"
+            android:background="#ff89dfff" />
+
+        <ImageButton
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:id="@+id/button_task_list"
+            android:layout_marginRight="30dp"
+            android:layout_marginLeft="15dp"
+            android:layout_margin="10dp"
+            android:background="#ff89dfff" />
+    </LinearLayout>
 
 </LinearLayout>
