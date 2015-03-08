@@ -40,7 +40,7 @@ public class MyPageActivity extends ActionBarActivity {
     List<String> _eventAttendanceList = new ArrayList<>();
     List<String> _commentIdList = new ArrayList<>();
     List<GraphObject> _feedObjectIdList = new ArrayList<>();
-    List<String> _userJoined = new ArrayList<>();
+    List<String> _userJoinedEventId = new ArrayList<>();
     Map<String, String> _eventIdMap = new HashMap<>();
     ListView listView;
 
@@ -199,11 +199,6 @@ public class MyPageActivity extends ActionBarActivity {
                                         }
                                     }
                             ).executeAsync();
-                            /**
-                             * TODO それぞれのobjectIdにたいしてrequestを送る
-                             *
-                             */
-
                         }
                     }
             ).executeAsync();
@@ -254,9 +249,6 @@ public class MyPageActivity extends ActionBarActivity {
         }
     }
 
-    public void getLikesUser (){
-
-    }
 
     /**
      * Facebookとのセッションの状態が変化したときに呼び出される処理
@@ -273,13 +265,16 @@ public class MyPageActivity extends ActionBarActivity {
     }
 
     /**
-     *
-     * @param eventIdMap
-     * @param session
+     *特定のオブジェクトにいいねをしている全てのユーザーを取得
+     * @param eventIdMap　全てのイベントID
+     * @param session   アクティブなSession
      */
     public void checkLikesState(Map<String, String> eventIdMap, Session session){
+        //全てのイベント名
         Set<String> eventNameSet = eventIdMap.keySet();
+        //  全てのイベントに対しての処理
         for(final String eventName : eventNameSet){
+            //ここからは一つのイベントに対して考えていく
             final String eventId = _eventIdMap.get(eventName);
             System.out.println(eventId);
             new Request(session,
@@ -290,33 +285,45 @@ public class MyPageActivity extends ActionBarActivity {
                         @Override
                         public void onCompleted(Response likesUser) {
                             System.out.println(likesUser.toString());
+                            //ここのデータキーでいいねをしているユーザーの情報を取得
                             List<GraphObject> _likesUserList = likesUser.getGraphObject().getPropertyAsList("data", GraphObject.class);
+                            //いいねをしているユーザーの人数だけ処理
                             for(GraphObject likeUser : _likesUserList){
+                                //このイベントに参加しているユーザーのIDを取得
                                 String userId = (String)likesUser.getGraphObject().getProperty("id");
-                                _userJoined.add(eventId);
+                                //イベントIDを追加
+                                _userJoinedEventId.add(eventId);
                             }
                             //アダプターにイベントIDをセットするメソッド
-                            showUserJoinedEventListView(_userJoined);
+                            showUserJoinedEventListView(_userJoinedEventId);
                         }
                     }
             ).executeAsync();
         }
     }
 
-    public void showUserJoinedEventListView(List<String> userJoined){
-        //イベント名、id
+    /**
+     *
+     * @param userJoinedEventId　
+     */
+    public void showUserJoinedEventListView(List<String> userJoinedEventId){
+        //全てのイベントIdを取得
         Set<String> eventNameSet = _eventIdMap.keySet();
         List<String> eventNameList = new ArrayList<>();
-        for (String userJoinId : userJoined) {
+        //全てのユーザーがおしたいいねの数だけ存在するuserJoined
+        for (String userJoinId : userJoinedEventId) {
+            //参加するイベントのID一つ一つをすべてのイベントのIDと比較する
             for(String eventName : eventNameSet){
                 if(_eventIdMap.get(eventName).equals(userJoinId)){
+                    //等しいものがあった場合はそれをリストにしておく
                     eventNameList.add(eventName);
                 }
             }
         }
+        //ユーザーが参加するイベント名とIdをマップにする
         Map<String, String> userJoinedEventMap = new HashMap<>();
-        for(int i = 0; i < userJoined.size(); i++){
-            userJoinedEventMap.put(eventNameList.get(i), userJoined.get(i));
+        for(int i = 0; i < userJoinedEventId.size(); i++){
+            userJoinedEventMap.put(eventNameList.get(i), userJoinedEventId.get(i));
         }
         EventListAdapter adapter = new EventListAdapter(
                 getApplicationContext(),

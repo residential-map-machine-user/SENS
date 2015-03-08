@@ -41,17 +41,15 @@ public class DetailEventActivity extends ActionBarActivity implements View.OnCli
     private class SessionStatusCallback implements Session.StatusCallback {
         @Override
         public void call(Session session, SessionState state, Exception exception) {
-            //updateView();
-            Log.d("ステータスチェック", "SessionStatusCallback");
             onSessionStateChange(session, state, exception);
         }
     }
-    //callbackとは
+
     private Session.StatusCallback _statusCallback = new SessionStatusCallback();
     private UiLifecycleHelper _uiHelper;
     private String _eventId;
-    Button _attend;
-    Button _notAttend;
+    private Button _attend;
+    private Button _unAttend;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,18 +57,11 @@ public class DetailEventActivity extends ActionBarActivity implements View.OnCli
         setContentView(R.layout.activity_detail_event);
         //参加表明のためのボタンをIdより取得してくる
         _attend = (Button)findViewById(R.id.button_attend);
-        _notAttend = (Button)findViewById(R.id.button_notAttend);
-        //参加するボタンのにリスナーをつける
+        _unAttend = (Button)findViewById(R.id.button_notAttend);
+        //ボタンにリスナーをつける
         _attend.setOnClickListener(this);
-        _notAttend.setOnClickListener(this);
-        _attend.setBackgroundColor(Color.WHITE);
-        _notAttend.setBackgroundColor(Color.WHITE);
-//        int[] layoutInt = {R.id.button_attend, R.id.button_notAttend, R.id.eventDay,
-//                R.id.eventPlace, R.id.eventCost, R.id.eventName, R.id.eventContent};
-//        final TextView[] textViews = new TextView[layoutInt.length];
-//        for(int i = 0; i < layoutInt.length; i ++){
-//            textViews[i] = (TextView)findViewById(i);
-//        }
+        _unAttend.setOnClickListener(this);
+        //イベントの基本情報を保持しておくリスト
         final TextView eventDay = (TextView) findViewById (R.id.eventDay);
         final TextView eventPlace = (TextView) findViewById(R.id.eventPlace);
         final TextView eventCost = (TextView) findViewById(R.id.eventCost);
@@ -146,8 +137,8 @@ public class DetailEventActivity extends ActionBarActivity implements View.OnCli
                     if((boolean)response.getGraphObject().getProperty("success")) {
                         _attend.setBackgroundColor(Color.BLUE);
                         _attend.setTextColor(Color.WHITE);
-                        _notAttend.setBackgroundColor(Color.WHITE);
-                        _notAttend.setTextColor(Color.BLACK);
+                        _unAttend.setBackgroundColor(Color.WHITE);
+                        _unAttend.setTextColor(Color.BLACK);
                     } else {
                         Toast.makeText(getApplicationContext(), "正しく実行されませんでした", Toast.LENGTH_SHORT).show();
                     }
@@ -160,8 +151,8 @@ public class DetailEventActivity extends ActionBarActivity implements View.OnCli
                     if((boolean)response.getGraphObject().getProperty("success")) {
                         _attend.setBackgroundColor(Color.WHITE);
                         _attend.setTextColor(Color.BLACK);
-                        _notAttend.setBackgroundColor(Color.BLUE);
-                        _notAttend.setTextColor(Color.WHITE);
+                        _unAttend.setBackgroundColor(Color.BLUE);
+                        _unAttend.setTextColor(Color.WHITE);
                     } else {
                         Toast.makeText(getApplicationContext(), "正しく実行されませんでした", Toast.LENGTH_LONG).show();
                     }
@@ -231,14 +222,6 @@ public class DetailEventActivity extends ActionBarActivity implements View.OnCli
 
 
     public void onSessionStateChange(Session session, SessionState state, Exception exception){
-        Log.i("実行","実行されてるよ");
-        Log.i("セッションチェック", session.getPermissions().toString());
-//        if ((exception instanceof FacebookOperationCanceledException ||
-//                exception instan   ceof FacebookAuthorizationException)) {
-//            Log.w("チェック", "error occured:" + exception.getMessage());
-//        } else if (state == SessionState.OPENED_TOKEN_UPDATED) {
-//            doPost();
-//        }
     }
 
     private void doLogin() {
@@ -255,6 +238,7 @@ public class DetailEventActivity extends ActionBarActivity implements View.OnCli
             Session.openActiveSession(this, true, _statusCallback);
         }
     }
+
     public boolean onCreateOptionsMenu(Menu menu) {
         // メニューの要素を追加して取得
         MenuInflater inflater = getMenuInflater();
@@ -262,6 +246,7 @@ public class DetailEventActivity extends ActionBarActivity implements View.OnCli
 
         return super.onCreateOptionsMenu(menu);
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         item.getItemId();

@@ -30,7 +30,7 @@
             android:layout_marginTop="30dp"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
-            android:background="#dbd3d3d3">
+            android:background="#72f9ed9f">
 
             <LinearLayout
                 android:orientation="horizontal"
@@ -126,9 +126,10 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_marginTop="40dp"
-            android:background="#dbd3d3d3"
+            android:background="#72f9ed9f"
             android:paddingLeft="20dp"
-            android:paddingRight="20dp">
+            android:paddingRight="20dp"
+            >
 
             <TextView
                 android:layout_width="wrap_content"

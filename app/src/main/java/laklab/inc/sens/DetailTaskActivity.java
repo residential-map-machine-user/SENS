@@ -1,8 +1,10 @@
 package laklab.inc.sens;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -11,7 +13,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.facebook.HttpMethod;
 import com.facebook.Request;
@@ -20,7 +21,11 @@ import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 
 public class DetailTaskActivity extends ActionBarActivity implements View.OnClickListener {
@@ -51,6 +56,8 @@ public class DetailTaskActivity extends ActionBarActivity implements View.OnClic
     Button _assigned;
     Button _unassigned;
     String _commentId;
+    TextView _taskContent;
+    TextView _taskLimit;
     private Session session;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,17 +69,15 @@ public class DetailTaskActivity extends ActionBarActivity implements View.OnClic
         //参加するボタンのにリスナーをつける
         _assigned.setOnClickListener(this);
         _unassigned.setOnClickListener(this);
-        _assigned.setBackgroundColor(Color.WHITE);
-        _unassigned.setBackgroundColor(Color.WHITE);
-        final TextView taskContent = (TextView)findViewById(R.id.taskContentTextView);
-        final TextView taskLimit = (TextView)findViewById(R.id.taskDueDateTextView);
+        _taskContent = (TextView)findViewById(R.id.taskContentTextView);
+        _taskLimit = (TextView)findViewById(R.id.taskDueDateTextView);
         //dataの初期化
         Intent intent = getIntent();
         ArrayList<String> eventInfo = intent.getStringArrayListExtra("eventInfo");
         //それぞれのテキストviewにイベント情報をセット
         _eventId = eventInfo.get(0);
-        taskContent.setText(eventInfo.get(1));
-        taskLimit.setText(eventInfo.get(2));
+        _taskContent.setText(eventInfo.get(1));
+        _taskLimit.setText(eventInfo.get(2));
         _commentId = eventInfo.get(3);
         Log.i("fadgs2", _commentId.toString());
         _uiHelper = new UiLifecycleHelper(this, _statusCallback);
@@ -119,37 +124,93 @@ public class DetailTaskActivity extends ActionBarActivity implements View.OnClic
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.button_assigned) {
-            doPost(POSTREQUEST, new Request.Callback() {
-                @Override
-                public void onCompleted(Response response) {
-                    Log.i("チェック１",response.toString());
-                    Log.i("チェック",response.getGraphObject().toString());
-                    if ((boolean) response.getGraphObject().getProperty("success")) {
-                        _assigned.setBackgroundColor(Color.BLUE);
-                        _assigned.setTextColor(Color.WHITE);
-                        _unassigned.setBackgroundColor(Color.WHITE);
-                        _unassigned.setTextColor(Color.BLACK);
-                    } else {
-                        Toast.makeText(getApplicationContext(), "正しく実行されませんでした", Toast.LENGTH_SHORT).show();
-                    }
+        SharedPreferences pref = getSharedPreferences("MYTASK", MODE_PRIVATE);
+        SharedPreferences.Editor edit = pref.edit();
+        if(v.getId() == R.id.button_assigned){
+            edit.putString("TASK_CONTENT",_taskContent.getText().toString()).commit();
+            edit.putString("TASK_LIMIT", _taskLimit.getText().toString()).commit();
+            _assigned.setBackgroundColor(Color.BLUE);
+            _assigned.setTextColor(Color.WHITE);
+            _unassigned.setBackgroundColor(Color.WHITE);
+            _unassigned.setTextColor(Color.BLACK);
+            Date date = new Date();
+            Date tlimit = null;
+            long currentTime = date.getTime();
+            long tlimitlong = 0;
+            DateFormat df = new SimpleDateFormat("yyyy/mm/dd");
+            try {
+                System.out.println(_taskContent.getText().toString());
+                tlimit = df.parse(_taskContent.getText().toString().trim());
+                tlimitlong = tlimit.getTime();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            System.out.println(tlimit +"");
+            System.out.println(currentTime + "");
+            long tmp = tlimitlong - currentTime;
+            new CountDownTimer(tmp,1000){
+                TextView countDownText = (TextView)findViewById(R.id.countDown);
+                public void onTick(long mill){
+                    countDownText.setText("残り時間" + mill/3600000 + "時間です");
                 }
-            });
-        } else {
-            doPost(DELETEREQUEST, new Request.Callback() {
-                @Override
-                public void onCompleted(Response response) {
-                    if((boolean)response.getGraphObject().getProperty("success")) {
-                        _assigned.setBackgroundColor(Color.WHITE);
-                        _assigned.setTextColor(Color.BLACK);
-                        _unassigned.setBackgroundColor(Color.BLUE);
-                        _unassigned.setTextColor(Color.WHITE);
-                    } else {
-                        Toast.makeText(getApplicationContext(), "正しく実行されませんでした", Toast.LENGTH_LONG).show();
-                    }
+                public void onFinish(){
+                    countDownText.setText("時間切れです");
+                    Bundle params = new Bundle();
+                    params.putString("message", "締め切りを守れませんでした。誰か助けて！");
+                    params.putBoolean("is_hidden", true);
+                    Session session = Session.getActiveSession();
+                    new Request(
+                            session,
+                            getString(R.string.pageId) + "/feed",
+                            params,
+                            HttpMethod.POST,
+                            new Request.Callback() {
+                                public void onCompleted(Response response) {
+            /* handle the result */
+                                    Log.i("publish", response.toString());
+                                }
+                            }
+                    ).executeAsync();
                 }
-            });
+            }.start();
+        }else{
+            edit.clear().commit();
+            _assigned.setBackgroundColor(Color.WHITE);
+            _assigned.setTextColor(Color.BLACK);
+            _unassigned.setBackgroundColor(Color.BLUE);
+            _unassigned.setTextColor(Color.WHITE);
+
         }
+//        if (v.getId() == R.id.button_assigned) {
+//            doPost(POSTREQUEST, new Request.Callback() {
+//                @Override
+//                public void onCompleted(Response response) {
+//                    Log.i("チェック１",response.toString());
+//                    if ((boolean) response.getGraphObject().getProperty("success")) {
+//                        _assigned.setBackgroundColor(Color.BLUE);
+//                        _assigned.setTextColor(Color.WHITE);
+//                        _unassigned.setBackgroundColor(Color.WHITE);
+//                        _unassigned.setTextColor(Color.BLACK);
+//                    } else {
+//                        Toast.makeText(getApplicationContext(), "正しく実行されませんでした", Toast.LENGTH_SHORT).show();
+//                    }
+//                }
+//            });
+//        } else {
+//            doPost(DELETEREQUEST, new Request.Callback() {
+//                @Override
+//                public void onCompleted(Response response) {
+//                    if((boolean)response.getGraphObject().getProperty("success")) {
+//                        _assigned.setBackgroundColor(Color.WHITE);
+//                        _assigned.setTextColor(Color.BLACK);
+//                        _unassigned.setBackgroundColor(Color.BLUE);
+//                        _unassigned.setTextColor(Color.WHITE);
+//                    } else {
+//                        Toast.makeText(getApplicationContext(), "正しく実行されませんでした", Toast.LENGTH_LONG).show();
+//                    }
+//                }
+//            });
+//        }
     }
 
     /**
@@ -178,6 +239,7 @@ public class DetailTaskActivity extends ActionBarActivity implements View.OnClic
                 return;
         }
         Session session = Session.getActiveSession();
+        System.out.println(_commentId);
         new Request(
                 session,
                 "/" + _commentId + "/likes",

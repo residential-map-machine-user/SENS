@@ -19,7 +19,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="50dp"
-            android:background="#ffececec"
+            android:background="#72f9ed9f"
             android:paddingLeft="20dp"
             android:paddingRight="20dp">
 
@@ -46,7 +46,7 @@
             android:orientation="horizontal"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:background="#ffececec"
+            android:background="#72f9ed9f"
             android:paddingLeft="20dp"
             android:paddingRight="20dp">
 
@@ -71,6 +71,13 @@
                 android:layout_weight="1" />
         </LinearLayout>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:id="@+id/countDown"
+            android:layout_gravity="center_horizontal" />
+
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
@@ -85,7 +92,8 @@
                 android:text="引き受ける"
                 android:id="@+id/button_assigned"
                 android:background="@drawable/back"
-                android:textColor="#cff2f2f2" />
+                android:textColor="#cff2f2f2"
+                android:alpha="0.5" />
 
             <Button
                 android:layout_width="86dp"
@@ -94,7 +102,8 @@
                 android:id="@+id/button_unassigned"
                 android:background="@drawable/back"
                 android:textColor="#cff2f2f2"
-                android:layout_marginLeft="30dp" />
+                android:layout_marginLeft="30dp"
+                android:alpha="0.5" />
         </LinearLayout>
     </LinearLayout>
 

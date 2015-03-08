@@ -51,6 +51,7 @@ public class ListEventsActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_events);
+
         _uiHelper = new UiLifecycleHelper(this, callback);
         _uiHelper.onCreate(savedInstanceState);
 
@@ -84,19 +85,6 @@ public class ListEventsActivity extends ActionBarActivity {
         //facebookにrequestを送る処理
         final Session session = Session.getActiveSession();
         if (session.isOpened()) {
-            new Request(session,
-                "/" + getString(R.string.pageId),
-                null,
-                HttpMethod.GET,
-                new Request.Callback() {
-                    @Override
-                    public void onCompleted(Response response){
-                        GraphObject graph = response.getGraphObject();
-                        int likeCount = (int) graph.getProperty("likes");
-                        boolean canPost = (boolean) graph.getProperty("can_post");
-                        Log.i("page", "メンバー数：" + likeCount);
-                        Log.i("page", "投稿可能：" + canPost);
-
                         new Request(session,
                                 "/" + getString(R.string.pageId) + "/feed",
                                 null,
@@ -207,14 +195,6 @@ public class ListEventsActivity extends ActionBarActivity {
                                     }
                                 }
                         ).executeAsync();
-                        /**
-                         * TODO それぞれのobjectIdにたいしてrequestを送る
-                         *
-                         */
-
-                    }
-                }
-            ).executeAsync();
         }
     }
 
@@ -262,10 +242,6 @@ public class ListEventsActivity extends ActionBarActivity {
         }
     }
 
-    public void getLikesUser (){
-
-    }
-
     /**
      * Facebookとのセッションの状態が変化したときに呼び出される処理
      * @param session
@@ -279,13 +255,19 @@ public class ListEventsActivity extends ActionBarActivity {
             Log.i("SessionClose", "セッションはクローズ");
         }
     }
+
+    /**
+     *
+     * @param menu メニューのレイアウト
+     * @return
+     */
     public boolean onCreateOptionsMenu(Menu menu) {
         // メニューの要素を追加して取得
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main, menu);
-
         return super.onCreateOptionsMenu(menu);
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         item.getItemId();

@@ -34,7 +34,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/dueDate"
-                android:hint="期限"
+                android:hint="期限 例:2015/03/04"
                 />
 
         </LinearLayout>
