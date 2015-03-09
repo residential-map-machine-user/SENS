@@ -1,10 +1,10 @@
 package laklab.inc.sens;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -38,27 +38,25 @@ public class DetailEventActivity extends ActionBarActivity implements View.OnCli
      * いいね取り消し
      */
     public static final int DELETEREQUEST = 2;
-    private class SessionStatusCallback implements Session.StatusCallback {
-        @Override
-        public void call(Session session, SessionState state, Exception exception) {
-            onSessionStateChange(session, state, exception);
-        }
-    }
-
-    private Session.StatusCallback _statusCallback = new SessionStatusCallback();
     private UiLifecycleHelper _uiHelper;
     private String _eventId;
     private Button _attend;
     private Button _unAttend;
+    private Session.StatusCallback _statusCallback = new Session.StatusCallback() {
+        @Override
+        public void call(Session session, SessionState state, Exception exception) {
+            onSessionStateChange(session, state, exception);
+        }
+    };
+    public void onSessionStateChange(Session session, SessionState state, Exception exception){
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_event);
-        //参加表明のためのボタンをIdより取得してくる
         _attend = (Button)findViewById(R.id.button_attend);
         _unAttend = (Button)findViewById(R.id.button_notAttend);
-        //ボタンにリスナーをつける
         _attend.setOnClickListener(this);
         _unAttend.setOnClickListener(this);
         //イベントの基本情報を保持しておくリスト
@@ -69,7 +67,7 @@ public class DetailEventActivity extends ActionBarActivity implements View.OnCli
         final TextView eventContent = (TextView) findViewById(R.id.eventContent);
         //listEventsActivityでIntentにセットしたイベント情報を取得する
         try {
-            //dataの初期化
+            //インテントで送られてきたデータを取得
             Intent intent = getIntent();
             ArrayList<String> eventInfo = intent.getStringArrayListExtra("eventInfo");
             //それぞれのテキストviewにイベント情報をセット
@@ -81,15 +79,13 @@ public class DetailEventActivity extends ActionBarActivity implements View.OnCli
             eventContent.setText(eventInfo.get(5));
         }catch(Exception dataNotFoundException){
             finish();
-            Toast.makeText(getApplicationContext(), "イベント情報が取得できませんでした", Toast.LENGTH_SHORT).show();
         }
-//        LikeView likeView = (LikeView)findViewById(R.id.like);
-//        likeView.setObjectId("https://www.facebook.com/684530848329994/posts/695663580550054");
+        //セッションの状態が変わるたびに呼ばれる
         _uiHelper = new UiLifecycleHelper(this, _statusCallback);
-
-        // Facebook ログイン管理sessionがOpenがどうかの確認
         Session session = Session.getActiveSession();
+        //activeなSessionを取得する
         if (session == null) {
+            //saveInstanceStateで前回のSessionの状態を取得
             if (savedInstanceState != null) {
                 session = Session.restoreSession(this, null, _statusCallback, savedInstanceState);
             }
@@ -98,14 +94,21 @@ public class DetailEventActivity extends ActionBarActivity implements View.OnCli
             }
             Session.setActiveSession(session);
             if (session.getState().equals(SessionState.CREATED_TOKEN_LOADED)) {
-                //session.openForPublish(getOpenRequest());
+                //??ここはアクセス権限を取得している
                 session.openForRead(new Session.OpenRequest(this));
             }
         }
-        // ログイン状態の確認セッションが投稿可能かどうかの確認
+        // セッションがオープンならログイン
         if (! session.isOpened()) {
             doLogin();
+            userJoinedStatus(session);
         }
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        _uiHelper.onResume();
     }
 
     @Override
@@ -117,13 +120,13 @@ public class DetailEventActivity extends ActionBarActivity implements View.OnCli
     @Override
     public void onStop(){
         super.onStop();
+        _uiHelper.onStop();
         Session.getActiveSession().removeCallback(_statusCallback);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.d("リザルト","onActivityResult");
         Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
         _uiHelper.onActivityResult(requestCode, resultCode, data, null);
     }
@@ -160,35 +163,9 @@ public class DetailEventActivity extends ActionBarActivity implements View.OnCli
             });
         }
     }
-
-    public void showUserCount(){
-        doPost(GETREUEST, new Request.Callback() {
-            @Override
-            public void onCompleted(Response response) {
-                GraphObject likes = response.getGraphObject();
-                Log.i("チェックGraph", response.toString());
-            }
-        });
-    }
-
-    /**
-     * permissionのチェックをする関数
-     * @param permissions チェックするpermissionの種類
-     * @return
-     */
-    public boolean checkPermission(List<String> permissions){
-        Session session = Session.getActiveSession();
-        if (session != null && session.getPermissions().contains(permissions)){
-            return true;
-        } else {
-            return false;
-        }
-    }
-
     /**
      * facebookに投稿するためのメソッド
      * これがよばれると特定のidのobjectにたいしていいねが送信される
-     *HttpMe
      * @param requestType リクエストの種類 0:GET 1:いいね　2:取り消し
      * @param callback callback処理
      */
@@ -220,19 +197,13 @@ public class DetailEventActivity extends ActionBarActivity implements View.OnCli
         ).executeAsync();
     }
 
-
-    public void onSessionStateChange(Session session, SessionState state, Exception exception){
-    }
-
     private void doLogin() {
         Session session = Session.getActiveSession();
-        Log.d("ログイン","doLogin: session state is " + session.getState() + ", isOpend:" + session.isOpened() + ", isClosed:" + session.isClosed());
         if (!session.isOpened()) {
             if (session.isClosed()) {
                 session = new Session(this);
                 Session.setActiveSession(session);
             }
-            //session.openForPublish(getOpenRequest());
             session.openForRead(new Session.OpenRequest(this));
         } else {
             Session.openActiveSession(this, true, _statusCallback);
@@ -245,6 +216,28 @@ public class DetailEventActivity extends ActionBarActivity implements View.OnCli
         inflater.inflate(R.menu.menu_main, menu);
 
         return super.onCreateOptionsMenu(menu);
+    }
+
+    public void userJoinedStatus(Session session){
+        new Request(session, "/" + _eventId  + "/likes", null, HttpMethod.GET, new Request.Callback() {
+            @Override
+            public void onCompleted(Response response) {
+                SharedPreferences pref = getSharedPreferences("USER_ID", MODE_PRIVATE);
+                String userId = pref.getString("userId", "");
+                System.out.println(userId);
+                List<GraphObject> likesUserList = response.getGraphObject().getPropertyAsList("data", GraphObject.class);
+                for(GraphObject likesUser:likesUserList){
+                    String likesUserId  =(String)likesUser.getProperty("id");
+                    if(likesUser.equals(userId)){
+                        _attend.setBackgroundColor(Color.BLUE);
+                        _attend.setTextColor(Color.WHITE);
+                        _unAttend.setBackgroundColor(Color.WHITE);
+                        _unAttend.setTextColor(Color.BLACK);
+                    }
+                }
+            }
+        }
+        ).executeAsync();
     }
 
     @Override

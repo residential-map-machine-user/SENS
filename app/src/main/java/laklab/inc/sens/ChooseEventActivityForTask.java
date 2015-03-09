@@ -78,7 +78,6 @@ public class ChooseEventActivityForTask extends ActionBarActivity {
      * 1:タスク内容
      */
     public static final int TASKCONTENT = 1;
-
     public boolean _taskAssigned = false;
     /**
      * Facebookとのセッションの状態が変化したときに呼び出される処理
