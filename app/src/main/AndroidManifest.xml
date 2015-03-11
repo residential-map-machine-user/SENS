@@ -10,11 +10,11 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity android:name="com.facebook.LoginActivity" />
-
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
         <activity
+            android:launchMode="singleTop"
             android:name=".LoginActivity"
             >
             <intent-filter>
@@ -23,49 +23,59 @@
             </intent-filter>
         </activity>
         <activity
+            android:launchMode="singleTop"
             android:name=".TopActivity">
         </activity>
         <activity
+            android:launchMode="singleTop"
             android:name=".CalenderActivity"
             android:label="カレンダー"
             >
         </activity>
         <activity
+            android:launchMode="singleTop"
             android:name=".MakeTaskActivity"
             android:label="新規タスク作成"
             >
         </activity>
         <activity
+            android:launchMode="singleTop"
             android:name=".ListEventsActivity"
             android:label="イベント詳細"
         >
         </activity>
         <activity
+            android:launchMode="singleTop"
             android:name=".MakeEventActivity"
             android:label="新規イベント作成"
          >
         </activity>
         <activity
+            android:launchMode="singleTop"
             android:name=".MyPageActivity"
             android:label="マイページ"
          >
         </activity>
         <activity
+            android:launchMode="singleTop"
             android:name=".ChooseEventActivityForTask"
             android:label="タスクを追加"
           >
         </activity>
         <activity
+            android:launchMode="singleTop"
             android:name=".DetailEventActivity"
             android:label="イベント詳細"
           >
         </activity>
         <activity
+            android:launchMode="singleTop"
             android:name=".DetailTaskActivity"
             android:label="タスク詳細"
          >
         </activity>
         <activity
+            android:launchMode="singleTop"
             android:name=".ListTaskActivity"
             android:label="タスク一覧"
             >

@@ -30,7 +30,6 @@ public class MakeTaskActivity extends ActionBarActivity implements View.OnClickL
     private EditText _taskContent;
     private String _inputtedTask;
     private String _eventId;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

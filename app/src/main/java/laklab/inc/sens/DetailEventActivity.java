@@ -98,11 +98,11 @@ public class DetailEventActivity extends ActionBarActivity implements View.OnCli
                 session.openForRead(new Session.OpenRequest(this));
             }
         }
-        // セッションがオープンならログイン
+        // セッションがオープンでないならログイン
         if (! session.isOpened()) {
             doLogin();
-            userJoinedStatus(session);
         }
+        userJoinedStatus(session);
     }
 
     @Override
@@ -222,13 +222,17 @@ public class DetailEventActivity extends ActionBarActivity implements View.OnCli
         new Request(session, "/" + _eventId  + "/likes", null, HttpMethod.GET, new Request.Callback() {
             @Override
             public void onCompleted(Response response) {
-                SharedPreferences pref = getSharedPreferences("USER_ID", MODE_PRIVATE);
-                String userId = pref.getString("userId", "");
+                //ログインしているユーザーのIdの取得
+                SharedPreferences pref = getSharedPreferences("USER_INFO", MODE_PRIVATE);
+                String userId = pref.getString("userId", "ユーザーIDが取得できませんでした");
+                String userName = pref.getString("userName","ユーザー名が取得できませんでした");
                 System.out.println(userId);
+                //likeしているユーザーすべてを取得
                 List<GraphObject> likesUserList = response.getGraphObject().getPropertyAsList("data", GraphObject.class);
+                System.out.println(likesUserList.toString());
                 for(GraphObject likesUser:likesUserList){
                     String likesUserId  =(String)likesUser.getProperty("id");
-                    if(likesUser.equals(userId)){
+                    if(likesUserId.equals(userId)){
                         _attend.setBackgroundColor(Color.BLUE);
                         _attend.setTextColor(Color.WHITE);
                         _unAttend.setBackgroundColor(Color.WHITE);

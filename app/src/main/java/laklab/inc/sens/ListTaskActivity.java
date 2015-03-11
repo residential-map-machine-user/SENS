@@ -32,11 +32,6 @@ public class ListTaskActivity extends ActionBarActivity {
 
     private UiLifecycleHelper _uiHelper;
     List<String> _eventNameList = new ArrayList<>();
-    List<String> _eventDayList = new ArrayList<>();
-    List<String> _eventPlaceList = new ArrayList<>();
-    List<String> _eventCostList = new ArrayList<>();
-    List<String> _eventContentList = new ArrayList<>();
-    List<String> _eventAttendanceList = new ArrayList<>();
     List<GraphObject> _feedObjectIdList = new ArrayList<>();
     List<String> _taskLimitList = new ArrayList<>();
     List<String> _taskContentList = new ArrayList<>();
@@ -50,6 +45,14 @@ public class ListTaskActivity extends ActionBarActivity {
             onSessionStateChange(session, state, exception);
         }
     };
+    /**
+     * 0:タスク期限
+     */
+    public static final int TASKLIMIT = 0;
+    /**
+     * 1:タスク内容
+     */
+    public static final int TASKCONTENT = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,11 +73,6 @@ public class ListTaskActivity extends ActionBarActivity {
                 String eventId = _eventIdMap.get(eventName);
                 ArrayList<String> eachEventInfo = new ArrayList<String>();
                 eachEventInfo.add(eventId);
-//                eachEventInfo.add(_eventNameList.get(position));
-//                eachEventInfo.add(_eventDayList.get(position));
-//                eachEventInfo.add(_eventPlaceList.get(position));
-//                eachEventInfo.add(_eventCostList.get(position));
-//                eachEventInfo.add(_eventContentList.get(position));
                 eachEventInfo.add(_taskLimitList.get(position));
                 eachEventInfo.add(_taskContentList.get(position));
                 eachEventInfo.add(_commentIdList.get(position));
@@ -89,129 +87,71 @@ public class ListTaskActivity extends ActionBarActivity {
         final Session session = Session.getActiveSession();
         if (session.isOpened()) {
             new Request(session,
-                    "/" + getString(R.string.pageId),
+                    "/" + getString(R.string.pageId) + "/feed",
                     null,
                     HttpMethod.GET,
                     new Request.Callback() {
                         @Override
-                        public void onCompleted(Response response) {
-                            GraphObject graph = response.getGraphObject();
-                            int likeCount = (int) graph.getProperty("likes");
-                            boolean canPost = (boolean) graph.getProperty("can_post");
-                            Log.i("page", "メンバー数：" + likeCount);
-                            Log.i("page", "投稿可能：" + canPost);
-
-                            new Request(session,
-                                    "/" + getString(R.string.pageId) + "/feed",
-                                    null,
-                                    HttpMethod.GET,
-                                    new Request.Callback() {
-                                        @Override
-                                        public void onCompleted(Response feeds) {
-                                            Log.d("feedsのaslistdata", feeds.getGraphObject().getPropertyAsList("data", GraphObject.class).toString());
-                                            List<GraphObject> feedList = feeds.getGraphObject().getPropertyAsList("data", GraphObject.class);
-                                            //いいねをポストするためにfeedのobjectIdを取得
-                                            for (GraphObject feed : feedList) {
-                                                if (checkGraphObject(feed, "id")) {
-                                                    _feedObjectIdList.add(feed);
-                                                    Log.d("チェックobjectId", _feedObjectIdList.toString());
-                                                }
-                                            }
-                                            Log.d("Response feeds getPropertydata", feeds.toString());
-                                            List<GraphObject> eventList = new ArrayList<>();
-                                            for (GraphObject feed : feedList) {
-                                                if (checkGraphObject(feed, "message")) {
-                                                    eventList.add(feed);
-                                                }
-                                            }
-                                            Log.i("RESPONSE", "イベント数：" + eventList.size());
-                                            // イベントから情報とタスクを取得
-                                            for (GraphObject event : eventList) {
-                                                String message = (String) event.getProperty("message");
-                                                String[] eventInfo = message.split(",");
-                                                // イベント名
-                                               Log.i("チェック", "------------------------");
-                                                if (eventInfo.length > 0 && eventInfo[0] != null) {
-                                                    Log.i("チェック", "イベント名：" + eventInfo[0]);
-                                                    _eventNameList.add(eventInfo[0]);
-                                                    String objectId = (String) event.getProperty("id");
-                                                    Log.d("チェックId", objectId.toString());
-                                                    _eventIdMap.put(eventInfo[0], objectId);
-                                                    _eventIdList.add(objectId);
-                                                }
-                                                // イベント日時
-                                                if (eventInfo.length > 1 && eventInfo[1] != null) {
-                                                    Log.i("チェック", "イベント日時：" + eventInfo[1]);
-                                                    _eventDayList.add(eventInfo[1]);
-                                                }
-                                                // イベント場所
-                                                if (eventInfo.length > 1 && eventInfo[2] != null) {
-                                                    Log.i("チェック", "イベント場所：" + eventInfo[2]);
-                                                    _eventPlaceList.add(eventInfo[2]);
-                                                }
-                                                // 参加費
-                                                if (eventInfo.length > 1 && eventInfo[3] != null) {
-                                                    Log.i("チェック", "参加費：" + eventInfo[3]);
-                                                    _eventCostList.add(eventInfo[3]);
-                                                }
-                                                // 内容
-                                                if (eventInfo.length > 1 && eventInfo[4] != null) {
-                                                    Log.i("チェック", "イベント内容：" + eventInfo[4]);
-                                                    _eventContentList.add(eventInfo[4]);
-                                                }
-                                                // イベント参加者数
-                                                if (event.getProperty("like_count") != null) {
-                                                    Log.i("チェック", "イベント参加者：" + event.getProperty("like_count"));
-                                                    _eventAttendanceList.add(event.getProperty("likes_count").toString());
-                                                }
-                                                // タスク抽出
-                                                if (event.getProperty("comments") != null) {
-                                                    List<GraphObject> tasks = GraphObject.Factory.create((JSONObject) event.getProperty("comments")).getPropertyAsList("data", GraphObject.class);
-                                                    List<GraphObject> taskList = new ArrayList<>();
-                                                    for (GraphObject task : tasks) {
-                                                            taskList.add(task);
-                                                    }
-                                                    Log.i("チェック", "タスク数：" + taskList.size());
-                                                    for (GraphObject taskData : taskList) {
-                                                        String taskMessage = (String) taskData.getProperty("message");
-                                                        String[] taskInfo = taskMessage.split(",");
-                                                        // タスク期限
-                                                        if (taskInfo.length > 1 && taskInfo[0] != null) {
-                                                            Log.i("チェック", ">>>>タスク期限：" + taskInfo[0]);
-                                                            _taskLimitList.add(taskInfo[0]);
-                                                        }
-                                                        // タスク名
-                                                        if (taskInfo.length > 0 && taskInfo[1] != null) {
-                                                            Log.i("チェック", ">>>>タスク内容：" + taskInfo[1]);
-                                                            _taskContentList.add(taskInfo[1]);
-                                                        }
-                                                        // タスクの状態
-                                                        // 割当済みか
-                                                        if ((int) taskData.getProperty("like_count") > 0)
-                                                            Log.i("チェック", ">>>>担当割当： 割当済");
-                                                        else
-                                                            Log.i("チェック", ">>>>担当割当： 未割当");
-                                                    }
-                                                }
-                                            }
-                                            getCommentId(_eventIdList, session);
-                                            for(String commentId :_commentIdList){
-                                                for(String taskContent : _taskContentList) {
-                                                    _commentIdMap.put(commentId, taskContent);
-                                                }
-                                            }
-                                            EventListAdapter adapter = new EventListAdapter(
-                                                    getApplicationContext(),
-                                                    0,
-                                                    _taskContentList,
-                                                    _eventIdMap
-                                            );
-                                            if (listView != null) {
-                                                listView.setAdapter(adapter);
-                                            }
-                                        }
+                        public void onCompleted(Response feeds) {
+                            List<GraphObject> feedList = feeds.getGraphObject().getPropertyAsList("data", GraphObject.class);
+                            for (GraphObject feed : feedList) {
+                                if (checkGraphObject(feed, "id")) {
+                                    _feedObjectIdList.add(feed);
+                                }
+                            }
+                            List<GraphObject> eventList = new ArrayList<>();
+                            for (GraphObject feed : feedList) {
+                                if (checkGraphObject(feed, "message")) {
+                                    eventList.add(feed);
+                                }
+                            }
+                            // イベントから情報とタスクを取得
+                            for (GraphObject event : eventList) {
+                                String message = (String) event.getProperty("message");
+                                String[] eventInfo = message.split(",");
+                                // イベント名
+                                if (eventInfo.length > 0 && eventInfo[0] != null) {
+                                    _eventNameList.add(eventInfo[0]);
+                                    String objectId = (String) event.getProperty("id");
+                                    _eventIdMap.put(eventInfo[0], objectId);
+                                    _eventIdList.add(objectId);
+                                }
+                                // タスク抽出
+                                if (event.getProperty("comments") != null) {
+                                    List<GraphObject> tasks = GraphObject.Factory.create((JSONObject) event.getProperty("comments")).getPropertyAsList("data", GraphObject.class);
+                                    List<GraphObject> taskList = new ArrayList<>();
+                                    for (GraphObject task : tasks) {
+                                            taskList.add(task);
                                     }
-                            ).executeAsync();
+                                    for (GraphObject taskData : taskList) {
+                                        String taskMessage = (String) taskData.getProperty("message");
+                                        String[] taskInfo = taskMessage.split(",");
+                                        // タスク基本情報
+                                        storeClassifiedInfo(taskInfo, TASKLIMIT, _taskLimitList);
+                                        storeClassifiedInfo(taskInfo, TASKCONTENT, _taskContentList);
+                                        // タスクの状態
+                                        if ((int) taskData.getProperty("like_count") > 0)
+                                            Log.i("チェック", ">>>>担当割当： 割当済");
+                                        else
+                                            Log.i("チェック", ">>>>担当割当： 未割当");
+                                    }
+                                }
+                            }
+                            getCommentId(_eventIdList, session);
+                            for(String commentId :_commentIdList){
+                                for(String taskContent : _taskContentList) {
+                                    _commentIdMap.put(commentId, taskContent);
+                                }
+                            }
+                            EventListAdapter adapter = new EventListAdapter(
+                                    getApplicationContext(),
+                                    0,
+                                    _taskContentList,
+                                    _eventIdMap
+                            );
+                            if (listView != null) {
+                                listView.setAdapter(adapter);
+                            }
                         }
                     }
             ).executeAsync();
@@ -228,6 +168,7 @@ public class ListTaskActivity extends ActionBarActivity {
 
     public void getCommentId(List<String> eventIdList, Session session){
         //全てのイベントに対して処理をする
+        //TODO ここで順番がめちゃくちゃになっているので対処する
         for(String eachEventId : eventIdList){
             new Request(session,
                     "/" + eachEventId + "/comments",
@@ -238,9 +179,9 @@ public class ListTaskActivity extends ActionBarActivity {
                         public void onCompleted(Response response) {
                             Log.i("チェックコメントID", response.getGraphObject().getPropertyAsList("data", GraphObject.class).toString());
                                 List<GraphObject> comments = response.getGraphObject().getPropertyAsList("data", GraphObject.class);
-                                for(GraphObject comment :comments){
-                                    _commentIdList.add((String)comment.getProperty("id"));
-                            }
+                                for(GraphObject comment :comments) {
+                                    _commentIdList.add((String) comment.getProperty("id"));
+                                }
                         }
                     }
             ).executeAsync();
@@ -260,6 +201,20 @@ public class ListTaskActivity extends ActionBarActivity {
             Log.i("SessionClose", "セッションはクローズ");
         }
     }
+
+    /**
+     *ひとつながりのイベントの情報を情報の種類ごとに分けて保存するためのメソッド
+     * @param sequentialEventInfo 一つのイベントに関する全ての情報か入っている
+     * @param eventInfoType　イベントの情報の種類　例　イベント名　イベントコスト
+     * @param storeEventInfo　イベントの種類ごとに保存しておくためにリスト
+     * @return　
+     */
+    public void storeClassifiedInfo(String[] sequentialEventInfo, int eventInfoType, List<String> storeEventInfo){
+        if (sequentialEventInfo.length > 1 && sequentialEventInfo[eventInfoType] != null){
+            storeEventInfo.add(sequentialEventInfo[eventInfoType]);
+        }
+    }
+
     public boolean onCreateOptionsMenu(Menu menu) {
         // メニューの要素を追加して取得
         MenuInflater inflater = getMenuInflater();

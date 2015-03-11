@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.HttpMethod;
 import com.facebook.Request;
@@ -20,12 +21,14 @@ import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
+import com.facebook.model.GraphObject;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 
 public class DetailTaskActivity extends ActionBarActivity implements View.OnClickListener {
@@ -41,47 +44,48 @@ public class DetailTaskActivity extends ActionBarActivity implements View.OnClic
      * いいね取り消し
      */
     public static final int DELETEREQUEST = 2;
-    private class SessionStatusCallback implements Session.StatusCallback {
+    //Qここではimplementとして新しいクラスを定義しているけど機能の拡張がないということはその必要があるのか？
+
+    //callbackとは
+    private Session.StatusCallback _statusCallback = new Session.StatusCallback() {
         @Override
         public void call(Session session, SessionState state, Exception exception) {
-            //updateView();
-            Log.d("ステータスチェック", "SessionStatusCallback");
-            onSessionStateChange(session, state, exception);
+
         }
-    }
-    //callbackとは
-    private Session.StatusCallback _statusCallback = new SessionStatusCallback();
+    };
     private UiLifecycleHelper _uiHelper;
     private String _eventId;
-    Button _assigned;
-    Button _unassigned;
-    String _commentId;
-    TextView _taskContent;
-    TextView _taskLimit;
+    private Button _assigned;
+    private Button _unassigned;
+    private String _commentId;
+    private TextView _taskContent;
+    private TextView _taskLimit;
     private Session session;
+    public void onSessionStateChange(Session session, SessionState state, Exception exception){
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_task);
-        //参加表明のためのボタンをIdより取得してくる
+        _uiHelper = new UiLifecycleHelper(this, _statusCallback);
+        //ボタンをIdで取得
         _assigned = (Button)findViewById(R.id.button_assigned);
         _unassigned = (Button)findViewById(R.id.button_unassigned);
-        //参加するボタンのにリスナーをつける
+        //リスナーのセット
         _assigned.setOnClickListener(this);
         _unassigned.setOnClickListener(this);
+        //テキストビューをIdで取得
         _taskContent = (TextView)findViewById(R.id.taskContentTextView);
         _taskLimit = (TextView)findViewById(R.id.taskDueDateTextView);
-        //dataの初期化
+        //イベントに関する種類別にリストされた情報を取得
         Intent intent = getIntent();
         ArrayList<String> eventInfo = intent.getStringArrayListExtra("eventInfo");
-        //それぞれのテキストviewにイベント情報をセット
+        //イベント情報の取得
         _eventId = eventInfo.get(0);
         _taskContent.setText(eventInfo.get(1));
         _taskLimit.setText(eventInfo.get(2));
         _commentId = eventInfo.get(3);
-        Log.i("fadgs2", _commentId.toString());
-        _uiHelper = new UiLifecycleHelper(this, _statusCallback);
-        // Facebook ログイン管理sessionがOpenがどうかの確認
+        //オープンなセッションを作成
         session = Session.getActiveSession();
         if (session == null) {
             if (savedInstanceState != null) {
@@ -96,10 +100,12 @@ public class DetailTaskActivity extends ActionBarActivity implements View.OnClic
                 session.openForRead(new Session.OpenRequest(this));
             }
         }
-        // ログイン状態の確認セッションが投稿可能かどうかの確認
+        //ログインされたない場合はログイン
         if (! session.isOpened()) {
             doLogin();
         }
+        userJoinedStatus(session);
+        countDownTask(_taskContent.getText().toString());
     }
 
     @Override
@@ -112,105 +118,48 @@ public class DetailTaskActivity extends ActionBarActivity implements View.OnClic
     public void onStop(){
         super.onStop();
         Session.getActiveSession().removeCallback(_statusCallback);
+        _uiHelper.onStop();
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.d("リザルト","onActivityResult");
         Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
         _uiHelper.onActivityResult(requestCode, resultCode, data, null);
     }
 
     @Override
     public void onClick(View v) {
-        SharedPreferences pref = getSharedPreferences("MYTASK", MODE_PRIVATE);
-        SharedPreferences.Editor edit = pref.edit();
-        if(v.getId() == R.id.button_assigned){
-            edit.putString("TASK_CONTENT",_taskContent.getText().toString()).commit();
-            edit.putString("TASK_LIMIT", _taskLimit.getText().toString()).commit();
-            _assigned.setBackgroundColor(Color.BLUE);
-            _assigned.setTextColor(Color.WHITE);
-            _unassigned.setBackgroundColor(Color.WHITE);
-            _unassigned.setTextColor(Color.BLACK);
-            Date date = new Date();
-            Date tlimit = null;
-            long currentTime = date.getTime();
-            long tlimitlong = 0;
-            DateFormat df = new SimpleDateFormat("yyyy/mm/dd");
-            try {
-                System.out.println(_taskContent.getText().toString());
-                tlimit = df.parse(_taskContent.getText().toString().trim());
-                tlimitlong = tlimit.getTime();
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            System.out.println(tlimit +"");
-            System.out.println(currentTime + "");
-            long tmp = tlimitlong - currentTime;
-            new CountDownTimer(tmp,1000){
-                TextView countDownText = (TextView)findViewById(R.id.countDown);
-                public void onTick(long mill){
-                    countDownText.setText("残り時間" + mill/3600000 + "時間です");
+        if (v.getId() == R.id.button_assigned) {
+            doPost(POSTREQUEST, new Request.Callback() {
+                @Override
+                public void onCompleted(Response response) {
+                    Log.i("チェック１", response.toString());
+                    if ((boolean) response.getGraphObject().getProperty("success")) {
+                        _assigned.setBackgroundColor(Color.BLUE);
+                        _assigned.setTextColor(Color.WHITE);
+                        _unassigned.setBackgroundColor(Color.WHITE);
+                        _unassigned.setTextColor(Color.BLACK);
+                    } else {
+                        Toast.makeText(getApplicationContext(), "正しく実行されませんでした", Toast.LENGTH_SHORT).show();
+                    }
                 }
-                public void onFinish(){
-                    countDownText.setText("時間切れです");
-                    Bundle params = new Bundle();
-                    params.putString("message", "締め切りを守れませんでした。誰か助けて！");
-                    params.putBoolean("is_hidden", true);
-                    Session session = Session.getActiveSession();
-                    new Request(
-                            session,
-                            getString(R.string.pageId) + "/feed",
-                            params,
-                            HttpMethod.POST,
-                            new Request.Callback() {
-                                public void onCompleted(Response response) {
-            /* handle the result */
-                                    Log.i("publish", response.toString());
-                                }
-                            }
-                    ).executeAsync();
+            });
+        } else {
+            doPost(DELETEREQUEST, new Request.Callback() {
+                @Override
+                public void onCompleted(Response response) {
+                    if ((boolean) response.getGraphObject().getProperty("success")) {
+                        _assigned.setBackgroundColor(Color.WHITE);
+                        _assigned.setTextColor(Color.BLACK);
+                        _unassigned.setBackgroundColor(Color.BLUE);
+                        _unassigned.setTextColor(Color.WHITE);
+                    } else {
+                        Toast.makeText(getApplicationContext(), "正しく実行されませんでした", Toast.LENGTH_LONG).show();
+                    }
                 }
-            }.start();
-        }else{
-            edit.clear().commit();
-            _assigned.setBackgroundColor(Color.WHITE);
-            _assigned.setTextColor(Color.BLACK);
-            _unassigned.setBackgroundColor(Color.BLUE);
-            _unassigned.setTextColor(Color.WHITE);
-
+            });
         }
-//        if (v.getId() == R.id.button_assigned) {
-//            doPost(POSTREQUEST, new Request.Callback() {
-//                @Override
-//                public void onCompleted(Response response) {
-//                    Log.i("チェック１",response.toString());
-//                    if ((boolean) response.getGraphObject().getProperty("success")) {
-//                        _assigned.setBackgroundColor(Color.BLUE);
-//                        _assigned.setTextColor(Color.WHITE);
-//                        _unassigned.setBackgroundColor(Color.WHITE);
-//                        _unassigned.setTextColor(Color.BLACK);
-//                    } else {
-//                        Toast.makeText(getApplicationContext(), "正しく実行されませんでした", Toast.LENGTH_SHORT).show();
-//                    }
-//                }
-//            });
-//        } else {
-//            doPost(DELETEREQUEST, new Request.Callback() {
-//                @Override
-//                public void onCompleted(Response response) {
-//                    if((boolean)response.getGraphObject().getProperty("success")) {
-//                        _assigned.setBackgroundColor(Color.WHITE);
-//                        _assigned.setTextColor(Color.BLACK);
-//                        _unassigned.setBackgroundColor(Color.BLUE);
-//                        _unassigned.setTextColor(Color.WHITE);
-//                    } else {
-//                        Toast.makeText(getApplicationContext(), "正しく実行されませんでした", Toast.LENGTH_LONG).show();
-//                    }
-//                }
-//            });
-//        }
     }
 
     /**
@@ -249,7 +198,60 @@ public class DetailTaskActivity extends ActionBarActivity implements View.OnClic
         ).executeAsync();
     }
 
-    public void onSessionStateChange(Session session, SessionState state, Exception exception){
+    public void userJoinedStatus(Session session){
+        new Request(session, "/" + _commentId  + "/likes", null, HttpMethod.GET, new Request.Callback() {
+            @Override
+            public void onCompleted(Response response) {
+                //ログインしているユーザーのIdの取得
+                SharedPreferences pref = getSharedPreferences("USER_INFO", MODE_PRIVATE);
+                String userId = pref.getString("userId", "ユーザーIDが取得できませんでした");
+                System.out.println(userId);
+                //likeしているユーザーすべてを取得
+                List<GraphObject> likesUserList = response.getGraphObject().getPropertyAsList("data", GraphObject.class);
+                for(GraphObject likesUser:likesUserList){
+                    String likesUserId  =(String)likesUser.getProperty("id");
+                    if(likesUserId.equals(userId)){
+                        _assigned.setBackgroundColor(Color.BLUE);
+                        _assigned.setTextColor(Color.WHITE);
+                        _unassigned.setBackgroundColor(Color.WHITE);
+                        _unassigned.setTextColor(Color.BLACK);
+                    }
+                }
+            }
+        }
+        ).executeAsync();
+    }
+
+    public void countDownTask(String taskContent){
+        //タスク期限までの時間を取得
+
+        Date taskLimit = null;
+        long taskLimitSecond = 0;
+        Date currentDate = new Date(System.currentTimeMillis());
+        long currentTime = currentDate.getTime();
+        //日時のformatを作る
+        DateFormat df = new SimpleDateFormat("yyyy/mm/dd");
+        try {
+            //文字列かたDate型に変換
+            taskLimit = df.parse(taskContent);
+            //long型で時間を取得
+            taskLimitSecond = taskLimit.getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        long tmp = taskLimitSecond - currentTime;
+        //一秒ごとに更新
+        new CountDownTimer(tmp,60000){
+            TextView countDownText = (TextView)findViewById(R.id.countDown);
+            //viewにセットするためのメソッド
+            public void onTick(long mill){
+                countDownText.setText("残り時間" + mill/3600000 + "時間です");
+            }
+            //期限までの時間がゼロになった場合
+            public void onFinish(){
+                countDownText.setText("時間切れです");
+            }
+        }.start();
     }
 
     private void doLogin() {
@@ -266,6 +268,7 @@ public class DetailTaskActivity extends ActionBarActivity implements View.OnClic
             Session.openActiveSession(this, true, _statusCallback);
         }
     }
+
     public boolean onCreateOptionsMenu(Menu menu) {
         // メニューの要素を追加して取得
         MenuInflater inflater = getMenuInflater();
@@ -273,6 +276,7 @@ public class DetailTaskActivity extends ActionBarActivity implements View.OnClic
 
         return super.onCreateOptionsMenu(menu);
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         item.getItemId();

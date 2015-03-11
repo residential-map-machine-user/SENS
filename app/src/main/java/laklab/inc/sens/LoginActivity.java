@@ -4,14 +4,13 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.widget.Toast;
 
+import com.facebook.HttpMethod;
 import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
-import com.facebook.model.GraphUser;
 import com.facebook.widget.LoginButton;
 
 import java.util.Arrays;
@@ -64,19 +63,24 @@ public class LoginActivity extends Activity {
         Session session = Session.getActiveSession();
         //セッションの状態によって遷移させてやる
         if(session.isOpened()){
-            Request.newMeRequest(session, new Request.GraphUserCallback() {
-                @Override
-                public void onCompleted(GraphUser user, Response response) {
-                    if (user != null) {
-                        String userId = (String)response.getGraphObject().getProperty("id");
-                        Toast.makeText(getApplicationContext(), userId, Toast.LENGTH_SHORT).show();
-                        SharedPreferences pref = getSharedPreferences("USER_Id", MODE_PRIVATE);
-                        SharedPreferences.Editor editor = pref.edit();
-                        editor.putString("userId", userId);
-                        editor.commit();
+            new Request(session,
+                    "/me",
+                    null,
+                    HttpMethod.GET,
+                    new Request.Callback(){
+                        @Override
+                        public void onCompleted(Response userInfo){
+                            String userId = (String)userInfo.getGraphObject().getProperty("id");
+                            String userName = (String)userInfo.getGraphObject().getProperty("name");
+                            SharedPreferences pref = getSharedPreferences("USER_INFO", MODE_PRIVATE);
+                            SharedPreferences.Editor editor = pref.edit();
+                            editor.putString("userId", userId);
+                            editor.putString("userName", userName);
+                            editor.commit();
+                            System.out.println(userId);
+                            System.out.println(userName);
                     }
-                }
-            }).executeAsync();
+                }).executeAsync();
             Intent showTop = new Intent(LoginActivity.this, TopActivity.class);
             startActivity(showTop);
         }

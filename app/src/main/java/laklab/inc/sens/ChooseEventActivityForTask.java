@@ -21,7 +21,6 @@ import com.facebook.UiLifecycleHelper;
 import com.facebook.model.GraphObject;
 
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

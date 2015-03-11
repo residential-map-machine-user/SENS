@@ -41,8 +41,10 @@ public class MyPageActivity extends ActionBarActivity {
     List<String> _commentIdList = new ArrayList<>();
     List<GraphObject> _feedObjectIdList = new ArrayList<>();
     List<String> _userJoinedEventId = new ArrayList<>();
+    List<String> _userJoinedTaskId = new ArrayList<>();
     Map<String, String> _eventIdMap = new HashMap<>();
-    ListView listView;
+    ListView _eventListView;
+    ListView _taskListView;
 
     private Session.StatusCallback callback = new Session.StatusCallback() {
         @Override
@@ -59,11 +61,11 @@ public class MyPageActivity extends ActionBarActivity {
         _uiHelper = new UiLifecycleHelper(this, callback);
         _uiHelper.onCreate(savedInstanceState);
         //listViewにの設定
-        listView = (ListView) findViewById(R.id.list_card);
         TextView nothing = new TextView(this);
         nothing.setText(getString(R.string.eventlist_nothing));
-        listView.setEmptyView(nothing);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        _eventListView = (ListView) findViewById(R.id.list_card);
+        _eventListView.setEmptyView(nothing);
+        _eventListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 TextView eventLabel = (TextView)view.findViewById(R.id.eventTitle);
@@ -77,10 +79,14 @@ public class MyPageActivity extends ActionBarActivity {
                 eachEventInfo.add(_eventCostList.get(position));
                 eachEventInfo.add(_eventContentList.get(position));
                 eachEventInfo.add(_commentIdList.get(position));
-//                Intent intent = new Intent(ListEventsActivity.this, DetailEventActivity.class);
-                Log.i("eventInfo", eachEventInfo.toString());
-//                intent.putExtra("eventInfo", eachEventInfo);
-//                startActivity(intent);
+            }
+        });
+        _taskListView = (ListView)findViewById(R.id.task_list);
+        _taskListView.setEmptyView(nothing);
+        _taskListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
             }
         });
         //facebookにrequestを送る処理
@@ -332,8 +338,8 @@ public class MyPageActivity extends ActionBarActivity {
                 userJoinedEventMap
         );
         adapter.setUseForMyPage(true);
-        if (listView != null) {
-            listView.setAdapter(adapter);
+        if (_eventListView != null) {
+            _eventListView.setAdapter(adapter);
         }
     }
     public boolean onCreateOptionsMenu(Menu menu) {
