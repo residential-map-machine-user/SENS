@@ -1,110 +1,109 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="laklab.inc.sens.DetailTaskActivity"
-    android:id="@+id/LinearLayout"
-    android:orientation="vertical"
-    android:background="#1b84f6e6">
-
-
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#1b84f6e6"
+    tools:context="laklab.inc.sens.DetailTaskActivity">
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:paddingTop="50dp"
-        >
+        android:background="#1b84f6e6"
+        android:orientation="vertical">
+
 
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
-            android:background="#72f9ed9f"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp">
+            android:layout_height="fill_parent"
+            android:orientation="vertical"
+            android:paddingTop="100dp">
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="#72f9ed9f"
+                android:paddingLeft="30dp"
+                android:paddingRight="30dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/taskContentIndex"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="内容" />
+
+                    <TextView
+                        android:id="@+id/taskLimitIndex"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="期日" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"></LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="right">
+
+                    <TextView
+                        android:id="@+id/taskContentTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="イベント開催日前日に参加者にリマインド" />
+
+                    <TextView
+                        android:id="@+id/taskDueDateTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="2014/5/20" />
+                </LinearLayout>
+            </LinearLayout>
 
             <TextView
+                android:id="@+id/countDown"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="期日"
-                android:id="@+id/textView24" />
+                android:layout_gravity="center_horizontal"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/textView5"
-                android:layout_weight="10" />
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="200dp"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="2014年5月20日"
-                android:id="@+id/taskDueDateTextView" />
-        </LinearLayout>
+                <Button
+                    android:id="@+id/button_assigned"
+                    android:layout_width="85dp"
+                    android:layout_height="65dp"
+                    android:alpha="0.5"
+                    android:background="@drawable/back"
+                    android:text="引き受ける"
+                    android:textColor="#cff2f2f2" />
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:background="#72f9ed9f"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="内容"
-                android:id="@+id/textView26"
-                android:layout_weight="1" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/textView6"
-                android:layout_weight="10" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="イベント開催日前日に参加者にリマインド"
-                android:id="@+id/taskContentTextView"
-                android:layout_weight="1" />
-        </LinearLayout>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:id="@+id/countDown"
-            android:layout_gravity="center_horizontal" />
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:layout_marginTop="200dp"
-            android:layout_gravity="center_horizontal">
-
-            <Button
-                android:layout_width="96dp"
-                android:layout_height="70dp"
-                android:text="引き受ける"
-                android:id="@+id/button_assigned"
-                android:background="@drawable/back"
-                android:textColor="#cff2f2f2"
-                android:alpha="0.5" />
-
-            <Button
-                android:layout_width="86dp"
-                android:layout_height="65dp"
-                android:text="取り消し"
-                android:id="@+id/button_unassigned"
-                android:background="@drawable/back"
-                android:textColor="#cff2f2f2"
-                android:layout_marginLeft="30dp"
-                android:alpha="0.5" />
+                <Button
+                    android:id="@+id/button_unassigned"
+                    android:layout_width="85dp"
+                    android:layout_height="65dp"
+                    android:layout_marginLeft="30dp"
+                    android:alpha="0.5"
+                    android:background="@drawable/back"
+                    android:text="取り消し"
+                    android:textColor="#cff2f2f2" />
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
-
-</LinearLayout>
+</ScrollView>

@@ -24,21 +24,17 @@
             android:layout_marginTop="20dp" />
 
         <LinearLayout
-            android:orientation="vertical"
+            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="30dp"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:background="#72f9ed9f">
+            android:background="#72f9ed9f"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp">
 
             <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:focusable="false"
-                android:dividerPadding="1dp"
-                android:layout_marginTop="1dp">
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -50,8 +46,29 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/textView2"
-                    android:layout_weight="10" />
+                    android:text="場所"
+                    android:id="@+id/textView16"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="参加費"
+                    android:id="@+id/textView17"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"></LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="right">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -60,57 +77,12 @@
                     android:id="@+id/eventDay"
                     android:layout_weight="1" />
 
-            </LinearLayout>
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:focusable="false"
-                android:dividerPadding="1dp"
-                android:layout_marginTop="1dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="場所"
-                    android:id="@+id/textView16"
-                    android:layout_weight="1" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/textView3"
-                    android:layout_weight="4" />
-
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="青少年オリンピックセンター"
                     android:id="@+id/eventPlace"
                     android:layout_weight="1" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:focusable="false"
-                android:dividerPadding="1dp"
-                android:layout_marginTop="1dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="参加費"
-                    android:id="@+id/textView17"
-                    android:layout_weight="1" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/textView4"
-                    android:layout_weight="10" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -119,6 +91,7 @@
                     android:id="@+id/eventCost"
                     android:layout_weight="1" />
             </LinearLayout>
+
         </LinearLayout>
 
         <LinearLayout

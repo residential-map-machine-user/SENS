@@ -158,6 +158,12 @@ public class ListTaskActivity extends ActionBarActivity {
         }
     }
 
+    /**
+     * グラブオブジェクトの中身に欲しい値が入っているか確認するためのメソッド
+     * @param graph　グラフオブジェクト
+     * @param property　指定するプロパティ　
+     * @return　
+     */
     public boolean checkGraphObject(GraphObject graph, String property){
         if(graph.getProperty(property) != null && graph.getProperty(property).toString().length() >0){
             return true;
