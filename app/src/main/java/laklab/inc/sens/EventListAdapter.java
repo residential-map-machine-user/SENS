@@ -114,7 +114,7 @@ public class EventListAdapter extends ArrayAdapter<String> {
                             Log.i("likesUserの中身", response.toString());
                             //if elseを使うことで絶対に例外が起こらない仕組みを作れる
                             try {
-                                //マイページ以外に使い場合
+                                //マイページ以外に使う場合
                                 if(!_useForMyPage) {
                                     if(response.getGraphObject() != null) {
                                         //JsonObjectからint型で値を取得
